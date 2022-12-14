@@ -5,166 +5,129 @@
 using System;
 using System.Collections.Generic;
 
-namespace Microsoft.Xna.Framework
+namespace Microsoft.Xna.Framework;
+
+internal class ReusableItemList<T> : ICollection<T>, IEnumerator<T>
 {
-    internal class ReusableItemList<T> : ICollection<T>, IEnumerator<T>
+    private readonly List<T> _list = new();
+    private int _listTop = 0;
+    private int _iteratorIndex;
+
+    public void Add(T item)
     {
-        private readonly List<T> _list = new List<T>();
-        private int _listTop = 0;
-        private int _iteratorIndex;
-
-        #region ICollection<T> Members
-
-        public void Add(T item)
+        if (_list.Count > _listTop)
         {
-            if (_list.Count > _listTop)
-            {
-                _list[_listTop] = item;                
-            }
-            else
-            {
-                _list.Add(item);
-            }
-
-            _listTop++;
+            _list[_listTop] = item;
         }
-		
-		public void Sort(IComparer<T> comparison)
-		{
-			_list.Sort(comparison);
-		}
-			
-		
-		public T GetNewItem()
-		{
-			if (_listTop < _list.Count)
-			{
-				return _list[_listTop++];
-			}
-			else
-			{
-				// Damm...Mono fails in this!
-				//return (T) Activator.CreateInstance(typeof(T));
-				return default(T);
-			}
-		}
-
-		public T this[int index]
-		{
-			get
-			{
-				if (index >= _listTop) 
-					throw new IndexOutOfRangeException();
-				return _list[index];
-			}
-			set
-			{
-				if (index >= _listTop) 
-					throw new IndexOutOfRangeException();
-				_list[index] = value;
-			}
-		}
-		
-        public void Clear()
+        else
         {
-            _listTop = 0;
+            _list.Add(item);
         }
 
-        public void Reset()
+        _listTop++;
+    }
+
+    public void Sort(IComparer<T> comparison)
+    {
+        _list.Sort(comparison);
+    }
+
+
+    public T GetNewItem()
+    {
+        if (_listTop < _list.Count)
         {
-            Clear();
-            _list.Clear();
+            return _list[_listTop++];
         }
-
-        public bool Contains(T item)
+        else
         {
-            return _list.Contains(item);
+            // Damm...Mono fails in this!
+            //return (T) Activator.CreateInstance(typeof(T));
+            return default(T);
         }
+    }
 
-        public void CopyTo(T[] array, int arrayIndex)
+    public T this[int index]
+    {
+        get
         {
-            _list.CopyTo(array,arrayIndex);
+            if (index >= _listTop)
+                throw new IndexOutOfRangeException();
+            return _list[index];
         }
-
-        public int Count
+        set
         {
-            get 
-            {
-                return _listTop;
-            }
+            if (index >= _listTop)
+                throw new IndexOutOfRangeException();
+            _list[index] = value;
         }
+    }
 
-        public bool IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+    public void Clear()
+    {
+        _listTop = 0;
+    }
 
-        public bool Remove(T item)
-        {
-            throw new NotSupportedException();
-        }
+    public void Reset()
+    {
+        Clear();
+        _list.Clear();
+    }
 
-        #endregion
+    public bool Contains(T item)
+    {
+        return _list.Contains(item);
+    }
 
-        #region IEnumerable<T> Members
+    public void CopyTo(T[] array, int arrayIndex)
+    {
+        _list.CopyTo(array, arrayIndex);
+    }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            _iteratorIndex = -1;
-            return this;
-        }
+    public int Count
+    {
+        get { return _listTop; }
+    }
 
-        #endregion
+    public bool IsReadOnly
+    {
+        get { return false; }
+    }
 
-        #region IEnumerable Members
+    public bool Remove(T item)
+    {
+        throw new NotSupportedException();
+    }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            _iteratorIndex = -1;
-            return this;
-        }
+    public IEnumerator<T> GetEnumerator()
+    {
+        _iteratorIndex = -1;
+        return this;
+    }
 
-        #endregion
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        _iteratorIndex = -1;
+        return this;
+    }
 
-        #region IEnumerator<T> Members
+    public T Current
+    {
+        get { return _list[_iteratorIndex]; }
+    }
 
-        public T Current
-        {
-            get
-            {
-                return _list[_iteratorIndex];
-            }
-        }
+    public void Dispose()
+    {
+    }
 
-        #endregion
+    object System.Collections.IEnumerator.Current
+    {
+        get { return _list[_iteratorIndex]; }
+    }
 
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-        }
-
-        #endregion
-
-        #region IEnumerator Members
-
-        object System.Collections.IEnumerator.Current
-        {
-            get
-            {
-                return _list[_iteratorIndex];
-            }
-        }
-
-        public bool MoveNext()
-        {
-            _iteratorIndex++;
-            return (_iteratorIndex < _listTop);
-        }
-
-        #endregion
+    public bool MoveNext()
+    {
+        _iteratorIndex++;
+        return _iteratorIndex < _listTop;
     }
 }

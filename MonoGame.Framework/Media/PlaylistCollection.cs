@@ -6,104 +6,95 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Framework.Media;
+
+public sealed class PlaylistCollection : ICollection<Playlist>, IEnumerable<Playlist>, IEnumerable, IDisposable
 {
+    private bool isReadOnly = false;
+    private List<Playlist> innerlist = new();
 
-    public sealed class PlaylistCollection : ICollection<Playlist>, IEnumerable<Playlist>, IEnumerable, IDisposable
+    public void Dispose()
     {
-		private bool isReadOnly = false;
-		private List<Playlist> innerlist = new List<Playlist>();
-		
-        public void Dispose()
+    }
+
+    public IEnumerator<Playlist> GetEnumerator()
+    {
+        return innerlist.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return innerlist.GetEnumerator();
+    }
+
+    public int Count
+    {
+        get { return innerlist.Count; }
+    }
+
+    public bool IsReadOnly
+    {
+        get { return isReadOnly; }
+    }
+
+    public Playlist this[int index]
+    {
+        get { return innerlist[index]; }
+    }
+
+    public void Add(Playlist item)
+    {
+        if (item == null)
+            throw new ArgumentNullException();
+
+        if (innerlist.Count == 0)
         {
+            innerlist.Add(item);
+            return;
         }
 
-        public IEnumerator<Playlist> GetEnumerator()
+        for (int i = 0; i < innerlist.Count; i++)
         {
-            return innerlist.GetEnumerator();
-        }
-		
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return innerlist.GetEnumerator();
-        }
-
-        public int Count
-        {
-            get
+            if (item.Duration < innerlist[i].Duration)
             {
-				return innerlist.Count;
-            }
-        }
-		
-		public bool IsReadOnly
-        {
-            get { return this.isReadOnly; }
-        }
-
-        public Playlist this[int index]
-        {
-            get
-            {
-				return this.innerlist[index];
-            }
-        }
-		
-		public void Add(Playlist item)
-        {
-            if (item == null)
-                throw new ArgumentNullException();
-
-            if (innerlist.Count == 0)
-            {
-                this.innerlist.Add(item);
+                innerlist.Insert(i, item);
                 return;
             }
+        }
 
-            for (int i = 0; i < this.innerlist.Count; i++)
-            {
-                if (item.Duration < this.innerlist[i].Duration)
-                {
-                    this.innerlist.Insert(i, item);
-                    return;
-                }
-            }
+        innerlist.Add(item);
+    }
 
-            this.innerlist.Add(item);
-        }
-		
-		public void Clear()
-        {
-            innerlist.Clear();
-        }
-        
-        public PlaylistCollection Clone()
-        {
-            PlaylistCollection plc = new PlaylistCollection();
-            foreach (Playlist playlist in this.innerlist)
-                plc.Add(playlist);
-            return plc;
-        }
-        
-        public bool Contains(Playlist item)
-        {
-            return innerlist.Contains(item);
-        }
-        
-        public void CopyTo(Playlist[] array, int arrayIndex)
-        {
-            innerlist.CopyTo(array, arrayIndex);
-        }
-		
-		public int IndexOf(Playlist item)
-        {
-            return innerlist.IndexOf(item);
-        }
-        
-        public bool Remove(Playlist item)
-        {
-            return innerlist.Remove(item);
-        }
+    public void Clear()
+    {
+        innerlist.Clear();
+    }
+
+    public PlaylistCollection Clone()
+    {
+        PlaylistCollection plc = new PlaylistCollection();
+        foreach (Playlist playlist in innerlist)
+            plc.Add(playlist);
+        return plc;
+    }
+
+    public bool Contains(Playlist item)
+    {
+        return innerlist.Contains(item);
+    }
+
+    public void CopyTo(Playlist[] array, int arrayIndex)
+    {
+        innerlist.CopyTo(array, arrayIndex);
+    }
+
+    public int IndexOf(Playlist item)
+    {
+        return innerlist.IndexOf(item);
+    }
+
+    public bool Remove(Playlist item)
+    {
+        return innerlist.Remove(item);
     }
 }
-

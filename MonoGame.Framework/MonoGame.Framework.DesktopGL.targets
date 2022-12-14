@@ -1,7 +1,7 @@
 <Project>
 
-  <PropertyGroup>
-    <MonoGamePlatform>DesktopGL</MonoGamePlatform>
-  </PropertyGroup>
+    <PropertyGroup>
+        <MonoGamePlatform>DesktopGL</MonoGamePlatform>
+    </PropertyGroup>
 
 </Project>

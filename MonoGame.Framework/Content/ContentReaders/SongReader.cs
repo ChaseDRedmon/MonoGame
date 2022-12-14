@@ -7,26 +7,25 @@ using System.IO;
 using Microsoft.Xna.Framework.Media;
 using MonoGame.Framework.Utilities;
 
-namespace Microsoft.Xna.Framework.Content
+namespace Microsoft.Xna.Framework.Content;
+
+internal class SongReader : ContentTypeReader<Song>
 {
-	internal class SongReader : ContentTypeReader<Song>
-	{
-		protected internal override Song Read(ContentReader input, Song existingInstance)
-		{
-			var path = input.ReadString();
-			
-			if (!String.IsNullOrEmpty(path))
-			{
-                // Add the ContentManager's RootDirectory
-                var dirPath = Path.Combine(input.ContentManager.RootDirectoryFullPath, input.AssetName);
+    protected internal override Song Read(ContentReader input, Song existingInstance)
+    {
+        var path = input.ReadString();
 
-                // Resolve the relative path
-                path = FileHelpers.ResolveRelativePath(dirPath, path);
-			}
-			
-			var durationMs = input.ReadObject<int>();
+        if (!String.IsNullOrEmpty(path))
+        {
+            // Add the ContentManager's RootDirectory
+            var dirPath = Path.Combine(input.ContentManager.RootDirectoryFullPath, input.AssetName);
 
-            return new Song(path, durationMs); 
-		}
-	}
+            // Resolve the relative path
+            path = FileHelpers.ResolveRelativePath(dirPath, path);
+        }
+
+        var durationMs = input.ReadObject<int>();
+
+        return new Song(path, durationMs);
+    }
 }

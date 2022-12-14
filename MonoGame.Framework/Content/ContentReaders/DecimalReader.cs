@@ -4,17 +4,16 @@
 
 using System;
 
-namespace Microsoft.Xna.Framework.Content
-{
-    internal class DecimalReader : ContentTypeReader<decimal>
-    {
-        public DecimalReader()
-        {
-        }
+namespace Microsoft.Xna.Framework.Content;
 
-        protected internal override decimal Read(ContentReader input, decimal existingInstance)
-        {
-            return input.ReadDecimal();
-        }
+internal class DecimalReader : ContentTypeReader<decimal>
+{
+    public DecimalReader()
+    {
+    }
+
+    protected internal override decimal Read(ContentReader input, decimal existingInstance)
+    {
+        return input.ReadDecimal();
     }
 }

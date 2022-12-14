@@ -4,33 +4,23 @@
 
 using System;
 
-namespace Microsoft.Xna.Framework.Media
+namespace Microsoft.Xna.Framework.Media;
+
+public sealed class Playlist : IDisposable
 {
-    public sealed class Playlist : IDisposable
+    public TimeSpan Duration { get; internal set; }
+
+    public string Name { get; internal set; }
+
+    public void Dispose()
     {
-        public TimeSpan Duration
-        {
-            get;
-			internal set;
-        }
-
-        public string Name
-        {
-            get;
-			internal set;
-        }
-
-		public void Dispose()
-        {
-        }
-
-		
-        /*public SongCollection Songs
-        {
-            get
-            {
-            }
-        }*/
     }
-}
 
+
+    /*public SongCollection Songs
+    {
+        get
+        {
+        }
+    }*/
+}

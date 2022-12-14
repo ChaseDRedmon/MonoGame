@@ -22,9 +22,20 @@ namespace Microsoft.Xna.Framework.Graphics
 {
     public partial class Texture2D : Texture
     {
-        protected bool Shared { get { return _shared; } }
-        protected bool Mipmap { get { return _mipmap; } }
-        protected SampleDescription SampleDescription { get { return _sampleDescription; } }
+        protected bool Shared
+        {
+            get { return _shared; }
+        }
+
+        protected bool Mipmap
+        {
+            get { return _mipmap; }
+        }
+
+        protected SampleDescription SampleDescription
+        {
+            get { return _sampleDescription; }
+        }
 
         private bool _shared;
         private bool _mipmap;
@@ -32,7 +43,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
         private SharpDX.Direct3D11.Texture2D _cachedStagingTexture;
 
-        private void PlatformConstruct(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type, bool shared)
+        private void PlatformConstruct(int width, int height, bool mipmap, SurfaceFormat format, SurfaceType type,
+            bool shared)
         {
             _shared = shared;
             _mipmap = mipmap;
@@ -79,7 +91,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformSetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex,
+            int elementCount) where T : struct
         {
             var elementSizeInByte = ReflectionHelpers.SizeOf<T>.Get();
             var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -101,7 +114,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 var subresourceIndex = CalculateSubresourceIndex(arraySlice, level);
                 var d3dContext = GraphicsDevice._d3dContext;
                 lock (d3dContext)
-                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(rect.Width), 0);
+                    d3dContext.UpdateSubresource(GetTexture(), subresourceIndex, region, dataPtr, GetPitch(rect.Width),
+                        0);
             }
             finally
             {
@@ -109,10 +123,11 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
-        private void PlatformGetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex, int elementCount) where T : struct
+        private void PlatformGetData<T>(int level, int arraySlice, Rectangle rect, T[] data, int startIndex,
+            int elementCount) where T : struct
         {
             // Create a temp staging resource for copying the data.
-            // 
+            //
             // TODO: We should probably be pooling these staging resources
             // and not creating a new one each time.
             //
@@ -154,7 +169,8 @@ namespace Microsoft.Xna.Framework.Graphics
                 DataStream stream = null;
                 try
                 {
-                    var databox = d3dContext.MapSubresource(_cachedStagingTexture, 0, MapMode.Read, MapFlags.None, out stream);
+                    var databox = d3dContext.MapSubresource(_cachedStagingTexture, 0, MapMode.Read, MapFlags.None,
+                        out stream);
 
                     var elementSize = _format.GetSize();
                     if (_format.IsCompressedFormat())
@@ -164,6 +180,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         elementsInRow /= 4;
                         rows /= 4;
                     }
+
                     var rowSize = elementSize * elementsInRow;
                     if (rowSize == databox.RowPitch)
                         stream.ReadRange(data, startIndex, elementCount);
@@ -177,7 +194,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         for (var row = 0; row < rows; row++)
                         {
                             int i;
-                            int maxElements =  (row + 1) * rowSize / elementSizeInByte;
+                            int maxElements = (row + 1) * rowSize / elementSizeInByte;
                             for (i = row * rowSize / elementSizeInByte; i < maxElements; i++)
                                 data[i + startIndex] = stream.Read<T>();
 
@@ -190,7 +207,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 finally
                 {
-                    SharpDX.Utilities.Dispose( ref stream);
+                    Utilities.Dispose(ref stream);
 
                     d3dContext.UnmapSubresource(_cachedStagingTexture, 0);
                 }
@@ -201,7 +218,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (disposing)
             {
-                SharpDX.Utilities.Dispose(ref _cachedStagingTexture);
+                Utilities.Dispose(ref _cachedStagingTexture);
             }
 
             base.Dispose(disposing);
@@ -231,6 +248,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
             return desc;
         }
+
         internal override Resource CreateTexture()
         {
             // TODO: Move this to SetData() if we want to make Immutable textures!
@@ -243,4 +261,3 @@ namespace Microsoft.Xna.Framework.Graphics
         }
     }
 }
-

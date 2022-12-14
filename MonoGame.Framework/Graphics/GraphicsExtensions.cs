@@ -767,7 +767,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 #endif // OPENGL
 
-                    public static int GetSyncInterval(this PresentInterval interval)
+        public static int GetSyncInterval(this PresentInterval interval)
         {
             switch (interval)
             {
@@ -808,6 +808,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case SurfaceFormat.RgbPvrtc4Bpp:
                     return true;
             }
+
             return false;
         }
 
@@ -910,6 +911,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 case VertexElementFormat.HalfVector4:
                     return 8;
             }
+
             return 0;
         }
 
@@ -951,7 +953,6 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
 #if OPENGL
-
         public static int GetBoundTexture2D()
         {
             var prevTexture = 0;
@@ -990,7 +991,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 #endif
-            }
+    }
 
     internal class MonoGameGLException : Exception
     {

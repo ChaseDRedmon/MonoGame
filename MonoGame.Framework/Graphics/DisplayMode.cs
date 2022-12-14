@@ -1,4 +1,3 @@
-#region License
 /*
 MIT License
 Copyright © 2006 The Mono.Xna Team
@@ -26,101 +25,87 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#endregion License
 
 using System;
 using System.Globalization;
 using System.Runtime.Serialization;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Framework.Graphics;
+
+[DataContract]
+public class DisplayMode
 {
-    [DataContract]
-    public class DisplayMode
+    private SurfaceFormat format;
+    private int height;
+    private int width;
+
+    public float AspectRatio
     {
-        #region Fields
+        get { return width / (float)height; }
+    }
 
-        private SurfaceFormat format;
-        private int height;
-        private int width;
+    public SurfaceFormat Format
+    {
+        get { return format; }
+    }
 
-        #endregion Fields
+    public int Height
+    {
+        get { return height; }
+    }
 
-        #region Properties
-        
-        public float AspectRatio {
-            get { return (float)width / (float)height; }
-        }
+    public int Width
+    {
+        get { return width; }
+    }
 
-        public SurfaceFormat Format {
-            get { return format; }
-        }
+    public Rectangle TitleSafeArea
+    {
+        get { return GraphicsDevice.GetTitleSafeArea(0, 0, width, height); }
+    }
 
-        public int Height {
-            get { return this.height; }
-        }
+    internal DisplayMode(int width, int height, SurfaceFormat format)
+    {
+        this.width = width;
+        this.height = height;
+        this.format = format;
+    }
 
-        public int Width {
-            get { return this.width; }
-        }
-        
-        public Rectangle TitleSafeArea {
-            get { return GraphicsDevice.GetTitleSafeArea(0, 0, width, height); }
-        }
+    public static bool operator !=(DisplayMode left, DisplayMode right)
+    {
+        return !(left == right);
+    }
 
-        #endregion Properties
-
-        #region Constructors
-        
-        internal DisplayMode(int width, int height, SurfaceFormat format)
+    public static bool operator ==(DisplayMode left, DisplayMode right)
+    {
+        if (ReferenceEquals(left, right)) //Same object or both are null
         {
-            this.width = width;
-            this.height = height;
-            this.format = format;
+            return true;
         }
 
-        #endregion Constructors
-
-        #region Operators
-
-        public static bool operator !=(DisplayMode left, DisplayMode right)
+        if (ReferenceEquals(left, null) || ReferenceEquals(right, null))
         {
-            return !(left == right);
+            return false;
         }
 
-        public static bool operator ==(DisplayMode left, DisplayMode right)
-        {
-            if (ReferenceEquals(left, right)) //Same object or both are null
-            {
-                return true;
-            }
-            if (ReferenceEquals(left, null) || ReferenceEquals(right, null))
-            {
-                return false;
-            }
-            return (left.format == right.format) &&
-                (left.height == right.height) &&
-                (left.width == right.width);
-        }
+        return left.format == right.format &&
+               left.height == right.height &&
+               left.width == right.width;
+    }
 
-        #endregion Operators
+    public override bool Equals(object obj)
+    {
+        return obj is DisplayMode mode && this == mode;
+    }
 
-        #region Public Methods
+    public override int GetHashCode()
+    {
+        return width.GetHashCode() ^ height.GetHashCode() ^ format.GetHashCode();
+    }
 
-        public override bool Equals(object obj)
-        {
-            return obj is DisplayMode && this == (DisplayMode)obj;
-        }
-
-        public override int GetHashCode()
-        {
-            return (this.width.GetHashCode() ^ this.height.GetHashCode() ^ this.format.GetHashCode());
-        }
-
-        public override string ToString()
-        {
-            return "{Width:" + this.width + " Height:" + this.height + " Format:" + this.Format + " AspectRatio:" + this.AspectRatio + "}";
-        }
-
-        #endregion Public Methods
+    public override string ToString()
+    {
+        return "{Width:" + width + " Height:" + height + " Format:" + Format + " AspectRatio:" +
+               AspectRatio + "}";
     }
 }

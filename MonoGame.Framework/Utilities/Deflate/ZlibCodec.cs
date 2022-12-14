@@ -79,7 +79,7 @@ namespace MonoGame.Framework.Utilities.Deflate
     /// href="http://www.ietf.org/rfc/rfc1951.txt">RFC 1951 - DEFLATE</see>.
     /// </remarks>
 
-    sealed public class ZlibCodec
+    public sealed class ZlibCodec
     {
         /// <summary>
         /// The buffer from which data is taken.

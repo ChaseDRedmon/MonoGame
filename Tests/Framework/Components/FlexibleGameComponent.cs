@@ -2,73 +2,73 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests.Components {
-	class FlexibleGameComponent : VisualTestDrawableGameComponent {
+namespace MonoGame.Tests.Components;
 
-		public FlexibleGameComponent (Game game)
-			: base (game)
-		{
-		}
+class FlexibleGameComponent : VisualTestDrawableGameComponent
+{
+    public FlexibleGameComponent(Game game)
+        : base(game)
+    {
+    }
 
-		public Action<FrameInfo> InitializeAction { get; set; }
-		public Action<FrameInfo> LoadContentAction { get; set; }
-		public Action<FrameInfo> UnloadContentAction { get; set; }
-		public Action<FrameInfo> UpdateAction { get; set; }
-		public Action<FrameInfo> UpdateOncePerDrawAction { get; set; }
-		public Action<FrameInfo> DrawAction { get; set; }
+    public Action<FrameInfo> InitializeAction { get; set; }
+    public Action<FrameInfo> LoadContentAction { get; set; }
+    public Action<FrameInfo> UnloadContentAction { get; set; }
+    public Action<FrameInfo> UpdateAction { get; set; }
+    public Action<FrameInfo> UpdateOncePerDrawAction { get; set; }
+    public Action<FrameInfo> DrawAction { get; set; }
 
-		private IFrameInfoSource _frameInfoSource;
-		public override void Initialize ()
-		{
-			_frameInfoSource = Game.Services.RequireService<IFrameInfoSource> ();
+    private IFrameInfoSource _frameInfoSource;
 
-			if (InitializeAction != null)
-				InitializeAction (_frameInfoSource.FrameInfo);
+    public override void Initialize()
+    {
+        _frameInfoSource = Game.Services.RequireService<IFrameInfoSource>();
 
-			base.Initialize ();
-		}
+        if (InitializeAction != null)
+            InitializeAction(_frameInfoSource.FrameInfo);
 
-		protected override void LoadContent ()
-		{
-			base.LoadContent ();
+        base.Initialize();
+    }
 
-			if (LoadContentAction != null)
-				LoadContentAction (_frameInfoSource.FrameInfo);
-		}
+    protected override void LoadContent()
+    {
+        base.LoadContent();
 
-		protected override void UnloadContent ()
-		{
-			base.UnloadContent ();
+        if (LoadContentAction != null)
+            LoadContentAction(_frameInfoSource.FrameInfo);
+    }
 
-			if (UnloadContentAction != null)
-				UnloadContentAction (_frameInfoSource.FrameInfo);
-		}
+    protected override void UnloadContent()
+    {
+        base.UnloadContent();
 
-		public override void Update (GameTime gameTime)
-		{
-			base.Update (gameTime);
+        if (UnloadContentAction != null)
+            UnloadContentAction(_frameInfoSource.FrameInfo);
+    }
 
-			if (UpdateAction != null)
-				UpdateAction (_frameInfoSource.FrameInfo);
-		}
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
 
-		protected override void UpdateOncePerDraw (GameTime gameTime)
-		{
-			base.UpdateOncePerDraw (gameTime);
+        if (UpdateAction != null)
+            UpdateAction(_frameInfoSource.FrameInfo);
+    }
 
-			if (UpdateOncePerDrawAction != null)
-				UpdateOncePerDrawAction (_frameInfoSource.FrameInfo);
-		}
+    protected override void UpdateOncePerDraw(GameTime gameTime)
+    {
+        base.UpdateOncePerDraw(gameTime);
 
-		public override void Draw (GameTime gameTime)
-		{
-			base.Draw (gameTime);
+        if (UpdateOncePerDrawAction != null)
+            UpdateOncePerDrawAction(_frameInfoSource.FrameInfo);
+    }
 
-			if (DrawAction != null)
-				DrawAction (_frameInfoSource.FrameInfo);
-		}
-	}
+    public override void Draw(GameTime gameTime)
+    {
+        base.Draw(gameTime);
+
+        if (DrawAction != null)
+            DrawAction(_frameInfoSource.FrameInfo);
+    }
 }

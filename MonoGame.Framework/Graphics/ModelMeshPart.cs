@@ -1,74 +1,72 @@
 using System;
 
-namespace Microsoft.Xna.Framework.Graphics
+namespace Microsoft.Xna.Framework.Graphics;
+
+public sealed class ModelMeshPart
 {
-	public sealed class ModelMeshPart
-	{
-        private Effect _effect;
+    private Effect _effect;
 
-        public Effect Effect 
+    public Effect Effect
+    {
+        get { return _effect; }
+        set
         {
-            get 
-            {
-                return _effect;
-            }
-            set 
-            {
-                if (value == _effect)
-                    return;
+            if (value == _effect)
+                return;
 
-                if (_effect != null)
+            if (_effect != null)
+            {
+                // First check to see any other parts are also using this effect.
+                var removeEffect = true;
+                foreach (var part in parent.MeshParts)
                 {
-                    // First check to see any other parts are also using this effect.
-                    var removeEffect = true;
-                    foreach (var part in parent.MeshParts)
+                    if (part != this && part._effect == _effect)
                     {
-                        if (part != this && part._effect == _effect)
-                        {
-                            removeEffect = false;
-                            break;
-                        }
+                        removeEffect = false;
+                        break;
                     }
-
-                    if (removeEffect)
-                        parent.Effects.Remove(_effect);
                 }
 
-                // Set the new effect.
-                _effect = value;
-                
-                if (_effect != null && !parent.Effects.Contains(_effect))                
-                    parent.Effects.Add(_effect);
+                if (removeEffect)
+                    parent.Effects.Remove(_effect);
             }
+
+            // Set the new effect.
+            _effect = value;
+
+            if (_effect != null && !parent.Effects.Contains(_effect))
+                parent.Effects.Add(_effect);
         }
+    }
 
-		public IndexBuffer IndexBuffer { get; set; }
+    public IndexBuffer IndexBuffer { get; set; }
 
-		public int NumVertices { get; set; }
+    public int NumVertices { get; set; }
 
-		public int PrimitiveCount { get; set; }
+    public int PrimitiveCount { get; set; }
 
-		public int StartIndex { get; set; }
+    public int StartIndex { get; set; }
 
-		public object Tag { get; set; }
+    public object Tag { get; set; }
 
-		public VertexBuffer VertexBuffer { get; set; }
+    public VertexBuffer VertexBuffer { get; set; }
 
-		public int VertexOffset { get; set; }
+    public int VertexOffset { get; set; }
 
-		internal int VertexBufferIndex { get; set; }
+    internal int VertexBufferIndex { get; set; }
 
-		internal int IndexBufferIndex { get; set; }
+    internal int IndexBufferIndex { get; set; }
 
-		internal int EffectIndex { get; set; }
-		
-		internal ModelMesh parent;
+    internal int EffectIndex { get; set; }
 
-        /// <summary>
-        /// Using this constructor is strongly discouraged. Adding meshes to models at runtime is
-        /// not supported and may lead to <see cref="NullReferenceException"/>s if parent is not set.
-        /// </summary>
-        [Obsolete("This constructor is deprecated and will be made internal in a future release.")]
-        public ModelMeshPart() { }
-	}
+    internal ModelMesh parent;
+
+    /// <summary>
+    /// Using this constructor is strongly discouraged. Adding meshes to models at runtime is
+    /// not supported and may lead to <see cref="NullReferenceException"/>s if parent is not set.
+    /// </summary>
+    [Obsolete("This constructor is deprecated and will be made internal in a future release.")]
+    public ModelMeshPart()
+    {
+    }
 }

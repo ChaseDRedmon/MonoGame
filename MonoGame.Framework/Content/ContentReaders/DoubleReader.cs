@@ -4,18 +4,16 @@
 
 using System;
 
-namespace Microsoft.Xna.Framework.Content
-{
-	internal class DoubleReader : ContentTypeReader<double>
-    {
-        public DoubleReader()
-        {
-        }
+namespace Microsoft.Xna.Framework.Content;
 
-        protected internal override double Read(ContentReader input, double existingInstance)
-        {
-            return input.ReadDouble();
-        }
+internal class DoubleReader : ContentTypeReader<double>
+{
+    public DoubleReader()
+    {
+    }
+
+    protected internal override double Read(ContentReader input, double existingInstance)
+    {
+        return input.ReadDouble();
     }
 }
-

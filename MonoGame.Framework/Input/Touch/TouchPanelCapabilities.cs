@@ -6,6 +6,7 @@ using System;
 #if ANDROID
 using Android.Content.PM;
 #endif
+
 #if IOS
 using UIKit;
 #endif
@@ -47,7 +48,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
                 }
 #elif WINDOWS
                 maximumTouchCount = GetSystemMetrics(SM_MAXIMUMTOUCHES);
-                isConnected = (maximumTouchCount > 0);
+                isConnected = maximumTouchCount > 0;
 #elif ANDROID
                 // http://developer.android.com/reference/android/content/pm/PackageManager.html#FEATURE_TOUCHSCREEN
                 var pm = Game.Activity.PackageManager;
@@ -74,10 +75,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
 
         public bool HasPressure
         {
-            get
-            {
-                return hasPressure;
-            }
+            get { return hasPressure; }
         }
 
         /// <summary>
@@ -85,10 +83,7 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// </summary>
         public bool IsConnected
         {
-            get
-            {
-                return isConnected;
-            }
+            get { return isConnected; }
         }
 
         /// <summary>
@@ -96,14 +91,12 @@ namespace Microsoft.Xna.Framework.Input.Touch
         /// </summary>
         public int MaximumTouchCount
         {
-            get
-            {
-                return maximumTouchCount;
-            }
+            get { return maximumTouchCount; }
         }
 
 #if WINDOWS
-        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, ExactSpelling = true)]
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto,
+            ExactSpelling = true)]
         static extern int GetSystemMetrics(int nIndex);
 
         const int SM_MAXIMUMTOUCHES = 95;

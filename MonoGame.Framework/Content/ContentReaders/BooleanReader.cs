@@ -5,20 +5,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using Microsoft.Xna.Framework.Content;
 
-namespace Microsoft.Xna.Framework.Content
-{
-	internal class BooleanReader : ContentTypeReader<bool>
-    {
-        public BooleanReader()
-        {
-        }
+namespace Microsoft.Xna.Framework.Content;
 
-        protected internal override bool Read(ContentReader input, bool existingInstance)
-        {
-            return input.ReadBoolean();
-        }
+internal class BooleanReader : ContentTypeReader<bool>
+{
+    public BooleanReader()
+    {
+    }
+
+    protected internal override bool Read(ContentReader input, bool existingInstance)
+    {
+        return input.ReadBoolean();
     }
 }

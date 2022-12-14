@@ -1,5 +1,4 @@
-﻿#region License
-/*
+﻿/*
 Microsoft Public License (Ms-PL)
 MonoGame - Copyright © 2009-2012 The MonoGame Team
 
@@ -64,7 +63,6 @@ change. To the extent permitted under your local laws, the contributors exclude
 the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
-#endregion License
 
 using System;
 using System.Collections.Generic;
@@ -75,10 +73,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 using NUnit.Framework;
 
 // TODO: It's likely that a more sophisticated approach will be required for
@@ -92,391 +88,433 @@ using NUnit.Framework;
 //       differences, contrast differences, color-contrast differences, edge
 //       differences, etc.
 
-namespace MonoGame.Tests.Components {
-	/// <summary>
-	/// Defines behavior needed for frames to be scheduled for capture and
-	/// then manipulated and released.
-	/// </summary>
-	interface IFrameCaptureSource {
-		/// <summary>
-		/// Schedules a frame capture for the next available Draw cycle.
-		/// </summary>
-		void ScheduleFrameCapture ();
+namespace MonoGame.Tests.Components;
 
-		/// <summary>
-		/// Gets the captured frame from the last scheduled capture.
-		/// </summary>
-		/// <returns></returns>
-		Texture2D GetCapturedFrame ();
+/// <summary>
+/// Defines behavior needed for frames to be scheduled for capture and
+/// then manipulated and released.
+/// </summary>
+interface IFrameCaptureSource
+{
+    /// <summary>
+    /// Schedules a frame capture for the next available Draw cycle.
+    /// </summary>
+    void ScheduleFrameCapture();
 
-		/// <summary>
-		/// Notifies the <see cref="IFrameCaptureSource"/> implementation that
-		/// a called has finished using the texture returned by
-		/// <see cref="GetCapturedFrame"/>.
-		/// </summary>
-		/// <param name="frame"></param>
-		void ReleaseCapturedFrame (Texture2D frame);
-	}
+    /// <summary>
+    /// Gets the captured frame from the last scheduled capture.
+    /// </summary>
+    /// <returns></returns>
+    Texture2D GetCapturedFrame();
 
-	/// <summary>
-	/// Defines methods for comparing two visual frames.
-	/// </summary>
-	interface IFrameComparer {
-		/// <summary>
-		/// Compares two frames and returns a similarity value from 0.0f
-		/// to 1.0f.
-		/// </summary>
-        /// <param name="image">The image to compare.</param>
-        /// <param name="referenceImage">A ground truth image to compare against.</param>
-		/// <returns>A floating point value from 0.0f to 1.0f that
-		/// represents the similarity of the two frames, according to
-		/// this IFrameComparer implementation.</returns>
-        float Compare(FramePixelData image, FramePixelData referenceImage);
-	}
+    /// <summary>
+    /// Notifies the <see cref="IFrameCaptureSource"/> implementation that
+    /// a called has finished using the texture returned by
+    /// <see cref="GetCapturedFrame"/>.
+    /// </summary>
+    /// <param name="frame"></param>
+    void ReleaseCapturedFrame(Texture2D frame);
+}
 
-	class FrameCompareComponent : DrawableGameComponent, IEnumerable<IFrameComparer> {
-		private static class Errors {
-			public const string AtLeastOneFrameComparerRequired =
-				"At least one IFrameComparer must be added before capturing and comparing frames";
-		}
+/// <summary>
+/// Defines methods for comparing two visual frames.
+/// </summary>
+interface IFrameComparer
+{
+    /// <summary>
+    /// Compares two frames and returns a similarity value from 0.0f
+    /// to 1.0f.
+    /// </summary>
+    /// <param name="image">The image to compare.</param>
+    /// <param name="referenceImage">A ground truth image to compare against.</param>
+    /// <returns>A floating point value from 0.0f to 1.0f that
+    /// represents the similarity of the two frames, according to
+    /// this IFrameComparer implementation.</returns>
+    float Compare(FramePixelData image, FramePixelData referenceImage);
+}
 
-		private enum RunState {
-			Idle,
-			DidScheduleFrameCapture,
-			DidCaptureFrame
-		}
+class FrameCompareComponent : DrawableGameComponent, IEnumerable<IFrameComparer>
+{
+    private static class Errors
+    {
+        public const string AtLeastOneFrameComparerRequired =
+            "At least one IFrameComparer must be added before capturing and comparing frames";
+    }
 
-		private IFrameCaptureSource _frameSource;
-		private string _fileNameFormat;
-		private string _referenceImageDirectory;
+    private enum RunState
+    {
+        Idle,
+        DidScheduleFrameCapture,
+        DidCaptureFrame
+    }
 
-		private readonly List<Tuple<IFrameComparer, float>> _frameComparers = new List<Tuple<IFrameComparer, float>> ();
-		private readonly List<FrameComparisonResult> _results = new List<FrameComparisonResult> ();
-		private readonly object _resultsSync = new object ();
+    private IFrameCaptureSource _frameSource;
+    private string _fileNameFormat;
+    private string _referenceImageDirectory;
 
-		private Thread _workThread;
-		private readonly object _workThreadSync = new object ();
+    private readonly List<Tuple<IFrameComparer, float>> _frameComparers = new();
+    private readonly List<FrameComparisonResult> _results = new();
+    private readonly object _resultsSync = new();
 
-		public FrameCompareComponent (
-			Game game, Predicate<FrameInfo> captureWhen,
-			string fileNameFormat, string referenceImageDirectory, string outputDirectory)
-			: base (game)
-		{
-			if (fileNameFormat == null)
-				throw new ArgumentNullException ("fileNameFormat");
-			if (referenceImageDirectory == null)
-				throw new ArgumentNullException ("compareSourceDirectory");
+    private Thread _workThread;
+    private readonly object _workThreadSync = new();
 
-			CaptureWhen = captureWhen;
-			_fileNameFormat = fileNameFormat;
-			_referenceImageDirectory = referenceImageDirectory;
-			OutputDirectory = outputDirectory;
-		}
+    public FrameCompareComponent(
+        Game game, Predicate<FrameInfo> captureWhen,
+        string fileNameFormat, string referenceImageDirectory, string outputDirectory)
+        : base(game)
+    {
+        if (fileNameFormat == null)
+            throw new ArgumentNullException("fileNameFormat");
+        if (referenceImageDirectory == null)
+            throw new ArgumentNullException("compareSourceDirectory");
 
-		public static FrameCompareComponent CreateDefault (
-			Game game, Predicate<FrameInfo> captureWhen = null, int maxFrameNumber = 99)
-		{
-			var folderName = TestContext.CurrentContext.GetTestFolderName ();
-			var fileNameFormat = TestContext.CurrentContext.GetTestFrameFileNameFormat (maxFrameNumber);
+        CaptureWhen = captureWhen;
+        _fileNameFormat = fileNameFormat;
+        _referenceImageDirectory = referenceImageDirectory;
+        OutputDirectory = outputDirectory;
+    }
 
-			return new FrameCompareComponent (
-				game,
-				captureWhen: captureWhen,
-				fileNameFormat: fileNameFormat,
-				referenceImageDirectory: Paths.ReferenceImage (folderName),
-				outputDirectory: Paths.CapturedFrame (folderName))
-				{
-					{ new PixelDeltaFrameComparer(), 1 }
-				};
-		}
+    public static FrameCompareComponent CreateDefault(
+        Game game, Predicate<FrameInfo> captureWhen = null, int maxFrameNumber = 99)
+    {
+        var folderName = TestContext.CurrentContext.GetTestFolderName();
+        var fileNameFormat = TestContext.CurrentContext.GetTestFrameFileNameFormat(maxFrameNumber);
 
-		protected override void Dispose (bool disposing)
-		{
-			if (disposing) {
-				if (_workThread != null) {
-					try {
-						_workThread.Abort ();
-					} catch (ThreadStateException) { }
-					_workThread = null;
-				}
-			}
-			base.Dispose (disposing);
-		}
+        return new FrameCompareComponent(
+            game,
+            captureWhen: captureWhen,
+            fileNameFormat: fileNameFormat,
+            referenceImageDirectory: Paths.ReferenceImage(folderName),
+            outputDirectory: Paths.CapturedFrame(folderName))
+        {
+            { new PixelDeltaFrameComparer(), 1 }
+        };
+    }
 
-		public Predicate<FrameInfo> CaptureWhen { get; set; }
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            if (_workThread != null)
+            {
+                try
+                {
+                    _workThread.Abort();
+                }
+                catch (ThreadStateException)
+                {
+                }
 
-		private RunState _state = RunState.Idle;
-		private RunState State
-		{
-			get { return _state; }
-			set {
-				if (_state != value) {
-					// Debugging only
-					//Console.WriteLine ("State: {0}->{1}", _state, value);
-					_state = value;
-				}
-			}
-		}
+                _workThread = null;
+            }
+        }
 
-		public string OutputDirectory { get; set; }
+        base.Dispose(disposing);
+    }
 
-		public void Add (IFrameComparer comparer, float weight)
-		{
-			if (comparer == null)
-				throw new ArgumentNullException ("comparer");
-			if (weight < 0)
-				throw new ArgumentOutOfRangeException ("weight", "weight must not be negative");
+    public Predicate<FrameInfo> CaptureWhen { get; set; }
 
-			_frameComparers.Add (Tuple.Create (comparer, weight));
-		}
+    private RunState _state = RunState.Idle;
 
-		public bool Remove (IFrameComparer comparer)
-		{
-			for (int i = 0; i < _frameComparers.Count; ++i) {
-				if (object.Equals (_frameComparers [i], comparer)) {
-					_frameComparers.RemoveAt (i);
-					return true;
-				}
-			}
-			return false;
-		}
+    private RunState State
+    {
+        get { return _state; }
+        set
+        {
+            if (_state != value)
+            {
+                // Debugging only
+                //Console.WriteLine ("State: {0}->{1}", _state, value);
+                _state = value;
+            }
+        }
+    }
 
-		public IEnumerable<FrameComparisonResult> Results
-		{
-			get
-			{
-				// Signal the end of the work items, then wait
-				// for processing to complete.
-				_workItems.Add (null);
-				lock (_resultsSync)
-					return _results;
-			}
-		}
+    public string OutputDirectory { get; set; }
 
-		public override void Initialize ()
-		{
-			base.Initialize ();
-			_frameSource = Game.Services.RequireService<IFrameCaptureSource> ();
-		}
+    public void Add(IFrameComparer comparer, float weight)
+    {
+        if (comparer == null)
+            throw new ArgumentNullException("comparer");
+        if (weight < 0)
+            throw new ArgumentOutOfRangeException("weight", "weight must not be negative");
 
-		public override void Update (GameTime gameTime)
-		{
-			var frameInfo = Game.Services.RequireService<IFrameInfoSource> ().FrameInfo;
+        _frameComparers.Add(Tuple.Create(comparer, weight));
+    }
 
-			if (State == RunState.DidCaptureFrame)
-				ProcessCapturedFrame ();
+    public bool Remove(IFrameComparer comparer)
+    {
+        for (int i = 0; i < _frameComparers.Count; ++i)
+        {
+            if (Equals(_frameComparers[i], comparer))
+            {
+                _frameComparers.RemoveAt(i);
+                return true;
+            }
+        }
 
-			if (State == RunState.Idle && (CaptureWhen == null || CaptureWhen (frameInfo)))
-				ScheduleFrameCapture ();
-		}
+        return false;
+    }
 
-		public override void Draw (GameTime gameTime)
-		{
-			switch (State) {
-			case RunState.DidScheduleFrameCapture:
-				// By this point, IFrameSource is processing the
-				// capture request, and will have finished by
-				// the next call to Update.
-				State = RunState.DidCaptureFrame;
-				break;
-			}
-		}
+    public IEnumerable<FrameComparisonResult> Results
+    {
+        get
+        {
+            // Signal the end of the work items, then wait
+            // for processing to complete.
+            _workItems.Add(null);
+            lock (_resultsSync)
+                return _results;
+        }
+    }
 
-		private void ScheduleFrameCapture ()
-		{
-			_frameSource.ScheduleFrameCapture ();
-			State = RunState.DidScheduleFrameCapture;
-		}
+    public override void Initialize()
+    {
+        base.Initialize();
+        _frameSource = Game.Services.RequireService<IFrameCaptureSource>();
+    }
 
-		private void ProcessCapturedFrame ()
-		{
-			var frame = _frameSource.GetCapturedFrame ();
-			try {
-				if (_frameComparers.Count == 0)
-					throw new InvalidOperationException (Errors.AtLeastOneFrameComparerRequired);
+    public override void Update(GameTime gameTime)
+    {
+        var frameInfo = Game.Services.RequireService<IFrameInfoSource>().FrameInfo;
 
-				lock (_workThreadSync) {
-					if (_workThread == null) {
-						_workThread = new Thread (CompareAndWriteWorker);
-						_workThread.Priority = ThreadPriority.Lowest;
-						_workThread.IsBackground = true;
-						_workThread.Start ();
-					}
-				}
+        if (State == RunState.DidCaptureFrame)
+            ProcessCapturedFrame();
 
-				var frameInfo = Game.Services.RequireService<IFrameInfoSource> ().FrameInfo;
+        if (State == RunState.Idle && (CaptureWhen == null || CaptureWhen(frameInfo)))
+            ScheduleFrameCapture();
+    }
 
-				var fileName = string.Format (_fileNameFormat, frameInfo.DrawNumber);
+    public override void Draw(GameTime gameTime)
+    {
+        switch (State)
+        {
+            case RunState.DidScheduleFrameCapture:
+                // By this point, IFrameSource is processing the
+                // capture request, and will have finished by
+                // the next call to Update.
+                State = RunState.DidCaptureFrame;
+                break;
+        }
+    }
 
-				string frameOutputPath = null;
-				if (OutputDirectory != null)
-					frameOutputPath = Path.Combine (OutputDirectory ?? ".", fileName);
-				var referenceImagePath = Path.Combine (_referenceImageDirectory, fileName);
+    private void ScheduleFrameCapture()
+    {
+        _frameSource.ScheduleFrameCapture();
+        State = RunState.DidScheduleFrameCapture;
+    }
 
-				var textureData = GetTextureData (frame);
+    private void ProcessCapturedFrame()
+    {
+        var frame = _frameSource.GetCapturedFrame();
+        try
+        {
+            if (_frameComparers.Count == 0)
+                throw new InvalidOperationException(Errors.AtLeastOneFrameComparerRequired);
 
-				_workItems.Add (new WorkItem (
-					frameInfo, textureData, frame.Width, frame.Height,
-					frameOutputPath, referenceImagePath,
-					_frameComparers.ToArray()));
-			} finally {
-				_frameSource.ReleaseCapturedFrame (frame);
-				State = RunState.Idle;
-			}
-		}
+            lock (_workThreadSync)
+            {
+                if (_workThread == null)
+                {
+                    _workThread = new Thread(CompareAndWriteWorker);
+                    _workThread.Priority = ThreadPriority.Lowest;
+                    _workThread.IsBackground = true;
+                    _workThread.Start();
+                }
+            }
 
-		private BlockingCollection<WorkItem> _workItems =
-			new BlockingCollection<WorkItem> (new ConcurrentQueue<WorkItem> ());
-		private void CompareAndWriteWorker ()
-		{
-			// HACK: This should not be needed!
-			Paths.SetStandardWorkingDirectory ();
+            var frameInfo = Game.Services.RequireService<IFrameInfoSource>().FrameInfo;
 
-			lock (_resultsSync) {
-				while (true) {
-					var workItem = _workItems.Take ();
-					if (workItem == null)
-						break;
+            var fileName = string.Format(_fileNameFormat, frameInfo.DrawNumber);
 
-					if (workItem.FrameOutputPath != null) {
-						var directory = Path.GetDirectoryName (workItem.FrameOutputPath);
-						if (!Directory.Exists (directory))
-							Directory.CreateDirectory (directory);
-					}
+            string frameOutputPath = null;
+            if (OutputDirectory != null)
+                frameOutputPath = Path.Combine(OutputDirectory ?? ".", fileName);
+            var referenceImagePath = Path.Combine(_referenceImageDirectory, fileName);
 
-				    var framePixelData = new FramePixelData (
-						workItem.TextureWidth, workItem.TextureHeight, workItem.TextureData);
-					var comparePixelData = LoadOrCreateEmptyFramePixelData (workItem.ReferenceImagePath);
+            var textureData = GetTextureData(frame);
 
-					var similarity = CompareFrames (
-					    framePixelData,
-					    comparePixelData,
-					    workItem.FrameComparers);
+            _workItems.Add(new WorkItem(
+                frameInfo, textureData, frame.Width, frame.Height,
+                frameOutputPath, referenceImagePath,
+                _frameComparers.ToArray()));
+        }
+        finally
+        {
+            _frameSource.ReleaseCapturedFrame(frame);
+            State = RunState.Idle;
+        }
+    }
 
-					if (workItem.FrameOutputPath != null) {
-						try {
-							framePixelData.Save (workItem.FrameOutputPath, "Output");
-						} catch (IOException) {
-							// FIXME: Report this error somehow.
-						}
-					}
+    private BlockingCollection<WorkItem> _workItems = new(new ConcurrentQueue<WorkItem>());
 
-					_results.Add (new FrameComparisonResult (
-						workItem.FrameInfo.DrawNumber, similarity,
-						workItem.ReferenceImagePath, workItem.FrameOutputPath));
-				}
-			}
+    private void CompareAndWriteWorker()
+    {
+        // HACK: This should not be needed!
+        Paths.SetStandardWorkingDirectory();
 
-			lock (_workThreadSync) {
-				_workThread = null;
-			}
-		}
+        lock (_resultsSync)
+        {
+            while (true)
+            {
+                var workItem = _workItems.Take();
+                if (workItem == null)
+                    break;
 
-		private static float CompareFrames (
-			FramePixelData image, FramePixelData referenceImage,
-			Tuple<IFrameComparer, float> [] frameComparers)
-		{
-			float sumOfWeights = 0;
-			foreach (var item in frameComparers) {
-				sumOfWeights += item.Item2;
-			}
+                if (workItem.FrameOutputPath != null)
+                {
+                    var directory = Path.GetDirectoryName(workItem.FrameOutputPath);
+                    if (!Directory.Exists(directory))
+                        Directory.CreateDirectory(directory);
+                }
 
-			float similarity = 0;
-			foreach (var item in frameComparers) {
-				var comparer = item.Item1;
-				var weight = item.Item2;
-                similarity += comparer.Compare(image, referenceImage) * weight / sumOfWeights;
-			}
-			return similarity;
-		}
+                var framePixelData = new FramePixelData(
+                    workItem.TextureWidth, workItem.TextureHeight, workItem.TextureData);
+                var comparePixelData = LoadOrCreateEmptyFramePixelData(workItem.ReferenceImagePath);
 
-		private Color[] GetTextureData (Texture2D frame)
-		{
-			var data = new Color [frame.Width * frame.Height];
-			frame.GetData (data);
-			return data;
-		}
+                var similarity = CompareFrames(
+                    framePixelData,
+                    comparePixelData,
+                    workItem.FrameComparers);
 
-		private static FramePixelData LoadOrCreateEmptyFramePixelData (string path)
-		{
-			try {
-				return FramePixelData.FromFile (path);
-			} catch (FileNotFoundException) {
-				// TODO: It would be nice to communicate
-				//       information about what went wrong, when
-				//       things go wrong.
-				return new FramePixelData (0, 0, new Color[0]);
-			}
-		}
+                if (workItem.FrameOutputPath != null)
+                {
+                    try
+                    {
+                        framePixelData.Save(workItem.FrameOutputPath, "Output");
+                    }
+                    catch (IOException)
+                    {
+                        // FIXME: Report this error somehow.
+                    }
+                }
 
-		public IEnumerator<IFrameComparer> GetEnumerator ()
-		{
-			foreach (var item in _frameComparers)
-				yield return item.Item1;
-		}
+                _results.Add(new FrameComparisonResult(
+                    workItem.FrameInfo.DrawNumber, similarity,
+                    workItem.ReferenceImagePath, workItem.FrameOutputPath));
+            }
+        }
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
-		{
-			foreach (var item in _frameComparers)
-				yield return item.Item1;
-		}
+        lock (_workThreadSync)
+        {
+            _workThread = null;
+        }
+    }
 
-		private class WorkItem {
-			public readonly FrameInfo FrameInfo;
-			public readonly Color [] TextureData;
-			public readonly int TextureWidth;
-			public readonly int TextureHeight;
-			public readonly string FrameOutputPath;
-			public readonly string ReferenceImagePath;
-			public readonly Tuple<IFrameComparer, float> [] FrameComparers;
+    private static float CompareFrames(
+        FramePixelData image, FramePixelData referenceImage,
+        Tuple<IFrameComparer, float>[] frameComparers)
+    {
+        float sumOfWeights = 0;
+        foreach (var item in frameComparers)
+        {
+            sumOfWeights += item.Item2;
+        }
 
-			public WorkItem (
-				FrameInfo frameInfo,
-				Color [] textureData, int textureWidth, int textureHeight,
-				string frameOutputPath, string referenceImagePath,
-				Tuple<IFrameComparer, float> [] frameComparers)
-			{
-				FrameInfo = frameInfo;
-				TextureData = textureData;
-				TextureWidth = textureWidth;
-				TextureHeight = textureHeight;
-				FrameOutputPath = frameOutputPath;
-				ReferenceImagePath = referenceImagePath;
-				FrameComparers = frameComparers;
-			}
-		}
-	}
+        float similarity = 0;
+        foreach (var item in frameComparers)
+        {
+            var comparer = item.Item1;
+            var weight = item.Item2;
+            similarity += comparer.Compare(image, referenceImage) * weight / sumOfWeights;
+        }
 
-	public struct FrameComparisonResult {
+        return similarity;
+    }
 
-		public FrameComparisonResult (
-			int drawNumber, float similarity, 
-			string referenceImagePath, string capturedImagePath = null)
-		{
-			DrawNumber = drawNumber;
-			Similarity = similarity;
-			ReferenceImagePath = referenceImagePath;
-			CapturedImagePath = capturedImagePath;
-		}
+    private Color[] GetTextureData(Texture2D frame)
+    {
+        var data = new Color [frame.Width * frame.Height];
+        frame.GetData(data);
+        return data;
+    }
 
-		public int DrawNumber;
-		public float Similarity;
-		public string CapturedImagePath;
-		public string ReferenceImagePath;
-	}
+    private static FramePixelData LoadOrCreateEmptyFramePixelData(string path)
+    {
+        try
+        {
+            return FramePixelData.FromFile(path);
+        }
+        catch (FileNotFoundException)
+        {
+            // TODO: It would be nice to communicate
+            //       information about what went wrong, when
+            //       things go wrong.
+            return new FramePixelData(0, 0, new Color[0]);
+        }
+    }
 
-	class ConstantComparer : IFrameComparer {
-		private float _value;
-		public ConstantComparer (float value)
-		{
-			if (value < 0)
-				throw new ArgumentOutOfRangeException ("value", "value must not be negative");
-			_value = value;
-		}
+    public IEnumerator<IFrameComparer> GetEnumerator()
+    {
+        foreach (var item in _frameComparers)
+            yield return item.Item1;
+    }
 
-		public float Compare (FramePixelData a, FramePixelData b)
-		{
-			return _value;
-		}
-	}
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        foreach (var item in _frameComparers)
+            yield return item.Item1;
+    }
+
+    private class WorkItem
+    {
+        public readonly FrameInfo FrameInfo;
+        public readonly Color[] TextureData;
+        public readonly int TextureWidth;
+        public readonly int TextureHeight;
+        public readonly string FrameOutputPath;
+        public readonly string ReferenceImagePath;
+        public readonly Tuple<IFrameComparer, float>[] FrameComparers;
+
+        public WorkItem(
+            FrameInfo frameInfo,
+            Color[] textureData, int textureWidth, int textureHeight,
+            string frameOutputPath, string referenceImagePath,
+            Tuple<IFrameComparer, float>[] frameComparers)
+        {
+            FrameInfo = frameInfo;
+            TextureData = textureData;
+            TextureWidth = textureWidth;
+            TextureHeight = textureHeight;
+            FrameOutputPath = frameOutputPath;
+            ReferenceImagePath = referenceImagePath;
+            FrameComparers = frameComparers;
+        }
+    }
+}
+
+public struct FrameComparisonResult
+{
+    public FrameComparisonResult(
+        int drawNumber, float similarity,
+        string referenceImagePath, string capturedImagePath = null)
+    {
+        DrawNumber = drawNumber;
+        Similarity = similarity;
+        ReferenceImagePath = referenceImagePath;
+        CapturedImagePath = capturedImagePath;
+    }
+
+    public int DrawNumber;
+    public float Similarity;
+    public string CapturedImagePath;
+    public string ReferenceImagePath;
+}
+
+class ConstantComparer : IFrameComparer
+{
+    private float _value;
+
+    public ConstantComparer(float value)
+    {
+        if (value < 0)
+            throw new ArgumentOutOfRangeException("value", "value must not be negative");
+        _value = value;
+    }
+
+    public float Compare(FramePixelData a, FramePixelData b)
+    {
+        return _value;
+    }
 }

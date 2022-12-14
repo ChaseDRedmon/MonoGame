@@ -1,30 +1,40 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests {
-	partial class FramePixelData {
-		public FramePixelData (int width, int height, Color[] data)
-		{
-			_width = width;
-			_height = height;
-			_data = data;
-		}
+namespace MonoGame.Tests;
 
-		public FramePixelData (int width, int height)
-			: this(width, height, new Color[width * height])
-		{
-		}
+partial class FramePixelData
+{
+    public FramePixelData(int width, int height, Color[] data)
+    {
+        _width = width;
+        _height = height;
+        _data = data;
+    }
 
-		private Color [] _data;
-		public Color [] Data {
-			get { return _data; }
-		}
+    public FramePixelData(int width, int height)
+        : this(width, height, new Color[width * height])
+    {
+    }
 
-		private int _width;
-		public int Width { get { return _width; } }
+    private Color[] _data;
 
-		private int _height;
-		public int Height { get { return _height; } }
-	}
+    public Color[] Data
+    {
+        get { return _data; }
+    }
+
+    private int _width;
+
+    public int Width
+    {
+        get { return _width; }
+    }
+
+    private int _height;
+
+    public int Height
+    {
+        get { return _height; }
+    }
 }
-

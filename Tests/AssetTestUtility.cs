@@ -7,13 +7,12 @@ using System.IO;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Tests
+namespace MonoGame.Tests;
+
+internal static class AssetTestUtility
 {
-    internal static class AssetTestUtility
+    public static Effect LoadEffect(ContentManager content, string name)
     {
-        public static Microsoft.Xna.Framework.Graphics.Effect LoadEffect(ContentManager content, string name)
-        {
-            return content.Load<Microsoft.Xna.Framework.Graphics.Effect>(Paths.CompiledEffect(name));
-        }
+        return content.Load<Effect>(Paths.CompiledEffect(name));
     }
 }

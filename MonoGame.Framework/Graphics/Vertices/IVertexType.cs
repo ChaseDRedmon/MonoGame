@@ -1,10 +1,6 @@
-﻿namespace Microsoft.Xna.Framework.Graphics
+﻿namespace Microsoft.Xna.Framework.Graphics;
+
+public interface IVertexType
 {
-    public interface IVertexType
-    {
-        VertexDeclaration VertexDeclaration
-        {
-            get;
-        }
-    }
+    VertexDeclaration VertexDeclaration { get; }
 }

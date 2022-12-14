@@ -1,5 +1,4 @@
-﻿#region License
-/*
+﻿/*
 Microsoft Public License (Ms-PL)
 MonoGame - Copyright © 2009-2012 The MonoGame Team
 
@@ -64,36 +63,36 @@ change. To the extent permitted under your local laws, the contributors exclude
 the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
-#endregion License
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests.Components {
-	class VisualTestGameComponent : GameComponent {
-		public VisualTestGameComponent (Game game)
-			: base (game)
-		{
-		}
+namespace MonoGame.Tests.Components;
 
-		private UpdateGuard _updateGuard = new UpdateGuard ();
-		public override void Update (GameTime gameTime)
-		{
-			base.Update (gameTime);
+class VisualTestGameComponent : GameComponent
+{
+    public VisualTestGameComponent(Game game)
+        : base(game)
+    {
+    }
 
-			if (gameTime.ElapsedGameTime == TimeSpan.Zero)
-				return;
+    private UpdateGuard _updateGuard = new();
 
-			if (_updateGuard.ShouldUpdate(Game.Services.RequireService<IFrameInfoSource> ().FrameInfo))
-				UpdateOncePerDraw (gameTime);
-		}
+    public override void Update(GameTime gameTime)
+    {
+        base.Update(gameTime);
 
-		protected virtual void UpdateOncePerDraw (GameTime gameTime)
-		{
-		}
-	}
+        if (gameTime.ElapsedGameTime == TimeSpan.Zero)
+            return;
+
+        if (_updateGuard.ShouldUpdate(Game.Services.RequireService<IFrameInfoSource>().FrameInfo))
+            UpdateOncePerDraw(gameTime);
+    }
+
+    protected virtual void UpdateOncePerDraw(GameTime gameTime)
+    {
+    }
 }

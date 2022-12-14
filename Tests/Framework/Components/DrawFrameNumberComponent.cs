@@ -1,5 +1,4 @@
-﻿#region License
-/*
+﻿/*
 Microsoft Public License (Ms-PL)
 MonoGame - Copyright © 2009-2012 The MonoGame Team
 
@@ -64,49 +63,48 @@ change. To the extent permitted under your local laws, the contributors exclude
 the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
-#endregion License
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoGame.Tests.Components {
-	class DrawFrameNumberComponent : DrawableGameComponent {
-		private SpriteBatch _batch;
-		private SpriteFont _font;
+namespace MonoGame.Tests.Components;
 
-		public DrawFrameNumberComponent (Game game)
-			: base (game)
-		{
-		}
+class DrawFrameNumberComponent : DrawableGameComponent
+{
+    private SpriteBatch _batch;
+    private SpriteFont _font;
 
-		protected override void LoadContent ()
-		{
-			_batch = new SpriteBatch (Game.GraphicsDevice);
-			_font = Game.Content.Load<SpriteFont> (Paths.Font ("Default"));
-		}
+    public DrawFrameNumberComponent(Game game)
+        : base(game)
+    {
+    }
 
-		protected override void UnloadContent ()
-		{
-			_batch.Dispose ();
-			_batch = null;
+    protected override void LoadContent()
+    {
+        _batch = new SpriteBatch(Game.GraphicsDevice);
+        _font = Game.Content.Load<SpriteFont>(Paths.Font("Default"));
+    }
 
-			_font = null;
-		}
+    protected override void UnloadContent()
+    {
+        _batch.Dispose();
+        _batch = null;
 
-		public override void Draw (GameTime gameTime)
-		{
-			var frameInfoSource = Game.Services.RequireService<IFrameInfoSource> ();
-			var frameInfo = frameInfoSource.FrameInfo;
+        _font = null;
+    }
 
-			// TODO: Add support for different placements and colors.
-			_batch.Begin ();
-			_batch.DrawString (_font, frameInfo.DrawNumber.ToString(), Vector2.Zero, Color.White);
-			_batch.End ();
-		}
-	}
+    public override void Draw(GameTime gameTime)
+    {
+        var frameInfoSource = Game.Services.RequireService<IFrameInfoSource>();
+        var frameInfo = frameInfoSource.FrameInfo;
+
+        // TODO: Add support for different placements and colors.
+        _batch.Begin();
+        _batch.DrawString(_font, frameInfo.DrawNumber.ToString(), Vector2.Zero, Color.White);
+        _batch.End();
+    }
 }

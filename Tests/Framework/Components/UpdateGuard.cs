@@ -1,5 +1,4 @@
-﻿#region License
-/*
+﻿/*
 Microsoft Public License (Ms-PL)
 MonoGame - Copyright © 2009-2012 The MonoGame Team
 
@@ -64,23 +63,23 @@ change. To the extent permitted under your local laws, the contributors exclude
 the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
-#endregion License
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MonoGame.Tests.Components {
-	class UpdateGuard {
-		private int _lastDrawNumberOfUpdate = -1;
+namespace MonoGame.Tests.Components;
 
-		public bool ShouldUpdate (FrameInfo frameInfo)
-		{
-			if (_lastDrawNumberOfUpdate == frameInfo.DrawNumber)
-				return false;
-			_lastDrawNumberOfUpdate = frameInfo.DrawNumber;
-			return true;
-		}
-	}
+class UpdateGuard
+{
+    private int _lastDrawNumberOfUpdate = -1;
+
+    public bool ShouldUpdate(FrameInfo frameInfo)
+    {
+        if (_lastDrawNumberOfUpdate == frameInfo.DrawNumber)
+            return false;
+        _lastDrawNumberOfUpdate = frameInfo.DrawNumber;
+        return true;
+    }
 }

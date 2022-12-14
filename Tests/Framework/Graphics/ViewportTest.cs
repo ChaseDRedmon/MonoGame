@@ -1,71 +1,71 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 using NUnit.Framework;
 
-namespace MonoGame.Tests.Graphics {
-	class ViewportTest : GraphicsDeviceTestFixtureBase {
-		[Test]
-		public void Affects_draw_origin ()
-		{
-            PrepareFrameCapture();
+namespace MonoGame.Tests.Graphics;
 
-            var spriteBatch = new SpriteBatch (gd);
-            var swatch = content.Load<Texture2D> (Paths.Texture ("white-64"));
+class ViewportTest : GraphicsDeviceTestFixtureBase
+{
+    [Test]
+    public void Affects_draw_origin()
+    {
+        PrepareFrameCapture();
 
-            gd.Clear (Color.CornflowerBlue);
-            gd.Viewport = new Viewport (20, 40, 100, 100);
+        var spriteBatch = new SpriteBatch(gd);
+        var swatch = content.Load<Texture2D>(Paths.Texture("white-64"));
 
-            spriteBatch.Begin ();
-            spriteBatch.Draw (swatch, new Vector2(10, 20), Color.GreenYellow);
-            spriteBatch.End ();
+        gd.Clear(Color.CornflowerBlue);
+        gd.Viewport = new Viewport(20, 40, 100, 100);
 
-            CheckFrames();
+        spriteBatch.Begin();
+        spriteBatch.Draw(swatch, new Vector2(10, 20), Color.GreenYellow);
+        spriteBatch.End();
 
-            spriteBatch.Dispose();
-            swatch.Dispose();
-		}
+        CheckFrames();
 
-		[Test]
-		public void Does_not_clip_device_clear ()
-		{
-            PrepareFrameCapture();
+        spriteBatch.Dispose();
+        swatch.Dispose();
+    }
 
-            var presentParams = gd.PresentationParameters;
-            gd.Viewport = new Viewport (
-                0, 0,
-                presentParams.BackBufferWidth,
-                presentParams.BackBufferHeight);
-            gd.Clear (Color.CornflowerBlue);
+    [Test]
+    public void Does_not_clip_device_clear()
+    {
+        PrepareFrameCapture();
 
-            gd.Viewport = new Viewport (30, 40, 100, 200);
-            gd.Clear (Color.Red);
+        var presentParams = gd.PresentationParameters;
+        gd.Viewport = new Viewport(
+            0, 0,
+            presentParams.BackBufferWidth,
+            presentParams.BackBufferHeight);
+        gd.Clear(Color.CornflowerBlue);
 
-            CheckFrames();
-		}
+        gd.Viewport = new Viewport(30, 40, 100, 200);
+        gd.Clear(Color.Red);
 
-		[Test]
-		public void Clips_SpriteBatch_draws ()
-		{
-            PrepareFrameCapture();
+        CheckFrames();
+    }
 
-            var spriteBatch = new SpriteBatch (gd);
-            var swatch = content.Load<Texture2D> (Paths.Texture ("white-64"));
+    [Test]
+    public void Clips_SpriteBatch_draws()
+    {
+        PrepareFrameCapture();
 
-            gd.Clear (Color.CornflowerBlue);
-            gd.Viewport = new Viewport (30, 40, 50, 60);
+        var spriteBatch = new SpriteBatch(gd);
+        var swatch = content.Load<Texture2D>(Paths.Texture("white-64"));
 
-            spriteBatch.Begin ();
-            spriteBatch.Draw (
-                swatch, new Vector2 (20, -20), null, Color.Indigo,
-                MathHelper.PiOver4, Vector2.Zero, Vector2.One,
-                SpriteEffects.None, 0);
-            spriteBatch.End ();
+        gd.Clear(Color.CornflowerBlue);
+        gd.Viewport = new Viewport(30, 40, 50, 60);
 
-            CheckFrames();
+        spriteBatch.Begin();
+        spriteBatch.Draw(
+            swatch, new Vector2(20, -20), null, Color.Indigo,
+            MathHelper.PiOver4, Vector2.Zero, Vector2.One,
+            SpriteEffects.None, 0);
+        spriteBatch.End();
 
-            spriteBatch.Dispose();
-            swatch.Dispose();
-		}
-	}
+        CheckFrames();
+
+        spriteBatch.Dispose();
+        swatch.Dispose();
+    }
 }

@@ -1,5 +1,4 @@
-﻿#region License
-/*
+﻿/*
 Microsoft Public License (Ms-PL)
 MonoGame - Copyright © 2009-2012 The MonoGame Team
 
@@ -64,7 +63,6 @@ change. To the extent permitted under your local laws, the contributors exclude
 the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
-#endregion License
 
 using System;
 using System.Collections.Generic;
@@ -72,23 +70,24 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MonoGame.Tests {
-	[StructLayout (LayoutKind.Sequential)]
-	struct PixelArgb {
-		public const int MaxDelta = 4 * Byte.MaxValue;
+namespace MonoGame.Tests;
 
-		public byte B;
-		public byte G;
-		public byte R;
-		public byte A;
+[StructLayout(LayoutKind.Sequential)]
+struct PixelArgb
+{
+    public const int MaxDelta = 4 * Byte.MaxValue;
 
-		public unsafe int Delta (PixelArgb* other)
-		{
-			return
-				Math.Abs (B - other->B) +
-				Math.Abs (G - other->G) +
-				Math.Abs (R - other->R) +
-				Math.Abs (A - other->A);
-		}
-	}
+    public byte B;
+    public byte G;
+    public byte R;
+    public byte A;
+
+    public unsafe int Delta(PixelArgb* other)
+    {
+        return
+            Math.Abs(B - other->B) +
+            Math.Abs(G - other->G) +
+            Math.Abs(R - other->R) +
+            Math.Abs(A - other->A);
+    }
 }

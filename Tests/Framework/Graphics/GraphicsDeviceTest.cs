@@ -102,7 +102,8 @@ namespace MonoGame.Tests.Graphics
             gd.BlendState = BlendState.NonPremultiplied;
             gd.DepthStencilState = DepthStencilState.None;
             gd.SamplerStates[0] = SamplerState.PointClamp;
-            var vbb = new VertexBufferBinding(new VertexBuffer(gd, VertexPositionColor.VertexDeclaration, 5, BufferUsage.WriteOnly));
+            var vbb = new VertexBufferBinding(new VertexBuffer(gd, VertexPositionColor.VertexDeclaration, 5,
+                BufferUsage.WriteOnly));
             gd.SetVertexBuffers(vbb);
 
             gd.Reset();
@@ -157,29 +158,30 @@ namespace MonoGame.Tests.Graphics
             Assert.Throws<ArgumentException>(() => gd.Reset(new PresentationParameters()));
         }
 
-		[Test]
-		public void Clear()
-		{
-			var colors = new Color [] {
-				Color.Red,
-				Color.Orange,
-				Color.Yellow,
-				Color.Green,
-				Color.Blue,
-				Color.Indigo,
-				Color.Violet
-			};
+        [Test]
+        public void Clear()
+        {
+            var colors = new Color[]
+            {
+                Color.Red,
+                Color.Orange,
+                Color.Yellow,
+                Color.Green,
+                Color.Blue,
+                Color.Indigo,
+                Color.Violet
+            };
 
             PrepareFrameCapture(colors.Length);
 
-		    foreach (var color in colors)
-		    {
-		        gd.Clear(color);
+            foreach (var color in colors)
+            {
+                gd.Clear(color);
                 SubmitFrame();
-		    }
+            }
 
             CheckFrames();
-		}
+        }
 
         [Test]
         public void DrawPrimitivesParameterValidation()
@@ -222,21 +224,24 @@ namespace MonoGame.Tests.Graphics
                 gd, VertexPositionColorTexture.VertexDeclaration,
                 3, BufferUsage.None);
             var indexBuffer = new IndexBuffer(
-                gd, IndexElementSize.SixteenBits, 
+                gd, IndexElementSize.SixteenBits,
                 3, BufferUsage.None);
 
             // No vertex shader or pixel shader.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1));
+            Assert.Throws<InvalidOperationException>(() =>
+                gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1));
 
             new BasicEffect(gd).CurrentTechnique.Passes[0].Apply();
 
             // No vertexBuffer.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1));
+            Assert.Throws<InvalidOperationException>(() =>
+                gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1));
 
             gd.SetVertexBuffer(vertexBuffer);
 
             // No indexBuffer.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1));
+            Assert.Throws<InvalidOperationException>(() =>
+                gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1));
 
             gd.Indices = indexBuffer;
 
@@ -260,7 +265,8 @@ namespace MonoGame.Tests.Graphics
 #endif
 
             // primitiveCount too small / large.
-            Assert.Throws<ArgumentOutOfRangeException>(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 0));
 #if !XNA
             Assert.DoesNotThrow(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 2));
 #endif
@@ -282,22 +288,25 @@ namespace MonoGame.Tests.Graphics
                 gd, VertexPositionColorTexture.VertexDeclaration,
                 3, BufferUsage.None);
             var indexBuffer = new IndexBuffer(
-                gd, IndexElementSize.SixteenBits, 
+                gd, IndexElementSize.SixteenBits,
                 3, BufferUsage.None);
 
             // No vertex shader or pixel shader.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 1));
+            Assert.Throws<InvalidOperationException>(
+                () => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 1));
 
             var effect = new BasicEffect(gd);
             effect.CurrentTechnique.Passes[0].Apply();
 
             // No vertexBuffer.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 1));
+            Assert.Throws<InvalidOperationException>(
+                () => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 1));
 
             gd.SetVertexBuffer(vertexBuffer);
 
             // No indexBuffer.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 1));
+            Assert.Throws<InvalidOperationException>(
+                () => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 1));
 
             gd.Indices = indexBuffer;
 
@@ -313,7 +322,8 @@ namespace MonoGame.Tests.Graphics
             Assert.DoesNotThrow(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 3, 1));
 
             // primitiveCount too small / large.
-            Assert.Throws<ArgumentOutOfRangeException>(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 0));
             Assert.DoesNotThrow(() => gd.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2));
 
             // startIndex + primitiveCount too large.
@@ -347,20 +357,23 @@ namespace MonoGame.Tests.Graphics
             var indexBuffer = new IndexBuffer(gd, IndexElementSize.SixteenBits, 3, BufferUsage.None);
 
             // No vertex shader or pixel shader.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1, 10));
+            Assert.Throws<InvalidOperationException>(() =>
+                gd.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1, 10));
 
             var effect = AssetTestUtility.LoadEffect(content, "Instancing");
             effect.Techniques[0].Passes[0].Apply();
 
             // No vertexBuffers.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1, 10));
+            Assert.Throws<InvalidOperationException>(() =>
+                gd.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1, 10));
 
             gd.SetVertexBuffers(
                 new VertexBufferBinding(vertexBuffer, 0, 0),
                 new VertexBufferBinding(instanceBuffer, 0, 1));
 
             // No indexBuffer.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1, 10));
+            Assert.Throws<InvalidOperationException>(() =>
+                gd.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1, 10));
 
             gd.Indices = indexBuffer;
 
@@ -368,7 +381,8 @@ namespace MonoGame.Tests.Graphics
             Assert.DoesNotThrow(() => gd.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 1, 10));
 
             // primitiveCount too small / large.
-            Assert.Throws<ArgumentOutOfRangeException>(() => gd.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 0, 10));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                gd.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0, 3, 0, 0, 10));
 
             effect.Dispose();
             vertexBuffer.Dispose();
@@ -388,10 +402,10 @@ namespace MonoGame.Tests.Graphics
             // Create vertex and index buffer for a quad.
             var vertices = new[]
             {
-                new VertexPositionTexture(new Vector3(-1,  1, 0), new Vector2(0, 0)),
-                new VertexPositionTexture(new Vector3( 1,  1, 0), new Vector2(1, 0)),
+                new VertexPositionTexture(new Vector3(-1, 1, 0), new Vector2(0, 0)),
+                new VertexPositionTexture(new Vector3(1, 1, 0), new Vector2(1, 0)),
                 new VertexPositionTexture(new Vector3(-1, -1, 0), new Vector2(0, 1)),
-                new VertexPositionTexture(new Vector3( 1, -1, 0), new Vector2(1, 1)),
+                new VertexPositionTexture(new Vector3(1, -1, 0), new Vector2(1, 1)),
             };
             vertexBuffer = new VertexBuffer(
                 gd, VertexPositionTexture.VertexDeclaration,
@@ -407,9 +421,10 @@ namespace MonoGame.Tests.Graphics
             for (int i = 0; i < worldTransforms.Length; i++)
             {
                 worldTransforms[i] = Matrix.CreateScale(0.4f) *
-                    Matrix.CreateRotationZ(0.05f * i) *
-                    Matrix.CreateTranslation(-3.5f + (i % 8), -1.5f + (int)(i / 8), 0);
+                                     Matrix.CreateRotationZ(0.05f * i) *
+                                     Matrix.CreateTranslation(-3.5f + i % 8, -1.5f + i / 8, 0);
             }
+
             VertexDeclaration instanceVertexDeclaration = new VertexDeclaration
             (
                 new VertexElement(0, VertexElementFormat.Vector4, VertexElementUsage.BlendWeight, 0),
@@ -417,7 +432,8 @@ namespace MonoGame.Tests.Graphics
                 new VertexElement(32, VertexElementFormat.Vector4, VertexElementUsage.BlendWeight, 2),
                 new VertexElement(48, VertexElementFormat.Vector4, VertexElementUsage.BlendWeight, 3)
             );
-            instanceVertexBuffer = new VertexBuffer(gd, instanceVertexDeclaration, worldTransforms.Length, BufferUsage.None);
+            instanceVertexBuffer =
+                new VertexBuffer(gd, instanceVertexDeclaration, worldTransforms.Length, BufferUsage.None);
             instanceVertexBuffer.SetData(worldTransforms);
 
             var view = Matrix.CreateLookAt(new Vector3(0, 0, 6), new Vector3(0, 0, 0), Vector3.Up);
@@ -443,7 +459,7 @@ namespace MonoGame.Tests.Graphics
 
             gd.DrawInstancedPrimitives(PrimitiveType.TriangleList, 0, 0, 6, 0, 2, worldTransforms.Length);
 
-            // There is a minor difference in the rasterization between XNA and DirectX. 
+            // There is a minor difference in the rasterization between XNA and DirectX.
             Similarity = 0.98f;
 
             CheckFrames();
@@ -467,7 +483,8 @@ namespace MonoGame.Tests.Graphics
             var vertexDataEmpty = new VertexPositionColorTexture[0];
 
             // No vertex shader or pixel shader.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawUserPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 1));
+            Assert.Throws<InvalidOperationException>(() =>
+                gd.DrawUserPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 1));
 
             var effect = new BasicEffect(gd);
             effect.CurrentTechnique.Passes[0].Apply();
@@ -493,15 +510,19 @@ namespace MonoGame.Tests.Graphics
             DoDrawUserPrimitivesAsserts(vertexDataNonEmpty, 1, 1, d => Assert.Throws<ArgumentOutOfRangeException>(d));
 
             // Null vertexDeclaration.
-            Assert.Throws<ArgumentNullException>(() => gd.DrawUserPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 1, null));
+            Assert.Throws<ArgumentNullException>(() =>
+                gd.DrawUserPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 1, null));
 
             effect.Dispose();
         }
 
-        private void DoDrawUserPrimitivesAsserts(VertexPositionColorTexture[] vertexData, int vertexOffset, int primitiveCount, Action<TestDelegate> assertMethod)
+        private void DoDrawUserPrimitivesAsserts(VertexPositionColorTexture[] vertexData, int vertexOffset,
+            int primitiveCount, Action<TestDelegate> assertMethod)
         {
-            assertMethod(() => gd.DrawUserPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset, primitiveCount));
-            assertMethod(() => gd.DrawUserPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset, primitiveCount, VertexPositionColorTexture.VertexDeclaration));
+            assertMethod(() =>
+                gd.DrawUserPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset, primitiveCount));
+            assertMethod(() => gd.DrawUserPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset,
+                primitiveCount, VertexPositionColorTexture.VertexDeclaration));
         }
 
         [Test]
@@ -519,53 +540,73 @@ namespace MonoGame.Tests.Graphics
             var indexDataEmpty = new short[0];
 
             // No vertex shader or pixel shader.
-            Assert.Throws<InvalidOperationException>(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 1));
+            Assert.Throws<InvalidOperationException>(() =>
+                gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0,
+                    1));
 
             var effect = new BasicEffect(gd);
             effect.CurrentTechnique.Passes[0].Apply();
 
             // Success - "normal" usage.
-            Assert.DoesNotThrow(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 1));
+            Assert.DoesNotThrow(() =>
+                gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0,
+                    1));
 
             // Failure cases.
 
             // Null vertexData.
-            DoDrawUserIndexedPrimitivesAsserts(null, 0, 3, indexDataNonEmpty, 0, 1, d => Assert.Throws<ArgumentNullException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(null, 0, 3, indexDataNonEmpty, 0, 1,
+                d => Assert.Throws<ArgumentNullException>(d));
 
             // Empty vertexData.
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataEmpty, 0, 3, indexDataNonEmpty, 0, 1, d => Assert.Throws<ArgumentNullException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataEmpty, 0, 3, indexDataNonEmpty, 0, 1,
+                d => Assert.Throws<ArgumentNullException>(d));
 
             // vertexOffset too small / large.
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, -1, 3, indexDataNonEmpty, 0, 1, d => Assert.Throws<ArgumentOutOfRangeException>(d));
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 3, 3, indexDataNonEmpty, 0, 1, d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, -1, 3, indexDataNonEmpty, 0, 1,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 3, 3, indexDataNonEmpty, 0, 1,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
 
             // numVertices too small / large.
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 0, indexDataNonEmpty, 0, 1, d => Assert.Throws<ArgumentOutOfRangeException>(d));
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 4, indexDataNonEmpty, 0, 1, d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 0, indexDataNonEmpty, 0, 1,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 4, indexDataNonEmpty, 0, 1,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
 
             // vertexOffset + numVertices too large.
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 1, 3, indexDataNonEmpty, 0, 1, d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 1, 3, indexDataNonEmpty, 0, 1,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
 
             // Null indexData.
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, null, 0, 1, d => Assert.Throws<ArgumentNullException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, null, 0, 1,
+                d => Assert.Throws<ArgumentNullException>(d));
 
             // Empty indexData.
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataEmpty, 0, 1, d => Assert.Throws<ArgumentNullException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataEmpty, 0, 1,
+                d => Assert.Throws<ArgumentNullException>(d));
 
             // indexOffset too small / large.
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, -1, 1, d => Assert.Throws<ArgumentOutOfRangeException>(d));
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 1, 1, d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, -1, 1,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 1, 1,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
 
             // primitiveCount too small / large.
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, -1, d => Assert.Throws<ArgumentOutOfRangeException>(d));
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 0, d => Assert.Throws<ArgumentOutOfRangeException>(d));
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 2, d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, -1,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 0,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 2,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
 
             // indexOffset + primitiveCount too large.
-            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 1, 1, d => Assert.Throws<ArgumentOutOfRangeException>(d));
+            DoDrawUserIndexedPrimitivesAsserts(vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 1, 1,
+                d => Assert.Throws<ArgumentOutOfRangeException>(d));
 
             // Null vertexDeclaration.
-            Assert.Throws<ArgumentNullException>(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 1, null));
+            Assert.Throws<ArgumentNullException>(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList,
+                vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 1, null));
 
             // Smaller vertex stride in VertexDeclaration than in actual vertices.
 
@@ -577,20 +618,28 @@ namespace MonoGame.Tests.Graphics
             Assert.DoesNotThrow(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 1, VertexPositionColor.VertexDeclaration));
             Assert.DoesNotThrow(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 3, indexDataNonEmpty.Select(x => (int) x).ToArray(), 0, 1, VertexPositionColor.VertexDeclaration));
 #else
-            Assert.Throws<ArgumentOutOfRangeException>(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 1, VertexPositionColor.VertexDeclaration));
-            Assert.Throws<ArgumentOutOfRangeException>(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexDataNonEmpty, 0, 3, indexDataNonEmpty.Select(x => (int) x).ToArray(), 0, 1, VertexPositionColor.VertexDeclaration));
+            Assert.Throws<ArgumentOutOfRangeException>(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList,
+                vertexDataNonEmpty, 0, 3, indexDataNonEmpty, 0, 1, VertexPositionColor.VertexDeclaration));
+            Assert.Throws<ArgumentOutOfRangeException>(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList,
+                vertexDataNonEmpty, 0, 3, indexDataNonEmpty.Select(x => (int)x).ToArray(), 0, 1,
+                VertexPositionColor.VertexDeclaration));
 #endif
             effect.Dispose();
         }
 
-        private void DoDrawUserIndexedPrimitivesAsserts(VertexPositionColorTexture[] vertexData, int vertexOffset, int numVertices, short[] indexData, int indexOffset, int primitiveCount, Action<TestDelegate> assertMethod)
+        private void DoDrawUserIndexedPrimitivesAsserts(VertexPositionColorTexture[] vertexData, int vertexOffset,
+            int numVertices, short[] indexData, int indexOffset, int primitiveCount, Action<TestDelegate> assertMethod)
         {
-            assertMethod(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount));
-            assertMethod(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset, numVertices, indexData, indexOffset, primitiveCount, VertexPositionColorTexture.VertexDeclaration));
+            assertMethod(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset,
+                numVertices, indexData, indexOffset, primitiveCount));
+            assertMethod(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset,
+                numVertices, indexData, indexOffset, primitiveCount, VertexPositionColorTexture.VertexDeclaration));
 
-            var intIndexData = (indexData == null) ? null : indexData.Select(x => (int) x).ToArray();
-            assertMethod(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset, numVertices, intIndexData, indexOffset, primitiveCount));
-            assertMethod(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset, numVertices, intIndexData, indexOffset, primitiveCount, VertexPositionColorTexture.VertexDeclaration));
+            var intIndexData = indexData == null ? null : indexData.Select(x => (int)x).ToArray();
+            assertMethod(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset,
+                numVertices, intIndexData, indexOffset, primitiveCount));
+            assertMethod(() => gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, vertexOffset,
+                numVertices, intIndexData, indexOffset, primitiveCount, VertexPositionColorTexture.VertexDeclaration));
         }
 
         [Test]
@@ -604,11 +653,11 @@ namespace MonoGame.Tests.Graphics
 #if XNA
             var supportedVertexTextureFormats = new[]
             {
-                SurfaceFormat.Single, 
-                SurfaceFormat.Vector2, 
+                SurfaceFormat.Single,
+                SurfaceFormat.Vector2,
                 SurfaceFormat.Vector4,
-                SurfaceFormat.HalfSingle, 
-                SurfaceFormat.HalfVector2, 
+                SurfaceFormat.HalfSingle,
+                SurfaceFormat.HalfVector2,
                 SurfaceFormat.HalfVector4,
                 SurfaceFormat.HdrBlendable
             };
@@ -637,7 +686,7 @@ namespace MonoGame.Tests.Graphics
         {
             public Vector2 Position;
 
-            public static readonly VertexDeclaration VertexDeclaration = new VertexDeclaration(
+            public static readonly VertexDeclaration VertexDeclaration = new(
                 new VertexElement(0, VertexElementFormat.Vector2, VertexElementUsage.Position, 0));
 
             VertexDeclaration IVertexType.VertexDeclaration
@@ -659,8 +708,8 @@ namespace MonoGame.Tests.Graphics
             var heightMapTexture = new Texture2D(gd, heightMapSize, heightMapSize, false, SurfaceFormat.Single);
             var heightMapData = new float[heightMapSize * heightMapSize];
             for (var y = 0; y < heightMapSize; y++)
-                for (var x = 0; x < heightMapSize; x++)
-                    heightMapData[(y * heightMapSize) + x] = (float) Math.Sin(x / 2.0f) + (float) Math.Sin(y / 3.0f);
+            for (var x = 0; x < heightMapSize; x++)
+                heightMapData[y * heightMapSize + x] = (float)Math.Sin(x / 2.0f) + (float)Math.Sin(y / 3.0f);
             heightMapTexture.SetData(heightMapData);
 
             var viewMatrix = Matrix.CreateLookAt(new Vector3(32, 10, 60), new Vector3(32, 0, 30), Vector3.Up);
@@ -670,7 +719,7 @@ namespace MonoGame.Tests.Graphics
             var effect = AssetTestUtility.LoadEffect(content, "VertexTextureEffect");
             effect.Parameters["WorldViewProj"].SetValue(viewMatrix * projectionMatrix);
             effect.Parameters["HeightMapTexture"].SetValue(heightMapTexture);
-            effect.Parameters["HeightMapSize"].SetValue((float) heightMapSize);
+            effect.Parameters["HeightMapSize"].SetValue((float)heightMapSize);
 
             effect.CurrentTechnique.Passes[0].Apply();
 
@@ -678,8 +727,8 @@ namespace MonoGame.Tests.Graphics
             var vertexBuffer = new VertexBuffer(gd, typeof(VertexPosition2), numVertices, BufferUsage.WriteOnly);
             var vertices = new VertexPosition2[numVertices];
             for (var y = 0; y < heightMapSize; y++)
-                for (var x = 0; x < heightMapSize; x++)
-                    vertices[(y * heightMapSize) + x] = new VertexPosition2 { Position = new Vector2(x, y) };
+            for (var x = 0; x < heightMapSize; x++)
+                vertices[y * heightMapSize + x] = new VertexPosition2 { Position = new Vector2(x, y) };
             vertexBuffer.SetData(vertices);
             gd.SetVertexBuffer(vertexBuffer);
 
@@ -688,18 +737,19 @@ namespace MonoGame.Tests.Graphics
             var indexData = new short[numIndices];
             var indexIndex = 0;
             for (short y = 0; y < heightMapSize - 1; y++)
-                for (short x = 0; x < heightMapSize - 1; x++)
-                {
-                    var baseIndex = (short) ((y * heightMapSize) + x);
+            for (short x = 0; x < heightMapSize - 1; x++)
+            {
+                var baseIndex = (short)(y * heightMapSize + x);
 
-                    indexData[indexIndex++] = baseIndex;
-                    indexData[indexIndex++] = (short) (baseIndex + heightMapSize);
-                    indexData[indexIndex++] = (short) (baseIndex + 1);
+                indexData[indexIndex++] = baseIndex;
+                indexData[indexIndex++] = (short)(baseIndex + heightMapSize);
+                indexData[indexIndex++] = (short)(baseIndex + 1);
 
-                    indexData[indexIndex++] = (short) (baseIndex + 1);
-                    indexData[indexIndex++] = (short) (baseIndex + heightMapSize);
-                    indexData[indexIndex++] = (short) (baseIndex + heightMapSize + 1);
-                }
+                indexData[indexIndex++] = (short)(baseIndex + 1);
+                indexData[indexIndex++] = (short)(baseIndex + heightMapSize);
+                indexData[indexIndex++] = (short)(baseIndex + heightMapSize + 1);
+            }
+
             indexBuffer.SetData(indexData);
             gd.Indices = indexBuffer;
 

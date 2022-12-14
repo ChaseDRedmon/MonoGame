@@ -50,7 +50,7 @@ namespace MonoGame.Tests.Graphics
                 Assert.AreNotEqual(adapter.SubSystemId, 0);
                 Assert.GreaterOrEqual(adapter.Revision, 0);
 
-                Assert.IsNotNull(adapter.CurrentDisplayMode); 
+                Assert.IsNotNull(adapter.CurrentDisplayMode);
                 Assert.IsNotNull(adapter.SupportedDisplayModes);
                 Assert.GreaterOrEqual(adapter.SupportedDisplayModes.Count(), 1);
                 Assert.AreEqual(1, adapter.SupportedDisplayModes.Count(m => Equals(m, adapter.CurrentDisplayMode)));
@@ -63,7 +63,7 @@ namespace MonoGame.Tests.Graphics
 #else
                 var isWidescreen = adapter.CurrentDisplayMode.AspectRatio >= minWideScreenAspect;
 #endif
-                Assert.AreEqual(isWidescreen, adapter.IsWideScreen); 
+                Assert.AreEqual(isWidescreen, adapter.IsWideScreen);
 
                 foreach (var mode in adapter.SupportedDisplayModes)
                 {
@@ -107,7 +107,7 @@ namespace MonoGame.Tests.Graphics
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.Dxt3, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.Reach, SurfaceFormat.Dxt5, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.Dxt5, SurfaceFormat.Color, false)]
-#if !XNA        
+#if !XNA
         [TestCase(GraphicsProfile.Reach, SurfaceFormat.Dxt1a, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.Dxt1a, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.Reach, SurfaceFormat.Dxt1SRgb, SurfaceFormat.Color, false)]
@@ -121,14 +121,16 @@ namespace MonoGame.Tests.Graphics
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.NormalizedByte2, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.Reach, SurfaceFormat.NormalizedByte4, SurfaceFormat.Color, false)]
         [TestCase(GraphicsProfile.HiDef, SurfaceFormat.NormalizedByte4, SurfaceFormat.Color, false)]
-        public static void QueryRenderTargetFormat_preferredSurface(GraphicsProfile graphicsProfile, SurfaceFormat preferredSurfaceFormat, SurfaceFormat expectedSurfaceFormat, bool expectedIsSupported)
+        public static void QueryRenderTargetFormat_preferredSurface(GraphicsProfile graphicsProfile,
+            SurfaceFormat preferredSurfaceFormat, SurfaceFormat expectedSurfaceFormat, bool expectedIsSupported)
         {
             var adapter = GraphicsAdapter.DefaultAdapter;
 
             SurfaceFormat selectedFormat;
             DepthFormat selectedDepthFormat;
             int selectedMultiSampleCount;
-            bool isSupported = adapter.QueryRenderTargetFormat(graphicsProfile, preferredSurfaceFormat, DepthFormat.None, 0,
+            bool isSupported = adapter.QueryRenderTargetFormat(graphicsProfile, preferredSurfaceFormat,
+                DepthFormat.None, 0,
                 out selectedFormat, out selectedDepthFormat, out selectedMultiSampleCount);
 
             Assert.AreEqual(isSupported, expectedIsSupported);

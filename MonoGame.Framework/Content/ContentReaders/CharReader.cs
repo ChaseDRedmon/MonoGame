@@ -5,20 +5,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using Microsoft.Xna.Framework.Content;
 
-namespace Microsoft.Xna.Framework.Content
-{
-	internal class CharReader : ContentTypeReader<char>
-    {
-        public CharReader()
-        {
-        }
+namespace Microsoft.Xna.Framework.Content;
 
-        protected internal override char Read(ContentReader input, char existingInstance)
-        {
-            return input.ReadChar();
-        }
+internal class CharReader : ContentTypeReader<char>
+{
+    public CharReader()
+    {
+    }
+
+    protected internal override char Read(ContentReader input, char existingInstance)
+    {
+        return input.ReadChar();
     }
 }

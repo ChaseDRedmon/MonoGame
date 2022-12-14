@@ -5,60 +5,61 @@
 using System;
 using System.IO;
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Microsoft.Xna.Framework.Audio;
+
+class XactClip
 {
-    class XactClip
+    private readonly float _defaultVolume;
+    private float _volumeScale;
+    private float _volume;
+
+    private readonly ClipEvent[] _events;
+    private float _time;
+    private int _nextEvent;
+
+    internal readonly bool FilterEnabled;
+    internal readonly FilterMode FilterMode;
+    internal readonly float FilterQ;
+    internal readonly ushort FilterFrequency;
+
+    internal readonly bool UseReverb;
+
+    public XactClip(SoundBank soundBank, BinaryReader clipReader, bool useReverb)
     {
-        private readonly float _defaultVolume;
-        private float _volumeScale;
-        private float _volume;
-
-        private readonly ClipEvent[] _events;
-        private float _time;
-        private int _nextEvent;
-
-        internal readonly bool FilterEnabled;
-        internal readonly FilterMode FilterMode;
-        internal readonly float FilterQ;
-        internal readonly ushort FilterFrequency;
-
-        internal readonly bool UseReverb;
-
-        public XactClip (SoundBank soundBank, BinaryReader clipReader, bool useReverb)
-        {
 #pragma warning disable 0219
-            State = SoundState.Stopped;
+        State = SoundState.Stopped;
 
-            UseReverb = useReverb;
+        UseReverb = useReverb;
 
-            var volumeDb = XactHelpers.ParseDecibels(clipReader.ReadByte());
-            _defaultVolume = XactHelpers.ParseVolumeFromDecibels(volumeDb);
-            var clipOffset = clipReader.ReadUInt32();
+        var volumeDb = XactHelpers.ParseDecibels(clipReader.ReadByte());
+        _defaultVolume = XactHelpers.ParseVolumeFromDecibels(volumeDb);
+        var clipOffset = clipReader.ReadUInt32();
 
-            // Read the filter info.
-            var filterQAndFlags = clipReader.ReadUInt16();
-            FilterEnabled = (filterQAndFlags & 1) == 1;
-            FilterMode = (FilterMode)((filterQAndFlags >> 1) & 3);
-            FilterQ = (filterQAndFlags >> 3) * 0.01f;
-            FilterFrequency = clipReader.ReadUInt16();
+        // Read the filter info.
+        var filterQAndFlags = clipReader.ReadUInt16();
+        FilterEnabled = (filterQAndFlags & 1) == 1;
+        FilterMode = (FilterMode)((filterQAndFlags >> 1) & 3);
+        FilterQ = (filterQAndFlags >> 3) * 0.01f;
+        FilterFrequency = clipReader.ReadUInt16();
 
-            var oldPosition = clipReader.BaseStream.Position;
-            clipReader.BaseStream.Seek(clipOffset, SeekOrigin.Begin);
-            
-            var numEvents = clipReader.ReadByte();
-            _events = new ClipEvent[numEvents];
-            
-            for (var i=0; i<numEvents; i++) 
+        var oldPosition = clipReader.BaseStream.Position;
+        clipReader.BaseStream.Seek(clipOffset, SeekOrigin.Begin);
+
+        var numEvents = clipReader.ReadByte();
+        _events = new ClipEvent[numEvents];
+
+        for (var i = 0; i < numEvents; i++)
+        {
+            var eventInfo = clipReader.ReadUInt32();
+            var randomOffset = clipReader.ReadUInt16() * 0.001f;
+
+            // TODO: eventInfo still has 11 bits that are unknown!
+            var eventId = eventInfo & 0x1F;
+            var timeStamp = ((eventInfo >> 5) & 0xFFFF) * 0.001f;
+            var unknown = eventInfo >> 21;
+
+            switch (eventId)
             {
-                var eventInfo = clipReader.ReadUInt32();
-                var randomOffset = clipReader.ReadUInt16() * 0.001f;
-
-                // TODO: eventInfo still has 11 bits that are unknown!
-                var eventId = eventInfo & 0x1F;
-                var timeStamp = ((eventInfo >> 5) & 0xFFFF) * 0.001f;
-                var unknown = eventInfo >> 21;
-
-                switch (eventId) {
                 case 0:
                     // Stop Event
                     throw new NotImplementedException("Stop event");
@@ -75,21 +76,21 @@ namespace Microsoft.Xna.Framework.Audio
                     var useCenterSpeaker = (eventFlags & 0x04) == 0x04;
 
                     int trackIndex = clipReader.ReadUInt16();
-                    int waveBankIndex = clipReader.ReadByte();					
+                    int waveBankIndex = clipReader.ReadByte();
                     var loopCount = clipReader.ReadByte();
                     var panAngle = clipReader.ReadUInt16() / 100.0f;
                     var panArc = clipReader.ReadUInt16() / 100.0f;
-                    
+
                     _events[i] = new PlayWaveEvent(
                         this,
-                        timeStamp, 
+                        timeStamp,
                         randomOffset,
-                        soundBank, 
-                        new[] { waveBankIndex }, 
+                        soundBank,
+                        new[] { waveBankIndex },
                         new[] { trackIndex },
                         null,
                         0,
-                        VariationType.Ordered, 
+                        VariationType.Ordered,
                         null,
                         null,
                         null,
@@ -120,8 +121,8 @@ namespace Microsoft.Xna.Framework.Audio
                     // Not sure what most of this is.
                     var moreFlags = clipReader.ReadByte();
                     var newWaveOnLoop = (moreFlags & 0x40) == 0x40;
-                    
-                    // The variation playlist type seems to be 
+
+                    // The variation playlist type seems to be
                     // stored in the bottom 4bits only.
                     var variationType = (VariationType)(moreFlags & 0x0F);
 
@@ -147,8 +148,8 @@ namespace Microsoft.Xna.Framework.Audio
                         this,
                         timeStamp,
                         randomOffset,
-                        soundBank, 
-                        waveBanks, 
+                        soundBank,
+                        waveBanks,
                         tracks,
                         weights,
                         totalWeights,
@@ -219,12 +220,12 @@ namespace Microsoft.Xna.Framework.Audio
                         randomOffset,
                         soundBank,
                         new[] { waveBankIndex },
-                        new[] { trackIndex }, 
+                        new[] { trackIndex },
                         null,
                         0,
                         VariationType.Ordered,
                         volumeVar,
-                        pitchVar, 
+                        pitchVar,
                         filterVar,
                         loopCount,
                         false);
@@ -289,7 +290,7 @@ namespace Microsoft.Xna.Framework.Audio
                     var moreFlags = clipReader.ReadByte();
                     var newWaveOnLoop = (moreFlags & 0x40) == 0x40;
 
-                    // The variation playlist type seems to be 
+                    // The variation playlist type seems to be
                     // stored in the bottom 4bits only.
                     var variationType = (VariationType)(moreFlags & 0x0F);
 
@@ -322,7 +323,7 @@ namespace Microsoft.Xna.Framework.Audio
                         totalWeights,
                         variationType,
                         volumeVar,
-                        pitchVar, 
+                        pitchVar,
                         filterVar,
                         loopCount,
                         newWaveOnLoop);
@@ -350,10 +351,10 @@ namespace Microsoft.Xna.Framework.Audio
                     // Unknown!
                     clipReader.ReadBytes(9);
 
-                    _events[i] = new VolumeEvent(   this, 
-                                                    timeStamp, 
-                                                    randomOffset, 
-                                                    volume);
+                    _events[i] = new VolumeEvent(this,
+                        timeStamp,
+                        randomOffset,
+                        volume);
                     break;
                 }
 
@@ -367,129 +368,128 @@ namespace Microsoft.Xna.Framework.Audio
 
                 default:
                     throw new NotSupportedException("Unknown event " + eventId);
-                }
             }
-            
-            clipReader.BaseStream.Seek (oldPosition, SeekOrigin.Begin);
+        }
+
+        clipReader.BaseStream.Seek(oldPosition, SeekOrigin.Begin);
 #pragma warning restore 0219
+    }
+
+    internal void Update(float dt)
+    {
+        if (State != SoundState.Playing)
+            return;
+
+        _time += dt;
+
+        // Play the next event.
+        while (_nextEvent < _events.Length)
+        {
+            var evt = _events[_nextEvent];
+            if (_time < evt.TimeStamp)
+                break;
+
+            evt.Play();
+            ++_nextEvent;
         }
 
-        internal void Update(float dt)
+        // Update all the active events.
+        var isPlaying = _nextEvent < _events.Length;
+        for (var i = 0; i < _nextEvent; i++)
         {
-            if (State != SoundState.Playing)
-                return;
-
-            _time += dt;
-
-            // Play the next event.
-            while (_nextEvent < _events.Length)
-            {
-                var evt = _events[_nextEvent];
-                if (_time < evt.TimeStamp)
-                    break;
-
-                evt.Play();
-                ++_nextEvent;
-            }
-
-            // Update all the active events.
-            var isPlaying = _nextEvent < _events.Length;
-            for (var i = 0; i < _nextEvent; i++)
-            {
-                var evt = _events[i];
-                isPlaying |= evt.Update(dt);
-            }
-
-            // Update the state.
-            if (!isPlaying)
-                State = SoundState.Stopped;
+            var evt = _events[i];
+            isPlaying |= evt.Update(dt);
         }
 
-        internal void SetFade(float fadeInDuration, float fadeOutDuration)
-        {
-            foreach (var evt in _events)
-            {
-                if (evt is PlayWaveEvent)
-                    evt.SetFade(fadeInDuration, fadeOutDuration);
-            }
-        }
-        
-        internal void UpdateState(float volume, float pitch, float reverbMix, float? filterFrequency, float? filterQFactor)
-        {
-            _volumeScale = volume;
-            var trackVolume = _volume * _volumeScale;
-
-            foreach (var evt in _events)
-                evt.SetState(trackVolume, pitch, reverbMix, filterFrequency, filterQFactor);
-        }
-
-        public void Play()
-        {
-            _time = 0.0f;
-            _nextEvent = 0;
-            SetVolume(_defaultVolume);
-            State = SoundState.Playing; 
-            Update(0);
-        }
-
-        public void Resume()
-        {
-            foreach (var evt in _events)
-                evt.Resume();
-
-            State = SoundState.Playing;
-        }
-        
-        public void Stop()
-        {
-            foreach (var evt in _events)
-                evt.Stop();
-
+        // Update the state.
+        if (!isPlaying)
             State = SoundState.Stopped;
-        }
-        
-        public void Pause()
+    }
+
+    internal void SetFade(float fadeInDuration, float fadeOutDuration)
+    {
+        foreach (var evt in _events)
         {
-            foreach (var evt in _events)
-                evt.Pause();
-
-            State = SoundState.Paused;
-        }
-
-        public SoundState State { get; private set; }
-
-        /// <summary>
-        /// Set the combined volume scale from the parent objects.
-        /// </summary>
-        /// <param name="volume">The volume scale.</param>
-        public void SetVolumeScale(float volume)
-        {
-            _volumeScale = volume;
-            UpdateVolumes();
-        }
-
-        /// <summary>
-        /// Set the volume for the clip.
-        /// </summary>
-        /// <param name="volume">The volume level.</param>
-        public void SetVolume(float volume)
-        {
-            _volume = volume;
-            UpdateVolumes();
-        }
-
-        private void UpdateVolumes()
-        {
-            var volume = _volume * _volumeScale;
-            foreach (var evt in _events)
-                evt.SetTrackVolume(volume);
-        }
-
-        public void SetPan(float pan)
-        {
-            foreach (var evt in _events)
-                evt.SetTrackPan(pan);
+            if (evt is PlayWaveEvent)
+                evt.SetFade(fadeInDuration, fadeOutDuration);
         }
     }
-}
 
+    internal void UpdateState(float volume, float pitch, float reverbMix, float? filterFrequency,
+        float? filterQFactor)
+    {
+        _volumeScale = volume;
+        var trackVolume = _volume * _volumeScale;
+
+        foreach (var evt in _events)
+            evt.SetState(trackVolume, pitch, reverbMix, filterFrequency, filterQFactor);
+    }
+
+    public void Play()
+    {
+        _time = 0.0f;
+        _nextEvent = 0;
+        SetVolume(_defaultVolume);
+        State = SoundState.Playing;
+        Update(0);
+    }
+
+    public void Resume()
+    {
+        foreach (var evt in _events)
+            evt.Resume();
+
+        State = SoundState.Playing;
+    }
+
+    public void Stop()
+    {
+        foreach (var evt in _events)
+            evt.Stop();
+
+        State = SoundState.Stopped;
+    }
+
+    public void Pause()
+    {
+        foreach (var evt in _events)
+            evt.Pause();
+
+        State = SoundState.Paused;
+    }
+
+    public SoundState State { get; private set; }
+
+    /// <summary>
+    /// Set the combined volume scale from the parent objects.
+    /// </summary>
+    /// <param name="volume">The volume scale.</param>
+    public void SetVolumeScale(float volume)
+    {
+        _volumeScale = volume;
+        UpdateVolumes();
+    }
+
+    /// <summary>
+    /// Set the volume for the clip.
+    /// </summary>
+    /// <param name="volume">The volume level.</param>
+    public void SetVolume(float volume)
+    {
+        _volume = volume;
+        UpdateVolumes();
+    }
+
+    private void UpdateVolumes()
+    {
+        var volume = _volume * _volumeScale;
+        foreach (var evt in _events)
+            evt.SetTrackVolume(volume);
+    }
+
+    public void SetPan(float pan)
+    {
+        foreach (var evt in _events)
+            evt.SetTrackPan(pan);
+    }
+}

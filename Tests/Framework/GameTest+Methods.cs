@@ -1,5 +1,4 @@
-﻿#region License
-/*
+﻿/*
 Microsoft Public License (Ms-PL)
 MonoGame - Copyright © 2009-2012 The MonoGame Team
 
@@ -64,27 +63,28 @@ change. To the extent permitted under your local laws, the contributors exclude
 the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
-#endregion License
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using NUnit.Framework;
 
-namespace MonoGame.Tests {
-	partial class GameTest {
-		public static class Methods {
-			[TestFixture]
-			public class Run : FixtureBase {
-				[Test, Ignore("Fix me!")]
-				public void Can_only_be_called_once ()
-				{
-					Game.Run ();
-					Assert.Throws<InvalidOperationException> (() => Game.Run ());
-				}
-			}
-		}
-	}
+namespace MonoGame.Tests;
+
+partial class GameTest
+{
+    public static class Methods
+    {
+        [TestFixture]
+        public class Run : FixtureBase
+        {
+            [Test, Ignore("Fix me!")]
+            public void Can_only_be_called_once()
+            {
+                Game.Run();
+                Assert.Throws<InvalidOperationException>(() => Game.Run());
+            }
+        }
+    }
 }

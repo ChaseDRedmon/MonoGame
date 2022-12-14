@@ -10,40 +10,35 @@ using UIKit;
 
 namespace Microsoft.Xna.Framework.Media
 {
-	public sealed class MediaSource
+    public sealed class MediaSource
     {
-		private MediaSourceType _type;
-		private string _name;
-		internal MediaSource (string name, MediaSourceType type)
-		{
-			_name = name;
-			_type = type;
-		}
-				
-        public Microsoft.Xna.Framework.Media.MediaSourceType MediaSourceType
+        private MediaSourceType _type;
+        private string _name;
+
+        internal MediaSource(string name, MediaSourceType type)
         {
-            get
-            {
-				return _type;
-            }
+            _name = name;
+            _type = type;
+        }
+
+        public MediaSourceType MediaSourceType
+        {
+            get { return _type; }
         }
 
         public string Name
         {
-            get
-            {
-				return _name;
-            }
+            get { return _name; }
         }
-	
-		public static IList<MediaSource> GetAvailableMediaSources()
+
+        public static IList<MediaSource> GetAvailableMediaSources()
         {
 #if IOS
 			MediaSource[] result = { new MediaSource(UIDevice.CurrentDevice.SystemName, MediaSourceType.LocalDevice) };
 #else
-			MediaSource[] result = { new MediaSource("DummpMediaSource", MediaSourceType.LocalDevice) };
+            MediaSource[] result = { new("DummpMediaSource", MediaSourceType.LocalDevice) };
 #endif
-			return result;
+            return result;
         }
     }
 }

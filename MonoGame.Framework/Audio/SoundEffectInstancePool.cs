@@ -4,48 +4,48 @@
 
 using System.Collections.Generic;
 
-namespace Microsoft.Xna.Framework.Audio
+namespace Microsoft.Xna.Framework.Audio;
+
+internal static class SoundEffectInstancePool
 {
-    internal static class SoundEffectInstancePool
+    private static readonly List<SoundEffectInstance> _playingInstances;
+    private static readonly List<SoundEffectInstance> _pooledInstances;
+
+    private static readonly object _locker;
+
+    static SoundEffectInstancePool()
     {
-        private static readonly List<SoundEffectInstance> _playingInstances;
-        private static readonly List<SoundEffectInstance> _pooledInstances;
+        _locker = new object();
 
-        private static readonly object _locker;
+        // Reduce garbage generation by allocating enough capacity for
+        // the maximum playing instances or at least some reasonable value.
+        var maxInstances = SoundEffect.MAX_PLAYING_INSTANCES < 1024 ? SoundEffect.MAX_PLAYING_INSTANCES : 1024;
+        _playingInstances = new List<SoundEffectInstance>(maxInstances);
+        _pooledInstances = new List<SoundEffectInstance>(maxInstances);
+    }
 
-        static SoundEffectInstancePool()
+    /// <summary>
+    /// Gets a value indicating whether the platform has capacity for more sounds to be played at this time.
+    /// </summary>
+    /// <value><c>true</c> if more sounds can be played; otherwise, <c>false</c>.</value>
+    internal static bool SoundsAvailable
+    {
+        get
         {
-            _locker = new object();
-
-            // Reduce garbage generation by allocating enough capacity for
-            // the maximum playing instances or at least some reasonable value.
-            var maxInstances = SoundEffect.MAX_PLAYING_INSTANCES < 1024 ? SoundEffect.MAX_PLAYING_INSTANCES : 1024;
-            _playingInstances = new List<SoundEffectInstance>(maxInstances);
-            _pooledInstances = new List<SoundEffectInstance>(maxInstances);
+            lock (_locker)
+                return _playingInstances.Count < SoundEffect.MAX_PLAYING_INSTANCES;
         }
+    }
 
-        /// <summary>
-        /// Gets a value indicating whether the platform has capacity for more sounds to be played at this time.
-        /// </summary>
-        /// <value><c>true</c> if more sounds can be played; otherwise, <c>false</c>.</value>
-        internal static bool SoundsAvailable
+    /// <summary>
+    /// Add the specified instance to the pool if it is a pooled instance and removes it from the
+    /// list of playing instances.
+    /// </summary>
+    /// <param name="inst">The SoundEffectInstance</param>
+    internal static void Add(SoundEffectInstance inst)
+    {
+        lock (_locker)
         {
-            get
-            {
-                lock(_locker)
-                	return _playingInstances.Count < SoundEffect.MAX_PLAYING_INSTANCES;
-            }
-        }
-
-        /// <summary>
-        /// Add the specified instance to the pool if it is a pooled instance and removes it from the
-        /// list of playing instances.
-        /// </summary>
-        /// <param name="inst">The SoundEffectInstance</param>
-        internal static void Add(SoundEffectInstance inst)
-        {
-            lock (_locker) {
-
             if (inst._isPooled)
             {
                 _pooledInstances.Add(inst);
@@ -53,32 +53,31 @@ namespace Microsoft.Xna.Framework.Audio
             }
 
             _playingInstances.Remove(inst);
+        } // lock(_locker)
+    }
 
-            } // lock(_locker)
-        }
-
-        /// <summary>
-        /// Adds the SoundEffectInstance to the list of playing instances.
-        /// </summary>
-        /// <param name="inst">The SoundEffectInstance to add to the playing list.</param>
-        internal static void Remove(SoundEffectInstance inst)
+    /// <summary>
+    /// Adds the SoundEffectInstance to the list of playing instances.
+    /// </summary>
+    /// <param name="inst">The SoundEffectInstance to add to the playing list.</param>
+    internal static void Remove(SoundEffectInstance inst)
+    {
+        lock (_locker)
         {
-            lock (_locker)
-            {
-                if (!_playingInstances.Contains(inst))
-                    _playingInstances.Add(inst);
-            }
+            if (!_playingInstances.Contains(inst))
+                _playingInstances.Add(inst);
         }
+    }
 
-        /// <summary>
-        /// Returns a pooled SoundEffectInstance if one is available, or allocates a new
-        /// SoundEffectInstance if the pool is empty.
-        /// </summary>
-        /// <returns>The SoundEffectInstance.</returns>
-        internal static SoundEffectInstance GetInstance(bool forXAct)
+    /// <summary>
+    /// Returns a pooled SoundEffectInstance if one is available, or allocates a new
+    /// SoundEffectInstance if the pool is empty.
+    /// </summary>
+    /// <returns>The SoundEffectInstance.</returns>
+    internal static SoundEffectInstance GetInstance(bool forXAct)
+    {
+        lock (_locker)
         {
-            lock (_locker) {
-
             SoundEffectInstance inst = null;
             var count = _pooledInstances.Count;
             if (count > 0)
@@ -106,21 +105,20 @@ namespace Microsoft.Xna.Framework.Audio
             }
 
             return inst;
+        } // lock (_locker)
+    }
 
-            } // lock (_locker)
-        }
-
-        /// <summary>
-        /// Iterates the list of playing instances, returning them to the pool if they
-        /// have stopped playing.
-        /// </summary>
-        internal static void Update()
+    /// <summary>
+    /// Iterates the list of playing instances, returning them to the pool if they
+    /// have stopped playing.
+    /// </summary>
+    internal static void Update()
+    {
+        lock (_locker)
         {
-            lock (_locker) {
-
             SoundEffectInstance inst = null;
 
-            // Cleanup instances which have finished playing.                    
+            // Cleanup instances which have finished playing.
             for (var x = 0; x < _playingInstances.Count;)
             {
                 inst = _playingInstances[x];
@@ -133,7 +131,8 @@ namespace Microsoft.Xna.Framework.Audio
                     continue;
                 }
 
-                if (inst.IsDisposed || inst.State == SoundState.Stopped || (inst._effect == null && !inst._isDynamic))
+                if (inst.IsDisposed || inst.State == SoundState.Stopped ||
+                    (inst._effect == null && !inst._isDynamic))
                 {
 #if OPENAL
                     if (!inst.IsDisposed)
@@ -145,18 +144,17 @@ namespace Microsoft.Xna.Framework.Audio
 
                 x++;
             }
+        } // lock (_locker)
+    }
 
-            } // lock (_locker)
-        }
-
-        /// <summary>
-        /// Iterates the list of playing instances, stop them and return them to the pool if they are instances of the given SoundEffect.
-        /// </summary>
-        /// <param name="effect">The SoundEffect</param>
-        internal static void StopPooledInstances(SoundEffect effect)
+    /// <summary>
+    /// Iterates the list of playing instances, stop them and return them to the pool if they are instances of the given SoundEffect.
+    /// </summary>
+    /// <param name="effect">The SoundEffect</param>
+    internal static void StopPooledInstances(SoundEffect effect)
+    {
+        lock (_locker)
         {
-            lock (_locker) {
-
             SoundEffectInstance inst = null;
 
             for (var x = 0; x < _playingInstances.Count;)
@@ -171,14 +169,13 @@ namespace Microsoft.Xna.Framework.Audio
 
                 x++;
             }
+        } // lock (_locker)
+    }
 
-            } // lock (_locker)
-        }
-
-        internal static void UpdateMasterVolume()
+    internal static void UpdateMasterVolume()
+    {
+        lock (_locker)
         {
-            lock (_locker) {
-
             foreach (var inst in _playingInstances)
             {
                 // XAct sounds are not controlled by the SoundEffect
@@ -191,7 +188,5 @@ namespace Microsoft.Xna.Framework.Audio
                 inst.Volume = inst.Volume;
             }
         }
-
-        } // lock (_locker)
-    }
+    } // lock (_locker)
 }

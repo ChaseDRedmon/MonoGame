@@ -1,5 +1,4 @@
-﻿#region License
-/*
+﻿/*
 Microsoft Public License (Ms-PL)
 MonoGame - Copyright © 2009-2012 The MonoGame Team
 
@@ -64,93 +63,96 @@ change. To the extent permitted under your local laws, the contributors exclude
 the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
-#endregion License
 
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
 using MonoGame.Tests.Components;
 
-namespace MonoGame.Tests.Visual {
-	class VisualTestGame : TestGameBase, IFrameCaptureSource {
-		public VisualTestGame ()
-		{
-			new GraphicsDeviceManager (this) {
-				PreferredBackBufferWidth = 800,
-				PreferredBackBufferHeight = 480,
-				GraphicsProfile = GraphicsProfile.HiDef,
-			};
+namespace MonoGame.Tests.Visual;
 
-			Services.AddService<IFrameCaptureSource> (this);
-		}
+class VisualTestGame : TestGameBase, IFrameCaptureSource
+{
+    public VisualTestGame()
+    {
+        new GraphicsDeviceManager(this)
+        {
+            PreferredBackBufferWidth = 800,
+            PreferredBackBufferHeight = 480,
+            GraphicsProfile = GraphicsProfile.HiDef,
+        };
 
-		protected override void Draw (GameTime gameTime)
-		{
-			if (_shouldCaptureFrame)
-				StartRenderingToTexture ();
+        Services.AddService<IFrameCaptureSource>(this);
+    }
 
-			try {
-				base.Draw (gameTime);
-			} finally {
-				if (_shouldCaptureFrame)
-					StopRenderingToTexture ();
-			}
+    protected override void Draw(GameTime gameTime)
+    {
+        if (_shouldCaptureFrame)
+            StartRenderingToTexture();
 
-			_shouldCaptureFrame = false;
-		}
+        try
+        {
+            base.Draw(gameTime);
+        }
+        finally
+        {
+            if (_shouldCaptureFrame)
+                StopRenderingToTexture();
+        }
 
-		protected override void Dispose (bool disposing)
-		{
-			if (disposing) {
-				if (_renderToTextureTarget != null) {
-					_renderToTextureTarget.Dispose ();
-					_renderToTextureTarget = null;
-				}
-			}
-			base.Dispose (disposing);
-		}
+        _shouldCaptureFrame = false;
+    }
 
-		#region IFrameSource Implementation
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            if (_renderToTextureTarget != null)
+            {
+                _renderToTextureTarget.Dispose();
+                _renderToTextureTarget = null;
+            }
+        }
 
-		private RenderTarget2D _renderToTextureTarget;
-		private bool _shouldCaptureFrame;
-		public void ScheduleFrameCapture ()
-		{
-			_shouldCaptureFrame = true;
-		}
+        base.Dispose(disposing);
+    }
 
-		public Texture2D GetCapturedFrame ()
-		{
-			return _renderToTextureTarget;
-		}
+    private RenderTarget2D _renderToTextureTarget;
+    private bool _shouldCaptureFrame;
 
-		public void ReleaseCapturedFrame (Texture2D frame)
-		{
-			_renderToTextureTarget.Dispose ();
-			_renderToTextureTarget = null;
-		}
+    public void ScheduleFrameCapture()
+    {
+        _shouldCaptureFrame = true;
+    }
 
-		private void StartRenderingToTexture ()
-		{
-			if (_renderToTextureTarget != null)
-				throw new InvalidOperationException ("Already rendering to a different texture.");
+    public Texture2D GetCapturedFrame()
+    {
+        return _renderToTextureTarget;
+    }
 
-			_renderToTextureTarget = new RenderTarget2D(
-				GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height,
-				false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+    public void ReleaseCapturedFrame(Texture2D frame)
+    {
+        _renderToTextureTarget.Dispose();
+        _renderToTextureTarget = null;
+    }
 
-			GraphicsDevice.SetRenderTarget (_renderToTextureTarget);
-		}
+    private void StartRenderingToTexture()
+    {
+        if (_renderToTextureTarget != null)
+            throw new InvalidOperationException("Already rendering to a different texture.");
 
-		private void StopRenderingToTexture ()
-		{
-			if (_renderToTextureTarget == null)
-				throw new InvalidOperationException ("Not currently rendering to a texture.");
+        _renderToTextureTarget = new RenderTarget2D(
+            GraphicsDevice, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height,
+            false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
 
-			GraphicsDevice.SetRenderTarget (null);
-		}
+        GraphicsDevice.SetRenderTarget(_renderToTextureTarget);
+    }
 
-		#endregion IFrameSource Implementation
-	}
+    private void StopRenderingToTexture()
+    {
+        if (_renderToTextureTarget == null)
+            throw new InvalidOperationException("Not currently rendering to a texture.");
+
+        GraphicsDevice.SetRenderTarget(null);
+    }
 }

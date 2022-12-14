@@ -1,5 +1,4 @@
-﻿#region License
-/*
+﻿/*
 Microsoft Public License (Ms-PL)
 MonoGame - Copyright © 2009-2012 The MonoGame Team
 
@@ -64,65 +63,70 @@ change. To the extent permitted under your local laws, the contributors exclude
 the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
-#endregion License
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Microsoft.Xna.Framework;
 
-namespace MonoGame.Tests {
-	struct FrameInfo {
-		public int UpdateNumber;
-		public int DrawNumber;
-		public TimeSpan ElapsedGameTime;
-		public TimeSpan TotalGameTime;
-		public bool IsRunningSlowly;
-	    public GameTime GameTime;
+namespace MonoGame.Tests;
 
-		public void AdvanceUpdate (GameTime gameTime)
-		{
-			UpdateNumber++;
-			UpdateGameTime (gameTime);
-		}
+struct FrameInfo
+{
+    public int UpdateNumber;
+    public int DrawNumber;
+    public TimeSpan ElapsedGameTime;
+    public TimeSpan TotalGameTime;
+    public bool IsRunningSlowly;
+    public GameTime GameTime;
 
-		public void AdvanceDraw (GameTime gameTime)
-		{
-			DrawNumber++;
-			UpdateGameTime (gameTime);
-		}
+    public void AdvanceUpdate(GameTime gameTime)
+    {
+        UpdateNumber++;
+        UpdateGameTime(gameTime);
+    }
 
-		public void Reset ()
-		{
-			UpdateNumber = 0;
-			DrawNumber = 0;
-			ElapsedGameTime = TimeSpan.Zero;
-			TotalGameTime = TimeSpan.Zero;
-			IsRunningSlowly = false;
-		}
+    public void AdvanceDraw(GameTime gameTime)
+    {
+        DrawNumber++;
+        UpdateGameTime(gameTime);
+    }
 
-		public void UpdateGameTime (GameTime gameTime)
-		{
-		    GameTime = gameTime;
-			ElapsedGameTime = gameTime.ElapsedGameTime;
-			TotalGameTime = gameTime.TotalGameTime;
-			IsRunningSlowly = gameTime.IsRunningSlowly;
-		}
-	}
+    public void Reset()
+    {
+        UpdateNumber = 0;
+        DrawNumber = 0;
+        ElapsedGameTime = TimeSpan.Zero;
+        TotalGameTime = TimeSpan.Zero;
+        IsRunningSlowly = false;
+    }
 
-	interface IFrameInfoSource {
-		FrameInfo FrameInfo { get; }
-	}
+    public void UpdateGameTime(GameTime gameTime)
+    {
+        GameTime = gameTime;
+        ElapsedGameTime = gameTime.ElapsedGameTime;
+        TotalGameTime = gameTime.TotalGameTime;
+        IsRunningSlowly = gameTime.IsRunningSlowly;
+    }
+}
 
-	class FrameInfoEventArgs : EventArgs {
-		public FrameInfoEventArgs (FrameInfo frameInfo)
-		{
-			_frameInfo = frameInfo;
-		}
+interface IFrameInfoSource
+{
+    FrameInfo FrameInfo { get; }
+}
 
-		private readonly FrameInfo _frameInfo;
-		public FrameInfo FrameInfo { get { return _frameInfo; } }
-	}
+class FrameInfoEventArgs : EventArgs
+{
+    public FrameInfoEventArgs(FrameInfo frameInfo)
+    {
+        _frameInfo = frameInfo;
+    }
+
+    private readonly FrameInfo _frameInfo;
+
+    public FrameInfo FrameInfo
+    {
+        get { return _frameInfo; }
+    }
 }
