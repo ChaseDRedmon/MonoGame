@@ -4,8 +4,10 @@
 
 using System;
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -1050,14 +1052,14 @@ public struct Vector2 : IEquatable<Vector2>
         int destinationIndex,
         int length)
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (sourceArray.Length < sourceIndex + length)
-            throw new ArgumentException("Source array length is lesser than sourceIndex + length");
+            Throw.ArgumentException("Source array length is lesser than sourceIndex + length");
+
         if (destinationArray.Length < destinationIndex + length)
-            throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
+            Throw.ArgumentException("Destination array length is lesser than destinationIndex + length");
 
         for (int x = 0; x < length; x++)
         {
@@ -1088,14 +1090,14 @@ public struct Vector2 : IEquatable<Vector2>
         int length
     )
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (sourceArray.Length < sourceIndex + length)
-            throw new ArgumentException("Source array length is lesser than sourceIndex + length");
+            Throw.ArgumentException("Source array length is lesser than sourceIndex + length");
+
         if (destinationArray.Length < destinationIndex + length)
-            throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
+            Throw.ArgumentException("Destination array length is lesser than destinationIndex + length");
 
         for (int x = 0; x < length; x++)
         {
@@ -1187,14 +1189,14 @@ public struct Vector2 : IEquatable<Vector2>
         int length
     )
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (sourceArray.Length < sourceIndex + length)
-            throw new ArgumentException("Source array length is lesser than sourceIndex + length");
+            Throw.ArgumentException("Source array length is lesser than sourceIndex + length");
+
         if (destinationArray.Length < destinationIndex + length)
-            throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
+            Throw.ArgumentException("Destination array length is lesser than destinationIndex + length");
 
         for (int i = 0; i < length; i++)
         {
@@ -1218,12 +1220,11 @@ public struct Vector2 : IEquatable<Vector2>
         Vector2[] destinationArray
     )
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (destinationArray.Length < sourceArray.Length)
-            throw new ArgumentException("Destination array length is lesser than source array length");
+            Throw.ArgumentException("Destination array length is lesser than source array length");
 
         for (int i = 0; i < sourceArray.Length; i++)
         {

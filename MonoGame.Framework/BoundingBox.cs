@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -300,8 +301,8 @@ public struct BoundingBox : IEquatable<BoundingBox>
     /// <exception cref="System.ArgumentException">Thrown if the given array is null or has no points.</exception>
     public static BoundingBox CreateFromPoints(Vector3[] points, int index = 0, int count = -1)
     {
-        if (points == null || points.Length == 0)
-            throw new ArgumentException();
+        if (points is null || points.Length == 0)
+            Throw.ArgumentException("Vector3 array cannot be null", nameof(points));
 
         if (count == -1)
             count = points.Length;
@@ -333,8 +334,8 @@ public struct BoundingBox : IEquatable<BoundingBox>
     /// <exception cref="System.ArgumentException">Thrown if the given list is null or has no points.</exception>
     public static BoundingBox CreateFromPoints(List<Vector3> points, int index = 0, int count = -1)
     {
-        if (points == null || points.Count == 0)
-            throw new ArgumentException();
+        if (points is null || points.Count == 0)
+            Throw.ArgumentException("Vector3 array cannot be null", nameof(points));
 
         if (count == -1)
             count = points.Count;
@@ -364,8 +365,8 @@ public struct BoundingBox : IEquatable<BoundingBox>
     /// <exception cref="System.ArgumentException">Thrown if the given list has no points.</exception>
     public static BoundingBox CreateFromPoints(IEnumerable<Vector3> points)
     {
-        if (points == null)
-            throw new ArgumentNullException();
+        if (points is null)
+            Throw.ArgumentNullException(points);
 
         var empty = true;
         var minVec = MaxVector3;
@@ -384,7 +385,7 @@ public struct BoundingBox : IEquatable<BoundingBox>
         }
 
         if (empty)
-            throw new ArgumentException();
+            Throw.ArgumentException("Vector3 array cannot be empty", nameof(points));
 
         return new BoundingBox(minVec, maxVec);
     }
@@ -504,12 +505,12 @@ public struct BoundingBox : IEquatable<BoundingBox>
     {
         if (corners == null)
         {
-            throw new ArgumentNullException("corners");
+            ArgumentNullException.ThrowIfNull(corners);
         }
 
         if (corners.Length < 8)
         {
-            throw new ArgumentOutOfRangeException("corners", "Not Enought Corners");
+            Throw.ArgumentOutOfRangeException("Not Enought Corners", nameof(corners));
         }
 
         corners[0].X = Min.X;

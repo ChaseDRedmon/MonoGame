@@ -24,8 +24,7 @@ abstract partial class GamePlatform : IDisposable
 
     protected GamePlatform(Game game)
     {
-        if (game == null)
-            throw new ArgumentNullException("game");
+        ArgumentNullException.ThrowIfNull(game);
         Game = game;
     }
 

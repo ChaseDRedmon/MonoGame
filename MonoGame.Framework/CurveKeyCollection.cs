@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -29,11 +30,10 @@ public class CurveKeyCollection : ICollection<CurveKey>
         get { return _keys[index]; }
         set
         {
-            if (value == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(value);
 
             if (index >= _keys.Count)
-                throw new IndexOutOfRangeException();
+                Throw.IndexOutOfRangeException();
 
             if (_keys[index].Position == value.Position)
                 _keys[index] = value;
@@ -85,8 +85,7 @@ public class CurveKeyCollection : ICollection<CurveKey>
     /// <remarks>The new key would be added respectively to a position of that key and the position of other keys.</remarks>
     public void Add(CurveKey item)
     {
-        if (item == null)
-            throw new ArgumentNullException("item");
+        ArgumentNullException.ThrowIfNull(item);
 
         if (_keys.Count == 0)
         {

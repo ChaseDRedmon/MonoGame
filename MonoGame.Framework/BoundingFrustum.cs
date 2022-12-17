@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -316,8 +317,8 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
     /// <param name="corners">The array which values will be replaced to corner values of this instance. It must have size of <see cref="BoundingFrustum.CornerCount"/>.</param>
     public void GetCorners(Vector3[] corners)
     {
-        if (corners == null) throw new ArgumentNullException("corners");
-        if (corners.Length < CornerCount) throw new ArgumentOutOfRangeException("corners");
+        ArgumentNullException.ThrowIfNull(corners);
+        Throw.ArgumentOutOfRangeException("Not enough corners", nameof(corners));
 
         _corners.CopyTo(corners, 0);
     }
@@ -445,9 +446,11 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
                 result = 0.0f;
                 return;
             case ContainmentType.Intersects:
-                throw new NotImplementedException();
+                Throw.NotImplementedException();
+                break;
             default:
-                throw new ArgumentOutOfRangeException();
+                Throw.UnreachableException();
+                break;
         }
     }
 

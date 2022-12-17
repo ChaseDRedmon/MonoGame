@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using System.Runtime.Serialization;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -1080,16 +1081,14 @@ public struct Vector3 : IEquatable<Vector3>
     public static void Transform(Vector3[] sourceArray, int sourceIndex, ref Matrix matrix,
         Vector3[] destinationArray, int destinationIndex, int length)
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
-        if (sourceArray.Length < sourceIndex + length)
-            throw new ArgumentException("Source array length is lesser than sourceIndex + length");
-        if (destinationArray.Length < destinationIndex + length)
-            throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
 
-        // TODO: Are there options on some platforms to implement a vectorized version of this?
+        if (sourceArray.Length < sourceIndex + length)
+            Throw.ArgumentException("Source array length is lesser than sourceIndex + length");
+
+        if (destinationArray.Length < destinationIndex + length)
+            Throw.ArgumentException("Destination array length is lesser than destinationIndex + length");
 
         for (var i = 0; i < length; i++)
         {
@@ -1114,14 +1113,14 @@ public struct Vector3 : IEquatable<Vector3>
     public static void Transform(Vector3[] sourceArray, int sourceIndex, ref Quaternion rotation,
         Vector3[] destinationArray, int destinationIndex, int length)
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (sourceArray.Length < sourceIndex + length)
-            throw new ArgumentException("Source array length is lesser than sourceIndex + length");
+            Throw.ArgumentException("Source array length is lesser than sourceIndex + length");
+
         if (destinationArray.Length < destinationIndex + length)
-            throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
+            Throw.ArgumentException("Destination array length is lesser than destinationIndex + length");
 
         // TODO: Are there options on some platforms to implement a vectorized version of this?
 
@@ -1149,12 +1148,11 @@ public struct Vector3 : IEquatable<Vector3>
     /// <param name="destinationArray">Destination array.</param>
     public static void Transform(Vector3[] sourceArray, ref Matrix matrix, Vector3[] destinationArray)
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (destinationArray.Length < sourceArray.Length)
-            throw new ArgumentException("Destination array length is lesser than source array length");
+            Throw.ArgumentException("Destination array length is lesser than source array length");
 
         // TODO: Are there options on some platforms to implement a vectorized version of this?
 
@@ -1177,12 +1175,11 @@ public struct Vector3 : IEquatable<Vector3>
     /// <param name="destinationArray">Destination array.</param>
     public static void Transform(Vector3[] sourceArray, ref Quaternion rotation, Vector3[] destinationArray)
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (destinationArray.Length < sourceArray.Length)
-            throw new ArgumentException("Destination array length is lesser than source array length");
+            Throw.ArgumentException("Destination array length is lesser than source array length");
 
         // TODO: Are there options on some platforms to implement a vectorized version of this?
 
@@ -1246,14 +1243,14 @@ public struct Vector3 : IEquatable<Vector3>
         int destinationIndex,
         int length)
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (sourceArray.Length < sourceIndex + length)
-            throw new ArgumentException("Source array length is lesser than sourceIndex + length");
+            Throw.ArgumentException("Source array length is lesser than sourceIndex + length");
+
         if (destinationArray.Length < destinationIndex + length)
-            throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
+            Throw.ArgumentException("Destination array length is lesser than destinationIndex + length");
 
         for (int x = 0; x < length; x++)
         {
@@ -1275,12 +1272,11 @@ public struct Vector3 : IEquatable<Vector3>
     /// <param name="destinationArray">Destination array.</param>
     public static void TransformNormal(Vector3[] sourceArray, ref Matrix matrix, Vector3[] destinationArray)
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (destinationArray.Length < sourceArray.Length)
-            throw new ArgumentException("Destination array length is lesser than source array length");
+            Throw.ArgumentException("Destination array length is lesser than source array length");
 
         for (var i = 0; i < sourceArray.Length; i++)
         {

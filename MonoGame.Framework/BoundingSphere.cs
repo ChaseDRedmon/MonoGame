@@ -263,8 +263,7 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
     /// <returns>The new <see cref="BoundingSphere"/>.</returns>
     public static BoundingSphere CreateFromPoints(IEnumerable<Vector3> points)
     {
-        if (points == null)
-            throw new ArgumentNullException("points");
+        ArgumentNullException.ThrowIfNull(points);
 
         // From "Real-Time Collision Detection" (Page 89)
 
@@ -296,7 +295,7 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
         }
 
         if (numPoints == 0)
-            throw new ArgumentException("You should have at least one point in points.");
+            Throw.ArgumentException("You should have at least one point in points.", nameof(numPoints));
 
         var sqDistX = Vector3.DistanceSquared(maxx, minx);
         var sqDistY = Vector3.DistanceSquared(maxy, miny);

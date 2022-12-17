@@ -148,10 +148,8 @@ internal static partial class ReflectionHelpers
     /// </summary>
     public static bool IsAssignableFrom(Type type, object value)
     {
-        if (type == null)
-            throw new ArgumentNullException("type");
-        if (value == null)
-            throw new ArgumentNullException("value");
+        ArgumentNullException.ThrowIfNull(type);
+        ArgumentNullException.ThrowIfNull(value);
 
         return IsAssignableFromType(type, value.GetType());
     }
@@ -161,10 +159,9 @@ internal static partial class ReflectionHelpers
     /// </summary>
     public static bool IsAssignableFromType(Type type, Type objectType)
     {
-        if (type == null)
-            throw new ArgumentNullException("type");
-        if (objectType == null)
-            throw new ArgumentNullException("objectType");
+        ArgumentNullException.ThrowIfNull(type);
+        ArgumentNullException.ThrowIfNull(objectType);
+
 #if NET45
             if (type.GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo()))
                 return true;

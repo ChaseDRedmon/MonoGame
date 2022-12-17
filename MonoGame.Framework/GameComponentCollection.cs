@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -42,7 +43,7 @@ public sealed class GameComponentCollection : Collection<IGameComponent>
     {
         if (IndexOf(item) != -1)
         {
-            throw new ArgumentException("Cannot Add Same Component Multiple Times");
+            Throw.ArgumentException("Cannot Add Same Component Multiple Times");
         }
 
         base.InsertItem(index, item);
@@ -72,8 +73,5 @@ public sealed class GameComponentCollection : Collection<IGameComponent>
         }
     }
 
-    protected override void SetItem(int index, IGameComponent item)
-    {
-        throw new NotSupportedException();
-    }
+    protected override void SetItem(int index, IGameComponent item) => Throw.NotSupportedException();
 }

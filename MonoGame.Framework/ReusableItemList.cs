@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -52,13 +53,14 @@ internal class ReusableItemList<T> : ICollection<T>, IEnumerator<T>
         get
         {
             if (index >= _listTop)
-                throw new IndexOutOfRangeException();
+                Throw.ArgumentOutOfRangeException();
             return _list[index];
         }
         set
         {
             if (index >= _listTop)
-                throw new IndexOutOfRangeException();
+                Throw.ArgumentOutOfRangeException();
+
             _list[index] = value;
         }
     }

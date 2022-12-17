@@ -5,6 +5,8 @@
 using System;
 using System.Runtime.Serialization;
 using System.Diagnostics;
+using System.Numerics;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -1117,14 +1119,14 @@ public struct Vector4 : IEquatable<Vector4>
         int length
     )
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (sourceArray.Length < sourceIndex + length)
-            throw new ArgumentException("Source array length is lesser than sourceIndex + length");
+            Throw.ArgumentException("Source array length is lesser than sourceIndex + length");
+
         if (destinationArray.Length < destinationIndex + length)
-            throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
+            Throw.ArgumentException("Destination array length is lesser than destinationIndex + length");
 
         for (var i = 0; i < length; i++)
         {
@@ -1151,14 +1153,14 @@ public struct Vector4 : IEquatable<Vector4>
         int length
     )
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (sourceArray.Length < sourceIndex + length)
-            throw new ArgumentException("Source array length is lesser than sourceIndex + length");
+            Throw.ArgumentException("Source array length is lesser than sourceIndex + length");
+
         if (destinationArray.Length < destinationIndex + length)
-            throw new ArgumentException("Destination array length is lesser than destinationIndex + length");
+            Throw.ArgumentException("Destination array length is lesser than destinationIndex + length");
 
         for (var i = 0; i < length; i++)
         {
@@ -1175,12 +1177,11 @@ public struct Vector4 : IEquatable<Vector4>
     /// <param name="destinationArray">Destination array.</param>
     public static void Transform(Vector4[] sourceArray, ref Matrix matrix, Vector4[] destinationArray)
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (destinationArray.Length < sourceArray.Length)
-            throw new ArgumentException("Destination array length is lesser than source array length");
+            Throw.ArgumentException("Destination array length is lesser than source array length");
 
         for (var i = 0; i < sourceArray.Length; i++)
         {
@@ -1197,12 +1198,11 @@ public struct Vector4 : IEquatable<Vector4>
     /// <param name="destinationArray">Destination array.</param>
     public static void Transform(Vector4[] sourceArray, ref Quaternion rotation, Vector4[] destinationArray)
     {
-        if (sourceArray == null)
-            throw new ArgumentNullException("sourceArray");
-        if (destinationArray == null)
-            throw new ArgumentNullException("destinationArray");
+        ArgumentNullException.ThrowIfNull(sourceArray);
+        ArgumentNullException.ThrowIfNull(destinationArray);
+
         if (destinationArray.Length < sourceArray.Length)
-            throw new ArgumentException("Destination array length is lesser than source array length");
+            Throw.ArgumentException("Destination array length is lesser than source array length");
 
         for (var i = 0; i < sourceArray.Length; i++)
         {

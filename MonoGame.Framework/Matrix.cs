@@ -5,6 +5,8 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using System.Windows.Forms;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -191,7 +193,7 @@ public struct Matrix : IEquatable<Matrix>
                 13 => M42,
                 14 => M43,
                 15 => M44,
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new UnreachableException()
             };
         }
 
@@ -247,7 +249,9 @@ public struct Matrix : IEquatable<Matrix>
                 case 15:
                     M44 = value;
                     break;
-                default: throw new ArgumentOutOfRangeException();
+                default:
+                    Throw.UnreachableException();
+                    break;
             }
         }
     }
@@ -902,17 +906,17 @@ public struct Matrix : IEquatable<Matrix>
     {
         if (nearPlaneDistance <= 0f)
         {
-            throw new ArgumentException("nearPlaneDistance <= 0");
+            Throw.ArgumentException("nearPlaneDistance <= 0");
         }
 
         if (farPlaneDistance <= 0f)
         {
-            throw new ArgumentException("farPlaneDistance <= 0");
+            Throw.ArgumentException("farPlaneDistance <= 0");
         }
 
         if (nearPlaneDistance >= farPlaneDistance)
         {
-            throw new ArgumentException("nearPlaneDistance >= farPlaneDistance");
+            Throw.ArgumentException("nearPlaneDistance >= farPlaneDistance");
         }
 
         var negFarRange = float.IsPositiveInfinity(farPlaneDistance)
@@ -959,22 +963,22 @@ public struct Matrix : IEquatable<Matrix>
     {
         if (fieldOfView <= 0f || fieldOfView >= 3.141593f)
         {
-            throw new ArgumentException("fieldOfView <= 0 or >= PI");
+            Throw.ArgumentException("fieldOfView <= 0 or >= PI");
         }
 
         if (nearPlaneDistance <= 0f)
         {
-            throw new ArgumentException("nearPlaneDistance <= 0");
+            Throw.ArgumentException("nearPlaneDistance <= 0");
         }
 
         if (farPlaneDistance <= 0f)
         {
-            throw new ArgumentException("farPlaneDistance <= 0");
+            Throw.ArgumentException("farPlaneDistance <= 0");
         }
 
         if (nearPlaneDistance >= farPlaneDistance)
         {
-            throw new ArgumentException("nearPlaneDistance >= farPlaneDistance");
+            Throw.ArgumentException("nearPlaneDistance >= farPlaneDistance");
         }
 
         var yScale = 1.0f / (float)Math.Tan((double)fieldOfView * 0.5f);
@@ -1043,17 +1047,17 @@ public struct Matrix : IEquatable<Matrix>
     {
         if (nearPlaneDistance <= 0f)
         {
-            throw new ArgumentException("nearPlaneDistance <= 0");
+            Throw.ArgumentException("nearPlaneDistance <= 0");
         }
 
         if (farPlaneDistance <= 0f)
         {
-            throw new ArgumentException("farPlaneDistance <= 0");
+            Throw.ArgumentException("farPlaneDistance <= 0");
         }
 
         if (nearPlaneDistance >= farPlaneDistance)
         {
-            throw new ArgumentException("nearPlaneDistance >= farPlaneDistance");
+            Throw.ArgumentException("nearPlaneDistance >= farPlaneDistance");
         }
 
         result.M11 = 2f * nearPlaneDistance / (right - left);

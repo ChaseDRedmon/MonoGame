@@ -5,6 +5,7 @@
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -56,9 +57,7 @@ public partial class GraphicsDeviceManager : IGraphicsDeviceService, IDisposable
     /// <param name="game">The game instance to attach.</param>
     public GraphicsDeviceManager(Game game)
     {
-        if (game == null)
-            throw new ArgumentNullException("game", "Game cannot be null.");
-
+        ArgumentNullException.ThrowIfNull(game);
         _game = game;
 
         _supportedOrientations = DisplayOrientation.Default;
@@ -91,8 +90,10 @@ public partial class GraphicsDeviceManager : IGraphicsDeviceService, IDisposable
         PlatformConstruct();
 
         if (_game.Services.GetService(typeof(IGraphicsDeviceManager)) != null)
-            throw new ArgumentException(
-                "A graphics device manager is already registered.  The graphics device manager cannot be changed once it is set.");
+        {
+            Throw.ArgumentException("A graphics device manager is already registered.  The graphics device manager cannot be changed once it is set.");
+        }
+
         _game.graphicsDeviceManager = this;
 
         _game.Services.AddService(typeof(IGraphicsDeviceManager), this);
@@ -250,9 +251,8 @@ public partial class GraphicsDeviceManager : IGraphicsDeviceService, IDisposable
             var args = new PreparingDeviceSettingsEventArgs(gdi);
             preparingDeviceSettingsHandler(this, args);
 
-            if (gdi.PresentationParameters == null || gdi.Adapter == null)
-                throw new NullReferenceException(
-                    "Members should not be set to null in PreparingDeviceSettingsEventArgs");
+            ArgumentNullException.ThrowIfNull("Members should not be set to null in PreparingDeviceSettingsEventArgs", nameof(gdi.PresentationParameters));
+            ArgumentNullException.ThrowIfNull("Members should not be set to null in PreparingDeviceSettingsEventArgs", nameof(gdi.Adapter));
         }
 
         return gdi;
@@ -475,9 +475,9 @@ public partial class GraphicsDeviceManager : IGraphicsDeviceService, IDisposable
         get { return _preferHalfPixelOffset; }
         set
         {
-            if (GraphicsDevice != null)
-                throw new InvalidOperationException(
-                    "Setting PreferHalfPixelOffset is not allowed after the creation of GraphicsDevice.");
+            if (GraphicsDevice is not null)
+                Throw.InvalidOperationException("Setting PreferHalfPixelOffset is not allowed after the creation of GraphicsDevice.");
+
             _preferHalfPixelOffset = value;
         }
     }

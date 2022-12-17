@@ -30,13 +30,11 @@ public static partial class TitleContainer
     /// <returns>A open stream or null if the file is not found.</returns>
     public static Stream OpenStream(string name)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException("name");
+        ArgumentNullException.ThrowIfNullOrEmpty(name);
 
         // We do not accept absolute paths here.
         if (Path.IsPathRooted(name))
-            throw new ArgumentException("Invalid filename. TitleContainer.OpenStream requires a relative path.",
-                name);
+            Throw.ArgumentException("Invalid filename. TitleContainer.OpenStream requires a relative path.", nameof(name));
 
         // Normalize the file path.
         var safeName = NormalizeRelativePath(name);
@@ -47,8 +45,8 @@ public static partial class TitleContainer
         try
         {
             stream = PlatformOpenStream(safeName);
-            if (stream == null)
-                throw FileNotFoundException(name, null);
+            if (stream is null)
+                Throw.FileNotFoundException(name, null);
         }
         catch (FileNotFoundException)
         {
@@ -60,11 +58,6 @@ public static partial class TitleContainer
         }
 
         return stream;
-    }
-
-    private static Exception FileNotFoundException(string name, Exception inner)
-    {
-        return new FileNotFoundException("Error loading \"" + name + "\". File not found.", inner);
     }
 
     internal static string NormalizeRelativePath(string name)

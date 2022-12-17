@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
+using MonoGame.Framework.Utilities;
 
 
 namespace Microsoft.Xna.Framework;
@@ -198,7 +199,7 @@ public partial class Game : IDisposable
         set
         {
             if (value < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException("The time must be positive.");
+                Throw.ArgumentOutOfRangeException("The time must be positive.", nameof(_inactiveSleepTime));
 
             _inactiveSleepTime = value;
         }
@@ -214,12 +215,10 @@ public partial class Game : IDisposable
         set
         {
             if (value < TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(
-                    "The time must be positive.");
+                Throw.ArgumentOutOfRangeException("The time must be positive.", nameof(_maxElapsedTime));
 
             if (value < _targetElapsedTime)
-                throw new ArgumentOutOfRangeException(
-                    "The time must be at least TargetElapsedTime");
+                Throw.ArgumentOutOfRangeException("The time must be at least TargetElapsedTime", nameof(_maxElapsedTime));
 
             _maxElapsedTime = value;
         }
@@ -256,12 +255,10 @@ public partial class Game : IDisposable
             value = Platform.TargetElapsedTimeChanging(value);
 
             if (value <= TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(
-                    "The time must be positive and non-zero.");
+                Throw.ArgumentOutOfRangeException("The time must be positive and non-zero.", nameof(_targetElapsedTime));
 
             if (value > _maxElapsedTime)
-                throw new ArgumentOutOfRangeException(
-                    "The time can not be larger than MaxElapsedTime");
+                Throw.ArgumentOutOfRangeException("The time can not be larger than MaxElapsedTime", nameof(_targetElapsedTime));
 
             if (value != _targetElapsedTime)
             {
@@ -302,9 +299,7 @@ public partial class Game : IDisposable
         get { return _content; }
         set
         {
-            if (value == null)
-                throw new ArgumentNullException();
-
+            ArgumentNullException.ThrowIfNull(value);
             _content = value;
         }
     }
@@ -325,7 +320,7 @@ public partial class Game : IDisposable
                     Services.GetService(typeof(IGraphicsDeviceService));
 
                 if (_graphicsDeviceService == null)
-                    throw new InvalidOperationException("No Graphics Device Service");
+                    Throw.InvalidOperationException("No Graphics Device Service");
             }
 
             return _graphicsDeviceService.GraphicsDevice;
@@ -483,8 +478,8 @@ public partial class Game : IDisposable
                 DoExiting();
                 break;
             default:
-                throw new ArgumentException(string.Format(
-                    "Handling for the run behavior {0} is not implemented.", runBehavior));
+                Throw.ArgumentException($"Handling for the run behavior {runBehavior} is not implemented.");
+                break;
         }
     }
 
@@ -874,9 +869,10 @@ public partial class Game : IDisposable
         }
         set
         {
-            if (_graphicsDeviceManager != null)
-                throw new InvalidOperationException(
-                    "GraphicsDeviceManager already registered for this Game object");
+            // TODO This should just return and ignore, instead of throwing an exception
+            if (_graphicsDeviceManager is not null)
+                Throw.InvalidOperationException("GraphicsDeviceManager already registered for this Game object");
+
             _graphicsDeviceManager = value;
         }
     }

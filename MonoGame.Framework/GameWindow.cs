@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using System;
 using System.ComponentModel;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -93,8 +94,8 @@ public abstract class GameWindow
     /// </exception>
     public virtual bool IsBorderless
     {
-        get { return false; }
-        set { throw new NotImplementedException(); }
+        get => false;
+        set => Throw.NotImplementedException();
     }
 
     internal MouseState MouseState;
