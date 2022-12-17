@@ -54,15 +54,11 @@ public class GameServiceContainer : IServiceProvider
     /// no suitable service provider is registered in this container.
     /// </returns>
     /// <exception cref="ArgumentNullException">If the specified type is <code>null</code>.</exception>
-    public object GetService(Type type)
+    public object? GetService(Type type)
     {
         ArgumentNullException.ThrowIfNull(type);
 
-        object service;
-        if (services.TryGetValue(type, out service))
-            return service;
-
-        return null;
+        return services.TryGetValue(type, out var service) ? service : null;
     }
 
     /// <summary>

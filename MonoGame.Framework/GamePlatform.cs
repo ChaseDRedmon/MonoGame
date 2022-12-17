@@ -22,7 +22,7 @@ abstract partial class GamePlatform : IDisposable
         get { return disposed; }
     }
 
-    protected GamePlatform(Game game)
+    protected GamePlatform(Game? game)
     {
         ArgumentNullException.ThrowIfNull(game);
         Game = game;

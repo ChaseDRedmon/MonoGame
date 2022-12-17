@@ -315,7 +315,7 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
     /// Returns a copy of internal corners array.
     /// </summary>
     /// <param name="corners">The array which values will be replaced to corner values of this instance. It must have size of <see cref="BoundingFrustum.CornerCount"/>.</param>
-    public void GetCorners(Vector3[] corners)
+    public void GetCorners(Vector3[]? corners)
     {
         ArgumentNullException.ThrowIfNull(corners);
         Throw.ArgumentOutOfRangeException("Not enough corners", nameof(corners));

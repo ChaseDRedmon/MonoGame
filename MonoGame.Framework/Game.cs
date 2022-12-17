@@ -859,11 +859,8 @@ public partial class Game : IDisposable
     {
         get
         {
-            if (_graphicsDeviceManager == null)
-            {
-                _graphicsDeviceManager = (IGraphicsDeviceManager)
-                    Services.GetService(typeof(IGraphicsDeviceManager));
-            }
+            _graphicsDeviceManager ??= (IGraphicsDeviceManager)
+                Services.GetService(typeof(IGraphicsDeviceManager));
 
             return (GraphicsDeviceManager)_graphicsDeviceManager;
         }

@@ -299,7 +299,7 @@ public struct BoundingBox : IEquatable<BoundingBox>
     /// <param name="count">The number of points to iterate</param>
     /// <returns>A bounding box that encapsulates the given point cloud.</returns>
     /// <exception cref="System.ArgumentException">Thrown if the given array is null or has no points.</exception>
-    public static BoundingBox CreateFromPoints(Vector3[] points, int index = 0, int count = -1)
+    public static BoundingBox CreateFromPoints(Vector3[]? points, int index = 0, int count = -1)
     {
         if (points is null || points.Length == 0)
             Throw.ArgumentException("Vector3 array cannot be null", nameof(points));
@@ -332,7 +332,7 @@ public struct BoundingBox : IEquatable<BoundingBox>
     /// <param name="count">The number of points to iterate</param>
     /// <returns>A bounding box that encapsulates the given point cloud.</returns>
     /// <exception cref="System.ArgumentException">Thrown if the given list is null or has no points.</exception>
-    public static BoundingBox CreateFromPoints(List<Vector3> points, int index = 0, int count = -1)
+    public static BoundingBox CreateFromPoints(List<Vector3>? points, int index = 0, int count = -1)
     {
         if (points is null || points.Count == 0)
             Throw.ArgumentException("Vector3 array cannot be null", nameof(points));
@@ -363,7 +363,7 @@ public struct BoundingBox : IEquatable<BoundingBox>
     /// <param name="points">The list of <see cref="Vector3"/> instances defining the point cloud to bound.</param>
     /// <returns>A <see cref="BoundingBox"/> that encloses the given point cloud.</returns>
     /// <exception cref="System.ArgumentException">Thrown if the given list has no points.</exception>
-    public static BoundingBox CreateFromPoints(IEnumerable<Vector3> points)
+    public static BoundingBox CreateFromPoints(IEnumerable<Vector3>? points)
     {
         if (points is null)
             Throw.ArgumentNullException(points);
@@ -501,9 +501,9 @@ public struct BoundingBox : IEquatable<BoundingBox>
     /// <exception cref="ArgumentOutOfRangeException">
     ///   If <paramref name="corners"/> has a length of less than 8.
     /// </exception>
-    public void GetCorners(Vector3[] corners)
+    public void GetCorners(Vector3[]? corners)
     {
-        if (corners == null)
+        if (corners is null)
         {
             ArgumentNullException.ThrowIfNull(corners);
         }

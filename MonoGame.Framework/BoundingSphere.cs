@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -261,7 +262,7 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
     /// </summary>
     /// <param name="points">List of point to create the sphere from.</param>
     /// <returns>The new <see cref="BoundingSphere"/>.</returns>
-    public static BoundingSphere CreateFromPoints(IEnumerable<Vector3> points)
+    public static BoundingSphere CreateFromPoints(IEnumerable<Vector3>? points)
     {
         ArgumentNullException.ThrowIfNull(points);
 

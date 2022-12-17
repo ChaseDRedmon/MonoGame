@@ -4,6 +4,9 @@
 
 using System;
 using System.Diagnostics;
+using System.Numerics;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using MonoGame.Framework.Utilities;

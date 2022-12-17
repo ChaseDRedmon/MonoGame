@@ -107,7 +107,7 @@ public partial class GraphicsDeviceManager : IGraphicsDeviceService, IDisposable
 
     private void CreateDevice()
     {
-        if (_graphicsDevice != null)
+        if (_graphicsDevice is not null)
             return;
 
         try
@@ -245,7 +245,7 @@ public partial class GraphicsDeviceManager : IGraphicsDeviceService, IDisposable
         PrepareGraphicsDeviceInformation(gdi);
         var preparingDeviceSettingsHandler = PreparingDeviceSettings;
 
-        if (preparingDeviceSettingsHandler != null)
+        if (preparingDeviceSettingsHandler is not null)
         {
             // this allows users to overwrite settings through the argument
             var args = new PreparingDeviceSettingsEventArgs(gdi);
