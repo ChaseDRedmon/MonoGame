@@ -12,7 +12,7 @@ namespace Microsoft.Xna.Framework;
 /// </summary>
 // TODO : [TypeConverter(typeof(ExpandableObjectConverter))]
 [DataContract]
-public class CurveKey : IEquatable<CurveKey>, IComparable<CurveKey>
+public sealed class CurveKey : IEquatable<CurveKey>, IComparable<CurveKey>
 {
     private CurveContinuity _continuity;
     private readonly float _position;

@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework;
 /// </summary>
 // TODO : [TypeConverter(typeof(ExpandableObjectConverter))]
 [DataContract]
-public class CurveKeyCollection : ICollection<CurveKey>
+public sealed class CurveKeyCollection : ICollection<CurveKey>
 {
     private readonly List<CurveKey> _keys;
 

@@ -8,7 +8,7 @@ using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
-internal class ReusableItemList<T> : ICollection<T>, IEnumerator<T>
+internal sealed class ReusableItemList<T> : ICollection<T>, IEnumerator<T>
 {
     private readonly List<T> _list = new();
     private int _listTop = 0;

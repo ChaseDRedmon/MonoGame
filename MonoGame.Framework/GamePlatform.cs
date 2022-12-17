@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Framework;
 
-abstract partial class GamePlatform : IDisposable
+internal abstract partial class GamePlatform : IDisposable
 {
     protected TimeSpan _inactiveSleepTime = TimeSpan.FromMilliseconds(20.0);
     protected bool _needsToResetElapsedTime = false;

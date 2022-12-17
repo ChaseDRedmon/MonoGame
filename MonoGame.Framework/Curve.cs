@@ -13,7 +13,7 @@ namespace Microsoft.Xna.Framework;
 /// </summary>
 // TODO : [TypeConverter(typeof(ExpandableObjectConverter))]
 [DataContract]
-public class Curve : ICurveEvaluator<float>
+public sealed class Curve : ICurveEvaluator<float>
 {
     private CurveLoopType _preLoop;
     private CurveLoopType _postLoop;

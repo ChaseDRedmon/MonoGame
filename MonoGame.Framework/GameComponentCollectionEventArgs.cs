@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework;
 /// Arguments for the <see cref="GameComponentCollection.ComponentAdded"/> and
 /// <see cref="GameComponentCollection.ComponentRemoved"/> events.
 /// </summary>
-public class GameComponentCollectionEventArgs : EventArgs
+public sealed class GameComponentCollectionEventArgs : EventArgs
 {
     private IGameComponent _gameComponent;
 

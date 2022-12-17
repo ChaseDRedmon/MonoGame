@@ -11,7 +11,7 @@ namespace Microsoft.Xna.Framework;
 /// <summary>
 /// A container for services for a <see cref="Game"/>.
 /// </summary>
-public class GameServiceContainer : IServiceProvider
+public sealed class GameServiceContainer : IServiceProvider
 {
     Dictionary<Type, object> services;
 

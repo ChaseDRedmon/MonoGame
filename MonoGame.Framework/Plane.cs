@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework;
 
-internal class PlaneHelper
+internal sealed class PlaneHelper
 {
     /// <summary>
     /// Returns a value indicating what side (positive/negative) of a plane a point is

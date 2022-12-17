@@ -9,6 +9,6 @@ namespace Microsoft.Xna.Framework;
 /// <summary>
 /// The parameters for launching a <see cref="Game"/>.
 /// </summary>
-public class LaunchParameters : Dictionary<string, string>
+public sealed class LaunchParameters : Dictionary<string, string>
 {
 }

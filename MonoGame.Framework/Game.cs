@@ -923,7 +923,7 @@ public partial class Game : IDisposable
     /// sorting and filtering based on a configurable sort comparer, filter
     /// predicate, and associate change events.
     /// </summary>
-    class SortingFilteringCollection<T> : ICollection<T>
+    internal class SortingFilteringCollection<T> : ICollection<T>
     {
         private readonly List<T> _items;
         private readonly List<AddJournalEntry<T>> _addJournal;

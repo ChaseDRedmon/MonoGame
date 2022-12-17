@@ -10,7 +10,7 @@ namespace Microsoft.Xna.Framework;
 /// The settings used in creation of the graphics device.
 /// See <see cref="GraphicsDeviceManager.PreparingDeviceSettings"/>.
 /// </summary>
-public class GraphicsDeviceInformation
+public sealed class GraphicsDeviceInformation
 {
     /// <summary>
     /// The graphics adapter on which the graphics device will be created.

@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework;
 /// <summary>
 /// Holds the time state of a <see cref="Game"/>.
 /// </summary>
-public class GameTime
+public sealed class GameTime
 {
     /// <summary>
     /// Time since the start of the <see cref="Game"/>.

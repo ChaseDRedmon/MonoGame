@@ -9,7 +9,7 @@ namespace Microsoft.Xna.Framework;
 /// <summary>
 /// The arguments to the <see cref="GraphicsDeviceManager.PreparingDeviceSettings"/> event.
 /// </summary>
-public class PreparingDeviceSettingsEventArgs : EventArgs
+public sealed class PreparingDeviceSettingsEventArgs : EventArgs
 {
     /// <summary>
     /// Create a new instance of the event.
