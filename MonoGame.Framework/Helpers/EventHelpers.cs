@@ -21,10 +21,9 @@ internal static class EventHelpers
     /// <param name="sender">The object raising the event.</param>
     /// <param name="handler"><see cref="EventHandler{TEventArgs}"/> to be invoked</param>
     /// <param name="e">The <typeparamref name="TEventArgs"/> passed to <see cref="EventHandler{TEventArgs}"/></param>
-    internal static void Raise<TEventArgs>(object sender, EventHandler<TEventArgs> handler, TEventArgs e)
+    internal static void Raise<TEventArgs>(object sender, EventHandler<TEventArgs>? handler, TEventArgs e)
     {
-        if (handler != null)
-            handler(sender, e);
+        handler?.Invoke(sender, e);
     }
 
     /// <summary>
@@ -35,9 +34,8 @@ internal static class EventHelpers
     /// <param name="sender">The object raising the event.</param>
     /// <param name="handler"><see cref="EventHandler"/> to be invoked</param>
     /// <param name="e">The <see cref="EventArgs"/> passed to <see cref="EventHandler"/></param>
-    internal static void Raise(object sender, EventHandler handler, EventArgs e)
+    internal static void Raise(object sender, EventHandler? handler, EventArgs e)
     {
-        if (handler != null)
-            handler(sender, e);
+        handler?.Invoke(sender, e);
     }
 }
