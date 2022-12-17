@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Microsoft.Xna.Framework;
 
@@ -12,11 +13,6 @@ namespace Microsoft.Xna.Framework;
 public static class MathHelper
 {
     /// <summary>
-    /// Represents the mathematical constant e(2.71828175).
-    /// </summary>
-    public const float E = MathF.E;
-
-    /// <summary>
     /// Represents the log base ten of e(0.4342945).
     /// </summary>
     public const float Log10E = 0.4342945f;
@@ -25,11 +21,6 @@ public static class MathHelper
     /// Represents the log base two of e(1.442695).
     /// </summary>
     public const float Log2E = 1.442695f;
-
-    /// <summary>
-    /// Represents the value of pi(3.14159274).
-    /// </summary>
-    public const float Pi = MathF.PI;
 
     /// <summary>
     /// Represents the value of pi divided by two(1.57079637).
@@ -42,17 +33,6 @@ public static class MathHelper
     public const float PiOver4 = (float)(Math.PI / 4.0);
 
     /// <summary>
-    /// Represents the value of pi times two(6.28318548).
-    /// </summary>
-    public const float TwoPi = (float)(Math.PI * 2.0);
-
-    /// <summary>
-    /// Represents the value of pi times two(6.28318548).
-    /// This is an alias of TwoPi.
-    /// </summary>
-    public const float Tau = TwoPi;
-
-    /// <summary>
     /// Returns the Cartesian coordinate for one axis of a point that is defined by a given triangle and two normalized barycentric (areal) coordinates.
     /// </summary>
     /// <param name="value1">The coordinate on one axis of vertex 1 of the defining triangle.</param>
@@ -61,6 +41,7 @@ public static class MathHelper
     /// <param name="amount1">The normalized barycentric (areal) coordinate b2, equal to the weighting factor for vertex 2, the coordinate of which is specified in value2.</param>
     /// <param name="amount2">The normalized barycentric (areal) coordinate b3, equal to the weighting factor for vertex 3, the coordinate of which is specified in value3.</param>
     /// <returns>Cartesian coordinate of the specified point with respect to the axis being used.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float Barycentric(float value1, float value2, float value3, float amount1, float amount2)
     {
         return value1 + (value2 - value1) * amount1 + (value3 - value1) * amount2;
@@ -81,43 +62,11 @@ public static class MathHelper
         // Internally using doubles not to lose precission
         double amountSquared = amount * amount;
         double amountCubed = amountSquared * amount;
+
         return (float)(0.5 * (2.0 * value2 +
                               (value3 - value1) * amount +
                               (2.0 * value1 - 5.0 * value2 + 4.0 * value3 - value4) * amountSquared +
                               (3.0 * value2 - value1 - 3.0 * value3 + value4) * amountCubed));
-    }
-
-    /// <summary>
-    /// Restricts a value to be within a specified range.
-    /// </summary>
-    /// <param name="value">The value to clamp.</param>
-    /// <param name="min">The minimum value. If <c>value</c> is less than <c>min</c>, <c>min</c> will be returned.</param>
-    /// <param name="max">The maximum value. If <c>value</c> is greater than <c>max</c>, <c>max</c> will be returned.</param>
-    /// <returns>The clamped value.</returns>
-    public static float Clamp(float value, float min, float max)
-    {
-        // First we check to see if we're greater than the max
-        value = value > max ? max : value;
-
-        // Then we check to see if we're less than the min.
-        value = value < min ? min : value;
-
-        // There's no check to see if min > max.
-        return value;
-    }
-
-    /// <summary>
-    /// Restricts a value to be within a specified range.
-    /// </summary>
-    /// <param name="value">The value to clamp.</param>
-    /// <param name="min">The minimum value. If <c>value</c> is less than <c>min</c>, <c>min</c> will be returned.</param>
-    /// <param name="max">The maximum value. If <c>value</c> is greater than <c>max</c>, <c>max</c> will be returned.</param>
-    /// <returns>The clamped value.</returns>
-    public static int Clamp(int value, int min, int max)
-    {
-        value = value > max ? max : value;
-        value = value < min ? min : value;
-        return value;
     }
 
     /// <summary>
@@ -126,6 +75,7 @@ public static class MathHelper
     /// <param name="value1">Source value.</param>
     /// <param name="value2">Source value.</param>
     /// <returns>Distance between the two values.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float Distance(float value1, float value2)
     {
         return Math.Abs(value1 - value2);
@@ -205,50 +155,6 @@ public static class MathHelper
     }
 
     /// <summary>
-    /// Returns the greater of two values.
-    /// </summary>
-    /// <param name="value1">Source value.</param>
-    /// <param name="value2">Source value.</param>
-    /// <returns>The greater value.</returns>
-    public static float Max(float value1, float value2)
-    {
-        return value1 > value2 ? value1 : value2;
-    }
-
-    /// <summary>
-    /// Returns the greater of two values.
-    /// </summary>
-    /// <param name="value1">Source value.</param>
-    /// <param name="value2">Source value.</param>
-    /// <returns>The greater value.</returns>
-    public static int Max(int value1, int value2)
-    {
-        return value1 > value2 ? value1 : value2;
-    }
-
-    /// <summary>
-    /// Returns the lesser of two values.
-    /// </summary>
-    /// <param name="value1">Source value.</param>
-    /// <param name="value2">Source value.</param>
-    /// <returns>The lesser value.</returns>
-    public static float Min(float value1, float value2)
-    {
-        return value1 < value2 ? value1 : value2;
-    }
-
-    /// <summary>
-    /// Returns the lesser of two values.
-    /// </summary>
-    /// <param name="value1">Source value.</param>
-    /// <param name="value2">Source value.</param>
-    /// <returns>The lesser value.</returns>
-    public static int Min(int value1, int value2)
-    {
-        return value1 < value2 ? value1 : value2;
-    }
-
-    /// <summary>
     /// Interpolates between two values using a cubic equation.
     /// </summary>
     /// <param name="value1">Source value.</param>
@@ -260,7 +166,7 @@ public static class MathHelper
         // It is expected that 0 < amount < 1
         // If amount < 0, return value1
         // If amount > 1, return value2
-        float result = Clamp(amount, 0f, 1f);
+        float result = Math.Clamp(amount, 0f, 1f);
         result = Hermite(value1, 0f, value2, 0f, result);
 
         return result;
@@ -303,13 +209,17 @@ public static class MathHelper
     /// <returns>The new angle, in radians.</returns>
     public static float WrapAngle(float angle)
     {
-        if (angle > -Pi && angle <= Pi)
+        if (angle is > -MathF.PI and <= MathF.PI)
             return angle;
-        angle %= TwoPi;
-        if (angle <= -Pi)
-            return angle + TwoPi;
-        if (angle > Pi)
-            return angle - TwoPi;
+
+        angle %= MathF.Tau;
+
+        if (angle <= -MathF.PI)
+            return angle + MathF.Tau;
+
+        if (angle > MathF.PI)
+            return angle - MathF.Tau;
+
         return angle;
     }
 
@@ -318,6 +228,7 @@ public static class MathHelper
     /// </summary>
     /// <param name="value">A value.</param>
     /// <returns><c>true</c> if <c>value</c> is powered by two; otherwise <c>false</c>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsPowerOfTwo(int value)
     {
         return value > 0 && (value & (value - 1)) == 0;

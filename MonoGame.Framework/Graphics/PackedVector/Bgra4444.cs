@@ -15,10 +15,10 @@ public struct Bgra4444 : IPackedVector<UInt16>, IEquatable<Bgra4444>
 
     private static UInt16 Pack(float x, float y, float z, float w)
     {
-        return (UInt16)((((int)MathF.Round(MathHelper.Clamp(w, 0, 1) * 15.0f) & 0x0F) << 12) |
-                        (((int)MathF.Round(MathHelper.Clamp(x, 0, 1) * 15.0f) & 0x0F) << 8) |
-                        (((int)MathF.Round(MathHelper.Clamp(y, 0, 1) * 15.0f) & 0x0F) << 4) |
-                        ((int)MathF.Round(MathHelper.Clamp(z, 0, 1) * 15.0f) & 0x0F));
+        return (UInt16)((((int)MathF.Round(Math.Clamp(w, 0, 1) * 15.0f) & 0x0F) << 12) |
+                        (((int)MathF.Round(Math.Clamp(x, 0, 1) * 15.0f) & 0x0F) << 8) |
+                        (((int)MathF.Round(Math.Clamp(y, 0, 1) * 15.0f) & 0x0F) << 4) |
+                        ((int)MathF.Round(Math.Clamp(z, 0, 1) * 15.0f) & 0x0F));
     }
 
     /// <summary>

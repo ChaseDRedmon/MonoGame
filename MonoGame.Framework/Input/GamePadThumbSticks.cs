@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
+
 namespace Microsoft.Xna.Framework.Input;
 
 /// <summary>
@@ -104,8 +106,9 @@ public struct GamePadThumbSticks
         }
         else
         {
-            thumbstickPosition = new Vector2(MathHelper.Clamp(thumbstickPosition.X, -1f, 1f),
-                MathHelper.Clamp(thumbstickPosition.Y, -1f, 1f));
+            thumbstickPosition = new Vector2(
+                Math.Clamp(thumbstickPosition.X, -1f, 1f),
+                Math.Clamp(thumbstickPosition.Y, -1f, 1f));
         }
 
         return thumbstickPosition;

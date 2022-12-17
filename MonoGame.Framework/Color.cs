@@ -205,7 +205,7 @@ public struct Color : IEquatable<Color>
     {
         if ((alpha & 0xFFFFFF00) != 0)
         {
-            var clampedA = (uint)MathHelper.Clamp(alpha, Byte.MinValue, Byte.MaxValue);
+            var clampedA = (uint)Math.Clamp(alpha, Byte.MinValue, Byte.MaxValue);
 
             _packedValue = (color._packedValue & 0x00FFFFFF) | (clampedA << 24);
         }
@@ -260,9 +260,9 @@ public struct Color : IEquatable<Color>
 
         if (((r | g | b) & 0xFFFFFF00) != 0)
         {
-            var clampedR = (uint)MathHelper.Clamp(r, Byte.MinValue, Byte.MaxValue);
-            var clampedG = (uint)MathHelper.Clamp(g, Byte.MinValue, Byte.MaxValue);
-            var clampedB = (uint)MathHelper.Clamp(b, Byte.MinValue, Byte.MaxValue);
+            var clampedR = (uint)Math.Clamp(r, Byte.MinValue, Byte.MaxValue);
+            var clampedG = (uint)Math.Clamp(g, Byte.MinValue, Byte.MaxValue);
+            var clampedB = (uint)Math.Clamp(b, Byte.MinValue, Byte.MaxValue);
 
             _packedValue |= (clampedB << 16) | (clampedG << 8) | clampedR;
         }
@@ -283,10 +283,10 @@ public struct Color : IEquatable<Color>
     {
         if (((r | g | b | alpha) & 0xFFFFFF00) != 0)
         {
-            var clampedR = (uint)MathHelper.Clamp(r, Byte.MinValue, Byte.MaxValue);
-            var clampedG = (uint)MathHelper.Clamp(g, Byte.MinValue, Byte.MaxValue);
-            var clampedB = (uint)MathHelper.Clamp(b, Byte.MinValue, Byte.MaxValue);
-            var clampedA = (uint)MathHelper.Clamp(alpha, Byte.MinValue, Byte.MaxValue);
+            var clampedR = (uint)Math.Clamp(r, Byte.MinValue, Byte.MaxValue);
+            var clampedG = (uint)Math.Clamp(g, Byte.MinValue, Byte.MaxValue);
+            var clampedB = (uint)Math.Clamp(b, Byte.MinValue, Byte.MaxValue);
+            var clampedA = (uint)Math.Clamp(alpha, Byte.MinValue, Byte.MaxValue);
 
             _packedValue = (clampedA << 24) | (clampedB << 16) | (clampedG << 8) | clampedR;
         }
@@ -1135,7 +1135,7 @@ public struct Color : IEquatable<Color>
     /// <returns>Interpolated <see cref="Color"/>.</returns>
     public static Color Lerp(Color value1, Color value2, Single amount)
     {
-        amount = MathHelper.Clamp(amount, 0, 1);
+        amount = Math.Clamp(amount, 0, 1);
         return new Color(
             (int)MathHelper.Lerp(value1.R, value2.R, amount),
             (int)MathHelper.Lerp(value1.G, value2.G, amount),
@@ -1150,7 +1150,7 @@ public struct Color : IEquatable<Color>
     [Obsolete("Color.Lerp should be used instead of this function.")]
     public static Color LerpPrecise(Color value1, Color value2, Single amount)
     {
-        amount = MathHelper.Clamp(amount, 0, 1);
+        amount = Math.Clamp(amount, 0, 1);
         return new Color(
             (int)MathHelper.LerpPrecise(value1.R, value2.R, amount),
             (int)MathHelper.LerpPrecise(value1.G, value2.G, amount),

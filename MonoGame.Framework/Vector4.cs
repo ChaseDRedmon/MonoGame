@@ -311,10 +311,10 @@ public struct Vector4 : IEquatable<Vector4>
     public static Vector4 Clamp(Vector4 value1, Vector4 min, Vector4 max)
     {
         return new Vector4(
-            MathHelper.Clamp(value1.X, min.X, max.X),
-            MathHelper.Clamp(value1.Y, min.Y, max.Y),
-            MathHelper.Clamp(value1.Z, min.Z, max.Z),
-            MathHelper.Clamp(value1.W, min.W, max.W));
+            Math.Clamp(value1.X, min.X, max.X),
+            Math.Clamp(value1.Y, min.Y, max.Y),
+            Math.Clamp(value1.Z, min.Z, max.Z),
+            Math.Clamp(value1.W, min.W, max.W));
     }
 
     /// <summary>
@@ -326,10 +326,10 @@ public struct Vector4 : IEquatable<Vector4>
     /// <param name="result">The clamped value as an output parameter.</param>
     public static void Clamp(ref Vector4 value1, ref Vector4 min, ref Vector4 max, out Vector4 result)
     {
-        result.X = MathHelper.Clamp(value1.X, min.X, max.X);
-        result.Y = MathHelper.Clamp(value1.Y, min.Y, max.Y);
-        result.Z = MathHelper.Clamp(value1.Z, min.Z, max.Z);
-        result.W = MathHelper.Clamp(value1.W, min.W, max.W);
+        result.X = Math.Clamp(value1.X, min.X, max.X);
+        result.Y = Math.Clamp(value1.Y, min.Y, max.Y);
+        result.Z = Math.Clamp(value1.Z, min.Z, max.Z);
+        result.W = Math.Clamp(value1.W, min.W, max.W);
     }
 
     /// <summary>
@@ -671,10 +671,10 @@ public struct Vector4 : IEquatable<Vector4>
     public static Vector4 Max(Vector4 value1, Vector4 value2)
     {
         return new Vector4(
-            MathHelper.Max(value1.X, value2.X),
-            MathHelper.Max(value1.Y, value2.Y),
-            MathHelper.Max(value1.Z, value2.Z),
-            MathHelper.Max(value1.W, value2.W));
+            MathF.Max(value1.X, value2.X),
+            MathF.Max(value1.Y, value2.Y),
+            MathF.Max(value1.Z, value2.Z),
+            MathF.Max(value1.W, value2.W));
     }
 
     /// <summary>
@@ -685,10 +685,10 @@ public struct Vector4 : IEquatable<Vector4>
     /// <param name="result">The <see cref="Vector4"/> with maximal values from the two vectors as an output parameter.</param>
     public static void Max(ref Vector4 value1, ref Vector4 value2, out Vector4 result)
     {
-        result.X = MathHelper.Max(value1.X, value2.X);
-        result.Y = MathHelper.Max(value1.Y, value2.Y);
-        result.Z = MathHelper.Max(value1.Z, value2.Z);
-        result.W = MathHelper.Max(value1.W, value2.W);
+        result.X = MathF.Max(value1.X, value2.X);
+        result.Y = MathF.Max(value1.Y, value2.Y);
+        result.Z = MathF.Max(value1.Z, value2.Z);
+        result.W = MathF.Max(value1.W, value2.W);
     }
 
     /// <summary>
@@ -700,10 +700,10 @@ public struct Vector4 : IEquatable<Vector4>
     public static Vector4 Min(Vector4 value1, Vector4 value2)
     {
         return new Vector4(
-            MathHelper.Min(value1.X, value2.X),
-            MathHelper.Min(value1.Y, value2.Y),
-            MathHelper.Min(value1.Z, value2.Z),
-            MathHelper.Min(value1.W, value2.W));
+            MathF.Min(value1.X, value2.X),
+            MathF.Min(value1.Y, value2.Y),
+            MathF.Min(value1.Z, value2.Z),
+            MathF.Min(value1.W, value2.W));
     }
 
     /// <summary>
@@ -714,10 +714,10 @@ public struct Vector4 : IEquatable<Vector4>
     /// <param name="result">The <see cref="Vector4"/> with minimal values from the two vectors as an output parameter.</param>
     public static void Min(ref Vector4 value1, ref Vector4 value2, out Vector4 result)
     {
-        result.X = MathHelper.Min(value1.X, value2.X);
-        result.Y = MathHelper.Min(value1.Y, value2.Y);
-        result.Z = MathHelper.Min(value1.Z, value2.Z);
-        result.W = MathHelper.Min(value1.W, value2.W);
+        result.X = MathF.Min(value1.X, value2.X);
+        result.Y = MathF.Min(value1.Y, value2.Y);
+        result.Z = MathF.Min(value1.Z, value2.Z);
+        result.W = MathF.Min(value1.W, value2.W);
     }
 
     /// <summary>

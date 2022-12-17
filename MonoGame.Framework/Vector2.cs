@@ -368,8 +368,8 @@ public struct Vector2 : IEquatable<Vector2>
     public static Vector2 Clamp(Vector2 value1, Vector2 min, Vector2 max)
     {
         return new Vector2(
-            MathHelper.Clamp(value1.X, min.X, max.X),
-            MathHelper.Clamp(value1.Y, min.Y, max.Y));
+            Math.Clamp(value1.X, min.X, max.X),
+            Math.Clamp(value1.Y, min.Y, max.Y));
     }
 
     /// <summary>
@@ -381,8 +381,8 @@ public struct Vector2 : IEquatable<Vector2>
     /// <param name="result">The clamped value as an output parameter.</param>
     public static void Clamp(ref Vector2 value1, ref Vector2 min, ref Vector2 max, out Vector2 result)
     {
-        result.X = MathHelper.Clamp(value1.X, min.X, max.X);
-        result.Y = MathHelper.Clamp(value1.Y, min.Y, max.Y);
+        result.X = Math.Clamp(value1.X, min.X, max.X);
+        result.Y = Math.Clamp(value1.Y, min.Y, max.Y);
     }
 
     /// <summary>

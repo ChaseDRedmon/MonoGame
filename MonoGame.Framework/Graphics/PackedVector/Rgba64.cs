@@ -119,9 +119,9 @@ public struct Rgba64 : IPackedVector<ulong>, IEquatable<Rgba64>, IPackedVector
 
     private static ulong Pack(float x, float y, float z, float w)
     {
-        return (ulong)MathF.Round(MathHelper.Clamp(x * 0xFFFF, 0, 65535f)) |
-               ((ulong)MathF.Round(MathHelper.Clamp(y * 0xFFFF, 0, 65535f)) << 16) |
-               ((ulong)MathF.Round(MathHelper.Clamp(z * 0xFFFF, 0, 65535f)) << 32) |
-               ((ulong)MathF.Round(MathHelper.Clamp(w * 0xFFFF, 0, 65535f)) << 48);
+        return (ulong)MathF.Round(Math.Clamp(x * 0xFFFF, 0, 65535f)) |
+               ((ulong)MathF.Round(Math.Clamp(y * 0xFFFF, 0, 65535f)) << 16) |
+               ((ulong)MathF.Round(Math.Clamp(z * 0xFFFF, 0, 65535f)) << 32) |
+               ((ulong)MathF.Round(Math.Clamp(w * 0xFFFF, 0, 65535f)) << 48);
     }
 }

@@ -86,7 +86,7 @@ public static partial class MediaPlayer
         get { return PlatformGetVolume(); }
         set
         {
-            var volume = MathHelper.Clamp(value, 0, 1);
+            var volume = Math.Clamp(value, 0, 1);
 
             PlatformSetVolume(volume);
         }

@@ -121,10 +121,10 @@ public struct Rgba1010102 : IPackedVector<uint>, IEquatable<Rgba1010102>, IPacke
     private static uint Pack(float x, float y, float z, float w)
     {
         return (uint)(
-            (((int)MathF.Round(MathHelper.Clamp(x, 0, 1) * 1023.0f) & 0x03FF) << 0) |
-            (((int)MathF.Round(MathHelper.Clamp(y, 0, 1) * 1023.0f) & 0x03FF) << 10) |
-            (((int)MathF.Round(MathHelper.Clamp(z, 0, 1) * 1023.0f) & 0x03FF) << 20) |
-            (((int)MathF.Round(MathHelper.Clamp(w, 0, 1) * 3.0f) & 0x03) << 30)
+            (((int)MathF.Round(Math.Clamp(x, 0, 1) * 1023.0f) & 0x03FF) << 0) |
+            (((int)MathF.Round(Math.Clamp(y, 0, 1) * 1023.0f) & 0x03FF) << 10) |
+            (((int)MathF.Round(Math.Clamp(z, 0, 1) * 1023.0f) & 0x03FF) << 20) |
+            (((int)MathF.Round(Math.Clamp(w, 0, 1) * 3.0f) & 0x03) << 30)
         );
     }
 }

@@ -75,8 +75,8 @@ public struct NormalizedShort2 : IPackedVector<uint>, IEquatable<NormalizedShort
 
         // clamp the value between min and max values
         // Round rather than truncate.
-        var word2 = (uint)((int)MathHelper.Clamp(MathF.Round(vectorX * maxPos), minNeg, maxPos) & 0xFFFF);
-        var word1 = (uint)(((int)MathHelper.Clamp(MathF.Round(vectorY * maxPos), minNeg, maxPos) & 0xFFFF) << 0x10);
+        var word2 = (uint)((int)Math.Clamp(MathF.Round(vectorX * maxPos), minNeg, maxPos) & 0xFFFF);
+        var word1 = (uint)(((int)Math.Clamp(MathF.Round(vectorY * maxPos), minNeg, maxPos) & 0xFFFF) << 0x10);
 
         return word2 | word1;
     }

@@ -2,6 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
+using System;
+
 namespace Microsoft.Xna.Framework.Input;
 
 /// <summary>
@@ -28,8 +30,8 @@ public struct GamePadTriggers
     /// <param name="rightTrigger">The position of the right trigger, the value will get clamped between 0.0f and 1.0f.</param>
     public GamePadTriggers(float leftTrigger, float rightTrigger) : this()
     {
-        Left = MathHelper.Clamp(leftTrigger, 0f, 1f);
-        Right = MathHelper.Clamp(rightTrigger, 0f, 1f);
+        Left = Math.Clamp(leftTrigger, 0f, 1f);
+        Right = Math.Clamp(rightTrigger, 0f, 1f);
     }
 
     /// <summary>

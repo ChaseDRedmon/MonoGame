@@ -125,8 +125,8 @@ public struct Rg32 : IPackedVector<uint>, IEquatable<Rg32>, IPackedVector
     private static uint Pack(float x, float y)
     {
         return (uint)(
-            ((int)MathF.Round(MathHelper.Clamp(x, 0, 1) * 65535.0f) & 0xFFFF) |
-            (((int)MathF.Round(MathHelper.Clamp(y, 0, 1) * 65535.0f) & 0xFFFF) << 16)
+            ((int)MathF.Round(Math.Clamp(x, 0, 1) * 65535.0f) & 0xFFFF) |
+            (((int)MathF.Round(Math.Clamp(y, 0, 1) * 65535.0f) & 0xFFFF) << 16)
         );
     }
 }

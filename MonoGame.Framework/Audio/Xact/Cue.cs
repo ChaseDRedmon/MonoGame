@@ -332,7 +332,7 @@ public class Cue : IDisposable
                 }
             }
 
-            pitch = MathHelper.Clamp(pitch, -1.0f, 1.0f);
+            pitch = Math.Clamp(pitch, -1.0f, 1.0f);
             if (volume < 0.0f)
                 volume = 0.0f;
 

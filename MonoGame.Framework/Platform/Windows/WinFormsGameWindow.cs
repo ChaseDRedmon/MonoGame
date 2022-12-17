@@ -314,8 +314,8 @@ class WinFormsGameWindow : GameWindow, IDisposable
             if (MouseState.LeftButton == ButtonState.Pressed)
             {
                 // Release mouse TouchLocation
-                var touchX = MathHelper.Clamp(MouseState.X, 0, Form.ClientRectangle.Width - 1);
-                var touchY = MathHelper.Clamp(MouseState.Y, 0, Form.ClientRectangle.Height - 1);
+                var touchX = Math.Clamp(MouseState.X, 0, Form.ClientRectangle.Width - 1);
+                var touchY = Math.Clamp(MouseState.Y, 0, Form.ClientRectangle.Height - 1);
                 TouchPanelState.AddEvent(0, TouchLocationState.Released, new Vector2(touchX, touchY), true);
             }
 

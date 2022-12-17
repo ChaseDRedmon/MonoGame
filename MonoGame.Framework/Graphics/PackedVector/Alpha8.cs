@@ -115,7 +115,7 @@ public struct Alpha8 : IPackedVector<byte>, IEquatable<Alpha8>, IPackedVector
     private static byte Pack(float alpha)
     {
         return (byte)MathF.Round(
-            MathHelper.Clamp(alpha, 0, 1) * 255.0f
+            Math.Clamp(alpha, 0, 1) * 255.0f
         );
     }
 }

@@ -54,7 +54,7 @@ public sealed class MediaQueue
         if (shuffle)
             _activeSongIndex = random.Next(songs.Count);
         else
-            _activeSongIndex = MathHelper.Clamp(_activeSongIndex + direction, 0, songs.Count - 1);
+            _activeSongIndex = Math.Clamp(_activeSongIndex + direction, 0, songs.Count - 1);
 
         return songs[_activeSongIndex];
     }

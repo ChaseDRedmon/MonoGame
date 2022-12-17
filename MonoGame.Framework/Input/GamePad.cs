@@ -163,9 +163,11 @@ public static partial class GamePad
         if (index < 0 || index >= PlatformGetMaxNumberOfGamePads())
             return false;
 
-        return PlatformSetVibration(index, MathHelper.Clamp(leftMotor, 0.0f, 1.0f),
-            MathHelper.Clamp(rightMotor, 0.0f, 1.0f), MathHelper.Clamp(leftTrigger, 0.0f, 1.0f),
-            MathHelper.Clamp(rightTrigger, 0.0f, 1.0f));
+        return PlatformSetVibration(index,
+            Math.Clamp(leftMotor, 0.0f, 1.0f),
+            Math.Clamp(rightMotor, 0.0f, 1.0f),
+            Math.Clamp(leftTrigger, 0.0f, 1.0f),
+            Math.Clamp(rightTrigger, 0.0f, 1.0f));
     }
 
     /// <summary>
