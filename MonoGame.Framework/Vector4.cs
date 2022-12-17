@@ -95,18 +95,7 @@ public struct Vector4 : IEquatable<Vector4>
         get { return unitW; }
     }
 
-    internal string DebugDisplayString
-    {
-        get
-        {
-            return string.Concat(
-                X.ToString(), "  ",
-                Y.ToString(), "  ",
-                Z.ToString(), "  ",
-                W.ToString()
-            );
-        }
-    }
+    internal string DebugDisplayString => $"{X}  {Y}  {Z}  {W}";
 
     /// <summary>
     /// Constructs a 3d vector with X, Y, Z and W from four values.
@@ -1218,7 +1207,7 @@ public struct Vector4 : IEquatable<Vector4>
     /// <returns>A <see cref="String"/> representation of this <see cref="Vector4"/>.</returns>
     public override string ToString()
     {
-        return "{X:" + X + " Y:" + Y + " Z:" + Z + " W:" + W + "}";
+        return $"{{X:{X} Y:{Y} Z:{Z} W:{W}}}";
     }
 
     /// <summary>

@@ -437,14 +437,15 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
         ContainmentType ctype;
         Contains(ref ray.Position, out ctype);
 
+        float? temp = null;
         switch (ctype)
         {
             case ContainmentType.Disjoint:
-                result = null;
-                return;
+                temp = null;
+                break;
             case ContainmentType.Contains:
-                result = 0.0f;
-                return;
+                temp = 0.0f;
+                break;
             case ContainmentType.Intersects:
                 Throw.NotImplementedException();
                 break;
@@ -452,6 +453,8 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
                 Throw.UnreachableException();
                 break;
         }
+
+        result = temp;
     }
 
     /// <summary>

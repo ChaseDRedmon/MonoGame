@@ -1185,10 +1185,7 @@ public partial class Game : IDisposable
 
         public override bool Equals(object obj)
         {
-            if (!(obj is AddJournalEntry<T> entry))
-                return false;
-
-            return Equals(Item, entry.Item);
+            return obj is AddJournalEntry<T> entry && Equals(Item, entry.Item);
         }
     }
 }

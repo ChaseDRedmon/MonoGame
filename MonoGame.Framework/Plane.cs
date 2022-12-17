@@ -170,9 +170,9 @@ public struct Plane : IEquatable<Plane>
     /// The dot product of the specified <see cref="Vector3"/> and the normal of this <see cref="Plane"/>
     /// plus the <see cref="D"/> value of this <see cref="Plane"/>.
     /// </param>
-    public void DotCoordinate(ref Vector3 value, out float result)
+    public float DotCoordinate(ref Vector3 value)
     {
-        result = Normal.X * value.X + Normal.Y * value.Y + Normal.Z * value.Z + D;
+        return Normal.X * value.X + Normal.Y * value.Y + Normal.Z * value.Z + D;
     }
 
     /// <summary>
@@ -428,25 +428,13 @@ public struct Plane : IEquatable<Plane>
         };
     }
 
-    internal string DebugDisplayString
-    {
-        get
-        {
-            return string.Concat(
-                Normal.DebugDisplayString, "  ",
-                D.ToString()
-            );
-        }
-    }
+    internal string DebugDisplayString => $"{Normal.DebugDisplayString}  {D}";
 
     /// <summary>
     /// Get a <see cref="String"/> representation of this <see cref="Plane"/>.
     /// </summary>
     /// <returns>A <see cref="String"/> representation of this <see cref="Plane"/>.</returns>
-    public override string ToString()
-    {
-        return "{Normal:" + Normal + " D:" + D + "}";
-    }
+    public override string ToString() => "{Normal:" + Normal + " D:" + D + "}";
 
     /// <summary>
     /// Deconstruction method for <see cref="Plane"/>.
