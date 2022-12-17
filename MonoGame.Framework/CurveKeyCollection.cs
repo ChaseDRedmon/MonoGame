@@ -122,6 +122,7 @@ public sealed class CurveKeyCollection : ICollection<CurveKey>
         CurveKeyCollection ckc = new CurveKeyCollection();
         foreach (CurveKey key in _keys)
             ckc.Add(key);
+
         return ckc;
     }
 

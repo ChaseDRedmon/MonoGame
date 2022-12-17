@@ -185,6 +185,7 @@ namespace Microsoft.Xna.Framework.Content
             // Tell the garbage collector not to call the finalizer
             // since all the cleanup will already be done.
             GC.SuppressFinalize(this);
+
             // Once disposed, content manager wont be used again
             RemoveContentManager(this);
         }

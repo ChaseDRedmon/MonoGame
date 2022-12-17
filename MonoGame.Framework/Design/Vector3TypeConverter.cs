@@ -14,6 +14,7 @@ public class Vector3TypeConverter : TypeConverter
     {
         if (VectorConversion.CanConvertTo(context, destinationType))
             return true;
+
         if (destinationType == typeof(string))
             return true;
 
