@@ -11,6 +11,7 @@
         <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
         <AnalysisLevel>latest</AnalysisLevel>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

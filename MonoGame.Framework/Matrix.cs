@@ -393,6 +393,46 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The result of the matrix addition.</returns>
     public static Matrix Add(Matrix matrix1, Matrix matrix2)
     {
+        if (Vector128.IsHardwareAccelerated)
+        {
+            Vector128<float> v11 = Vector128.Create(matrix1.M11, matrix1.M21, matrix1.M31, matrix1.M41);
+            Vector128<float> v12 = Vector128.Create(matrix1.M12, matrix1.M22, matrix1.M32, matrix1.M42);
+            Vector128<float> v13 = Vector128.Create(matrix1.M13, matrix1.M23, matrix1.M33, matrix1.M43);
+            Vector128<float> v14 = Vector128.Create(matrix1.M14, matrix1.M24, matrix1.M34, matrix1.M44);
+
+            Vector128<float> v21 = Vector128.Create(matrix2.M11, matrix2.M21, matrix2.M31, matrix2.M41);
+            Vector128<float> v22 = Vector128.Create(matrix2.M12, matrix2.M22, matrix2.M32, matrix2.M42);
+            Vector128<float> v23 = Vector128.Create(matrix2.M13, matrix2.M23, matrix2.M33, matrix2.M43);
+            Vector128<float> v24 = Vector128.Create(matrix2.M14, matrix2.M24, matrix2.M34, matrix2.M44);
+
+            // Add the vectors element-wise
+            v11 = Vector128.Add(v11, v21);
+            v12 = Vector128.Add(v12, v22);
+            v13 = Vector128.Add(v13, v23);
+            v14 = Vector128.Add(v14, v24);
+
+            // Create a new matrix with the added elements
+            return new Matrix
+            {
+                M11 = v11.GetElement(0),
+                M21 = v11.GetElement(1),
+                M31 = v11.GetElement(2),
+                M41 = v11.GetElement(3),
+                M12 = v12.GetElement(0),
+                M22 = v12.GetElement(1),
+                M32 = v12.GetElement(2),
+                M42 = v12.GetElement(3),
+                M13 = v13.GetElement(0),
+                M23 = v13.GetElement(1),
+                M33 = v13.GetElement(2),
+                M43 = v13.GetElement(3),
+                M14 = v14.GetElement(0),
+                M24 = v14.GetElement(1),
+                M34 = v14.GetElement(2),
+                M44 = v14.GetElement(3)
+            };
+        }
+
         matrix1.M11 += matrix2.M11;
         matrix1.M12 += matrix2.M12;
         matrix1.M13 += matrix2.M13;
@@ -423,6 +463,46 @@ public struct Matrix : IEquatable<Matrix>
     /// <param name="result">The result of the matrix addition as an output parameter.</param>
     public static void Add(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
     {
+        if (Vector128.IsHardwareAccelerated)
+        {
+            Vector128<float> v11 = Vector128.Create(matrix1.M11, matrix1.M21, matrix1.M31, matrix1.M41);
+            Vector128<float> v12 = Vector128.Create(matrix1.M12, matrix1.M22, matrix1.M32, matrix1.M42);
+            Vector128<float> v13 = Vector128.Create(matrix1.M13, matrix1.M23, matrix1.M33, matrix1.M43);
+            Vector128<float> v14 = Vector128.Create(matrix1.M14, matrix1.M24, matrix1.M34, matrix1.M44);
+
+            Vector128<float> v21 = Vector128.Create(matrix2.M11, matrix2.M21, matrix2.M31, matrix2.M41);
+            Vector128<float> v22 = Vector128.Create(matrix2.M12, matrix2.M22, matrix2.M32, matrix2.M42);
+            Vector128<float> v23 = Vector128.Create(matrix2.M13, matrix2.M23, matrix2.M33, matrix2.M43);
+            Vector128<float> v24 = Vector128.Create(matrix2.M14, matrix2.M24, matrix2.M34, matrix2.M44);
+
+            // Add the vectors element-wise
+            v11 = Vector128.Add(v11, v21);
+            v12 = Vector128.Add(v12, v22);
+            v13 = Vector128.Add(v13, v23);
+            v14 = Vector128.Add(v14, v24);
+
+            // Create a new matrix with the added elements
+            result = new Matrix
+            {
+                M11 = v11.GetElement(0),
+                M21 = v11.GetElement(1),
+                M31 = v11.GetElement(2),
+                M41 = v11.GetElement(3),
+                M12 = v12.GetElement(0),
+                M22 = v12.GetElement(1),
+                M32 = v12.GetElement(2),
+                M42 = v12.GetElement(3),
+                M13 = v13.GetElement(0),
+                M23 = v13.GetElement(1),
+                M33 = v13.GetElement(2),
+                M43 = v13.GetElement(3),
+                M14 = v14.GetElement(0),
+                M24 = v14.GetElement(1),
+                M34 = v14.GetElement(2),
+                M44 = v14.GetElement(3)
+            };
+        }
+
         result.M11 = matrix1.M11 + matrix2.M11;
         result.M12 = matrix1.M12 + matrix2.M12;
         result.M13 = matrix1.M13 + matrix2.M13;
@@ -723,8 +803,7 @@ public struct Matrix : IEquatable<Matrix>
     /// </remarks>
     public static void CreateFromYawPitchRoll(float yaw, float pitch, float roll, out Matrix result)
     {
-        Quaternion quaternion;
-        Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll, out quaternion);
+        var quaternion = Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll);
         CreateFromQuaternion(ref quaternion, out result);
     }
 
@@ -1439,12 +1518,14 @@ public struct Matrix : IEquatable<Matrix>
         x.Normalize();
         y.Normalize();
 
-        result = new Matrix();
-        result.Right = x;
-        result.Up = y;
-        result.Forward = z;
-        result.Translation = position;
-        result.M44 = 1f;
+        result = new Matrix
+        {
+            Right = x,
+            Up = y,
+            Forward = z,
+            Translation = position,
+            M44 = 1f
+        };
     }
 
     /// <summary>
@@ -1474,12 +1555,13 @@ public struct Matrix : IEquatable<Matrix>
             return false;
         }
 
-        Matrix m1 = new Matrix(M11 / scale.X, M12 / scale.X, M13 / scale.X, 0,
-            M21 / scale.Y, M22 / scale.Y, M23 / scale.Y, 0,
-            M31 / scale.Z, M32 / scale.Z, M33 / scale.Z, 0,
-            0, 0, 0, 1);
+        var m = new Matrix4x4(
+            m11: M11 / scale.X, m12: M12 / scale.X, m13: M13 / scale.X, m14: 0,
+            m21: M21 / scale.Y, m22: M22 / scale.Y, m23: M23 / scale.Y, m24: 0,
+            m31: M31 / scale.Z, m32: M32 / scale.Z, m33: M33 / scale.Z, m34: 0,
+            m41: 0, m42: 0, m43: 0, m44: 1);
 
-        rotation = Quaternion.CreateFromRotationMatrix(m1);
+        rotation = Quaternion.CreateFromRotationMatrix(m);
         return true;
     }
 
@@ -1491,6 +1573,30 @@ public struct Matrix : IEquatable<Matrix>
     /// </remarks>
     public float Determinant()
     {
+        // Take the fast path if we have hardware accelerated instruction sets available to us
+        if (Vector128.IsHardwareAccelerated)
+        {
+            // Load the matrix elements into vectors
+            Vector128<float> v11 = Vector128.Create(M11, M21, M31, M41);
+            Vector128<float> v12 = Vector128.Create(M12, M22, M32, M42);
+            Vector128<float> v13 = Vector128.Create(M13, M23, M33, M43);
+            Vector128<float> v14 = Vector128.Create(M14, M24, M34, M44);
+
+            // Calculate the intermediate results
+            Vector128<float> t1 = v12 * v14;
+            Vector128<float> t2 = v13 * v14;
+            Vector128<float> t3 = v13 * v12;
+            Vector128<float> t4 = v11 * v14;
+            Vector128<float> t5 = v11 * v13;
+            Vector128<float> t6 = v11 * v12;
+
+            // Calculate the determinant
+            Vector128<float> result = v11 * (t1 - t2) - v12 * (t4 - t5) + v13 * (t6 - t3);
+
+            // Return the first element of the result vector as the final result
+            return result[0];
+        }
+
         float num22 = M11;
         float num21 = M12;
         float num20 = M13;
@@ -1513,6 +1619,7 @@ public struct Matrix : IEquatable<Matrix>
         float num15 = num8 * num - num5 * num4;
         float num14 = num8 * num2 - num6 * num4;
         float num13 = num8 * num3 - num7 * num4;
+
         return num22 * (num11 * num18 - num10 * num17 + num9 * num16) -
                num21 * (num12 * num18 - num10 * num15 + num9 * num14) +
                num20 * (num12 * num17 - num11 * num15 + num9 * num13) -
@@ -1527,23 +1634,63 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The result of dividing the matrix.</returns>
     public static Matrix Divide(Matrix matrix1, Matrix matrix2)
     {
-        matrix1.M11 /= matrix2.M11;
-        matrix1.M12 /= matrix2.M12;
-        matrix1.M13 /= matrix2.M13;
-        matrix1.M14 /= matrix2.M14;
-        matrix1.M21 /= matrix2.M21;
-        matrix1.M22 /= matrix2.M22;
-        matrix1.M23 /= matrix2.M23;
-        matrix1.M24 /= matrix2.M24;
-        matrix1.M31 /= matrix2.M31;
-        matrix1.M32 /= matrix2.M32;
-        matrix1.M33 /= matrix2.M33;
-        matrix1.M34 /= matrix2.M34;
-        matrix1.M41 /= matrix2.M41;
-        matrix1.M42 /= matrix2.M42;
-        matrix1.M43 /= matrix2.M43;
-        matrix1.M44 /= matrix2.M44;
-        return matrix1;
+        if (Vector128.IsHardwareAccelerated)
+        {
+            Vector128<float> v11 = Vector128.Create(matrix1.M11, matrix1.M12, matrix1.M13, matrix1.M14);
+            Vector128<float> v21 = Vector128.Create(matrix1.M21, matrix1.M12, matrix1.M13, matrix1.M14);
+            Vector128<float> v31 = Vector128.Create(matrix1.M31, matrix1.M12, matrix1.M13, matrix1.M14);
+            Vector128<float> v41 = Vector128.Create(matrix1.M41, matrix1.M12, matrix1.M13, matrix1.M14);
+
+            Vector128<float> v11Divisor = Vector128.Create(matrix1.M11, matrix1.M12, matrix1.M13, matrix1.M14);
+            Vector128<float> v21Divisor = Vector128.Create(matrix1.M21, matrix1.M12, matrix1.M13, matrix1.M14);
+            Vector128<float> v31Divisor = Vector128.Create(matrix1.M31, matrix1.M12, matrix1.M13, matrix1.M14);
+            Vector128<float> v41Divisor = Vector128.Create(matrix1.M41, matrix1.M12, matrix1.M13, matrix1.M14);
+
+            var v11Result = Vector128.Divide(v11, v11Divisor);
+            var v21Result = Vector128.Divide(v21, v21Divisor);
+            var v31Result = Vector128.Divide(v31, v31Divisor);
+            var v41Result = Vector128.Divide(v41, v41Divisor);
+
+            return new Matrix
+            {
+                M11 = v11Result.GetElement(0),
+                M12 = v11Result.GetElement(1),
+                M13 = v11Result.GetElement(2),
+                M14 = v11Result.GetElement(3),
+                M21 = v21Result.GetElement(0),
+                M22 = v21Result.GetElement(1),
+                M23 = v21Result.GetElement(2),
+                M24 = v21Result.GetElement(3),
+                M31 = v31Result.GetElement(0),
+                M32 = v31Result.GetElement(1),
+                M33 = v31Result.GetElement(2),
+                M34 = v31Result.GetElement(3),
+                M41 = v41Result.GetElement(0),
+                M42 = v41Result.GetElement(1),
+                M43 = v41Result.GetElement(2),
+                M44 = v41Result.GetElement(3)
+            };
+        }
+
+        return new Matrix
+        {
+            M11 = matrix1.M11 / matrix2.M11,
+            M12 = matrix1.M12 / matrix2.M12,
+            M13 = matrix1.M13 / matrix2.M13,
+            M14 = matrix1.M14 / matrix2.M14,
+            M21 = matrix1.M21 / matrix2.M21,
+            M22 = matrix1.M22 / matrix2.M22,
+            M23 = matrix1.M23 / matrix2.M23,
+            M24 = matrix1.M24 / matrix2.M24,
+            M31 = matrix1.M31 / matrix2.M31,
+            M32 = matrix1.M32 / matrix2.M32,
+            M33 = matrix1.M33 / matrix2.M33,
+            M34 = matrix1.M34 / matrix2.M34,
+            M41 = matrix1.M41 / matrix2.M41,
+            M42 = matrix1.M42 / matrix2.M42,
+            M43 = matrix1.M43 / matrix2.M43,
+            M44 = matrix1.M44 / matrix2.M44
+        };
     }
 
     /// <summary>
