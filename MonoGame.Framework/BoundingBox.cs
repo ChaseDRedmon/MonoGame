@@ -153,7 +153,7 @@ public struct BoundingBox : IEquatable<BoundingBox>
             && Max.Z - sphere.Center.Z >= sphere.Radius)
             return ContainmentType.Contains;
 
-        double dmin = 0;
+        var dmin = 0.0d;
 
         double e = sphere.Center.X - Min.X;
         if (e < 0)

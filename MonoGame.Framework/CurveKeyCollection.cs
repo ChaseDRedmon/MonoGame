@@ -119,8 +119,8 @@ public sealed class CurveKeyCollection : ICollection<CurveKey>
     /// <returns>A copy of this collection.</returns>
     public CurveKeyCollection Clone()
     {
-        CurveKeyCollection ckc = new CurveKeyCollection();
-        foreach (CurveKey key in _keys)
+        var ckc = new CurveKeyCollection();
+        foreach (var key in _keys)
             ckc.Add(key);
 
         return ckc;

@@ -452,11 +452,9 @@ public struct Matrix : IEquatable<Matrix>
     public static Matrix CreateBillboard(Vector3 objectPosition, Vector3 cameraPosition,
         Vector3 cameraUpVector, Nullable<Vector3> cameraForwardVector)
     {
-        Matrix result;
-
         // Delegate to the other overload of the function to do the work
         CreateBillboard(ref objectPosition, ref cameraPosition, ref cameraUpVector, cameraForwardVector,
-            out result);
+            out var result);
 
         return result;
     }
@@ -473,8 +471,6 @@ public struct Matrix : IEquatable<Matrix>
         ref Vector3 cameraUpVector, Vector3? cameraForwardVector, out Matrix result)
     {
         Vector3 vector;
-        Vector3 vector2;
-        Vector3 vector3;
         vector.X = objectPosition.X - cameraPosition.X;
         vector.Y = objectPosition.Y - cameraPosition.Y;
         vector.Z = objectPosition.Z - cameraPosition.Z;
@@ -488,9 +484,9 @@ public struct Matrix : IEquatable<Matrix>
             Vector3.Multiply(ref vector, 1f / MathF.Sqrt(num), out vector);
         }
 
-        Vector3.Cross(ref cameraUpVector, ref vector, out vector3);
+        Vector3.Cross(ref cameraUpVector, ref vector, out var vector3);
         vector3.Normalize();
-        Vector3.Cross(ref vector, ref vector3, out vector2);
+        Vector3.Cross(ref vector, ref vector3, out var vector2);
         result.M11 = vector3.X;
         result.M12 = vector3.Y;
         result.M13 = vector3.Z;
@@ -521,9 +517,8 @@ public struct Matrix : IEquatable<Matrix>
     public static Matrix CreateConstrainedBillboard(Vector3 objectPosition, Vector3 cameraPosition,
         Vector3 rotateAxis, Nullable<Vector3> cameraForwardVector, Nullable<Vector3> objectForwardVector)
     {
-        Matrix result;
         CreateConstrainedBillboard(ref objectPosition, ref cameraPosition, ref rotateAxis,
-            cameraForwardVector, objectForwardVector, out result);
+            cameraForwardVector, objectForwardVector, out var result);
         return result;
     }
 
@@ -539,7 +534,6 @@ public struct Matrix : IEquatable<Matrix>
     public static void CreateConstrainedBillboard(ref Vector3 objectPosition, ref Vector3 cameraPosition,
         ref Vector3 rotateAxis, Vector3? cameraForwardVector, Vector3? objectForwardVector, out Matrix result)
     {
-        float num;
         Vector3 vector;
         Vector3 vector2;
         Vector3 vector3;
@@ -557,7 +551,7 @@ public struct Matrix : IEquatable<Matrix>
         }
 
         Vector3 vector4 = rotateAxis;
-        Vector3.Dot(ref rotateAxis, ref vector2, out num);
+        Vector3.Dot(ref rotateAxis, ref vector2, out var num);
         if (Math.Abs(num) > 0.9982547f)
         {
             if (objectForwardVector.HasValue)
@@ -617,8 +611,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The rotation <see cref="Matrix"/>.</returns>
     public static Matrix CreateFromAxisAngle(Vector3 axis, float angle)
     {
-        Matrix result;
-        CreateFromAxisAngle(ref axis, angle, out result);
+        CreateFromAxisAngle(ref axis, angle, out var result);
         return result;
     }
 
@@ -666,8 +659,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The rotation <see cref="Matrix"/>.</returns>
     public static Matrix CreateFromQuaternion(Quaternion quaternion)
     {
-        Matrix result;
-        CreateFromQuaternion(ref quaternion, out result);
+        CreateFromQuaternion(ref quaternion, out var result);
         return result;
     }
 
@@ -716,8 +708,7 @@ public struct Matrix : IEquatable<Matrix>
     /// </remarks>
     public static Matrix CreateFromYawPitchRoll(float yaw, float pitch, float roll)
     {
-        Matrix matrix;
-        CreateFromYawPitchRoll(yaw, pitch, roll, out matrix);
+        CreateFromYawPitchRoll(yaw, pitch, roll, out var matrix);
         return matrix;
     }
 
@@ -746,8 +737,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The viewing <see cref="Matrix"/>.</returns>
     public static Matrix CreateLookAt(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 cameraUpVector)
     {
-        Matrix matrix;
-        CreateLookAt(ref cameraPosition, ref cameraTarget, ref cameraUpVector, out matrix);
+        CreateLookAt(ref cameraPosition, ref cameraTarget, ref cameraUpVector, out var matrix);
         return matrix;
     }
 
@@ -792,8 +782,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The new projection <see cref="Matrix"/> for orthographic view.</returns>
     public static Matrix CreateOrthographic(float width, float height, float zNearPlane, float zFarPlane)
     {
-        Matrix matrix;
-        CreateOrthographic(width, height, zNearPlane, zFarPlane, out matrix);
+        CreateOrthographic(width, height, zNearPlane, zFarPlane, out var matrix);
         return matrix;
     }
 
@@ -832,8 +821,7 @@ public struct Matrix : IEquatable<Matrix>
     public static Matrix CreateOrthographicOffCenter(float left, float right, float bottom, float top,
         float zNearPlane, float zFarPlane)
     {
-        Matrix matrix;
-        CreateOrthographicOffCenter(left, right, bottom, top, zNearPlane, zFarPlane, out matrix);
+        CreateOrthographicOffCenter(left, right, bottom, top, zNearPlane, zFarPlane, out var matrix);
         return matrix;
     }
 
@@ -846,9 +834,8 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The new projection <see cref="Matrix"/> for customized orthographic view.</returns>
     public static Matrix CreateOrthographicOffCenter(Rectangle viewingVolume, float zNearPlane, float zFarPlane)
     {
-        Matrix matrix;
         CreateOrthographicOffCenter(viewingVolume.Left, viewingVolume.Right, viewingVolume.Bottom,
-            viewingVolume.Top, zNearPlane, zFarPlane, out matrix);
+            viewingVolume.Top, zNearPlane, zFarPlane, out var matrix);
         return matrix;
     }
 
@@ -894,8 +881,7 @@ public struct Matrix : IEquatable<Matrix>
     public static Matrix CreatePerspective(float width, float height, float nearPlaneDistance,
         float farPlaneDistance)
     {
-        Matrix matrix;
-        CreatePerspective(width, height, nearPlaneDistance, farPlaneDistance, out matrix);
+        CreatePerspective(width, height, nearPlaneDistance, farPlaneDistance, out var matrix);
         return matrix;
     }
 
@@ -951,8 +937,7 @@ public struct Matrix : IEquatable<Matrix>
     public static Matrix CreatePerspectiveFieldOfView(float fieldOfView, float aspectRatio, float nearPlaneDistance,
         float farPlaneDistance)
     {
-        Matrix result;
-        CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance, out result);
+        CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance, out var result);
         return result;
     }
 
@@ -1017,8 +1002,7 @@ public struct Matrix : IEquatable<Matrix>
     public static Matrix CreatePerspectiveOffCenter(float left, float right, float bottom, float top,
         float nearPlaneDistance, float farPlaneDistance)
     {
-        Matrix result;
-        CreatePerspectiveOffCenter(left, right, bottom, top, nearPlaneDistance, farPlaneDistance, out result);
+        CreatePerspectiveOffCenter(left, right, bottom, top, nearPlaneDistance, farPlaneDistance, out var result);
         return result;
     }
 
@@ -1032,9 +1016,8 @@ public struct Matrix : IEquatable<Matrix>
     public static Matrix CreatePerspectiveOffCenter(Rectangle viewingVolume, float nearPlaneDistance,
         float farPlaneDistance)
     {
-        Matrix result;
         CreatePerspectiveOffCenter(viewingVolume.Left, viewingVolume.Right, viewingVolume.Bottom, viewingVolume.Top,
-            nearPlaneDistance, farPlaneDistance, out result);
+            nearPlaneDistance, farPlaneDistance, out var result);
         return result;
     }
 
@@ -1085,8 +1068,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The rotation <see cref="Matrix"/> around X axis.</returns>
     public static Matrix CreateRotationX(float radians)
     {
-        Matrix result;
-        CreateRotationX(radians, out result);
+        CreateRotationX(radians, out var result);
         return result;
     }
 
@@ -1115,8 +1097,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The rotation <see cref="Matrix"/> around Y axis.</returns>
     public static Matrix CreateRotationY(float radians)
     {
-        Matrix result;
-        CreateRotationY(radians, out result);
+        CreateRotationY(radians, out var result);
         return result;
     }
 
@@ -1145,8 +1126,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The rotation <see cref="Matrix"/> around Z axis.</returns>
     public static Matrix CreateRotationZ(float radians)
     {
-        Matrix result;
-        CreateRotationZ(radians, out result);
+        CreateRotationZ(radians, out var result);
         return result;
     }
 
@@ -1175,8 +1155,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The scaling <see cref="Matrix"/>.</returns>
     public static Matrix CreateScale(float scale)
     {
-        Matrix result;
-        CreateScale(scale, scale, scale, out result);
+        CreateScale(scale, scale, scale, out var result);
         return result;
     }
 
@@ -1199,8 +1178,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The scaling <see cref="Matrix"/>.</returns>
     public static Matrix CreateScale(float xScale, float yScale, float zScale)
     {
-        Matrix result;
-        CreateScale(xScale, yScale, zScale, out result);
+        CreateScale(xScale, yScale, zScale, out var result);
         return result;
     }
 
@@ -1238,8 +1216,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The scaling <see cref="Matrix"/>.</returns>
     public static Matrix CreateScale(Vector3 scales)
     {
-        Matrix result;
-        CreateScale(ref scales, out result);
+        CreateScale(ref scales, out var result);
         return result;
     }
 
@@ -1277,8 +1254,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>A <see cref="Matrix"/> that can be used to flatten geometry onto the specified plane from the specified direction. </returns>
     public static Matrix CreateShadow(Vector3 lightDirection, Plane plane)
     {
-        Matrix result;
-        CreateShadow(ref lightDirection, ref plane, out result);
+        CreateShadow(ref lightDirection, ref plane, out var result);
         return result;
     }
 
@@ -1325,8 +1301,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The translation <see cref="Matrix"/>.</returns>
     public static Matrix CreateTranslation(float xPosition, float yPosition, float zPosition)
     {
-        Matrix result;
-        CreateTranslation(xPosition, yPosition, zPosition, out result);
+        CreateTranslation(xPosition, yPosition, zPosition, out var result);
         return result;
     }
 
@@ -1362,8 +1337,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The translation <see cref="Matrix"/>.</returns>
     public static Matrix CreateTranslation(Vector3 position)
     {
-        Matrix result;
-        CreateTranslation(ref position, out result);
+        CreateTranslation(ref position, out var result);
         return result;
     }
 
@@ -1401,8 +1375,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The reflection <see cref="Matrix"/>.</returns>
     public static Matrix CreateReflection(Plane value)
     {
-        Matrix result;
-        CreateReflection(ref value, out result);
+        CreateReflection(ref value, out var result);
         return result;
     }
 
@@ -1413,8 +1386,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <param name="result">The reflection <see cref="Matrix"/> as an output parameter.</param>
     public static void CreateReflection(ref Plane value, out Matrix result)
     {
-        Plane plane;
-        Plane.Normalize(ref value, out plane);
+        Plane.Normalize(ref value, out var plane);
         float x = plane.Normal.X;
         float y = plane.Normal.Y;
         float z = plane.Normal.Z;
@@ -1448,8 +1420,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The world <see cref="Matrix"/>.</returns>
     public static Matrix CreateWorld(Vector3 position, Vector3 forward, Vector3 up)
     {
-        Matrix ret;
-        CreateWorld(ref position, ref forward, ref up, out ret);
+        CreateWorld(ref position, ref forward, ref up, out var ret);
         return ret;
     }
 
@@ -1462,10 +1433,9 @@ public struct Matrix : IEquatable<Matrix>
     /// <param name="result">The world <see cref="Matrix"/> as an output parameter.</param>
     public static void CreateWorld(ref Vector3 position, ref Vector3 forward, ref Vector3 up, out Matrix result)
     {
-        Vector3 x, y, z;
-        Vector3.Normalize(ref forward, out z);
-        Vector3.Cross(ref forward, ref up, out x);
-        Vector3.Cross(ref x, ref forward, out y);
+        Vector3.Normalize(ref forward, out var z);
+        Vector3.Cross(ref forward, ref up, out var x);
+        Vector3.Cross(ref x, ref forward, out var y);
         x.Normalize();
         y.Normalize();
 
@@ -1712,8 +1682,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The inverted matrix.</returns>
     public static Matrix Invert(Matrix matrix)
     {
-        Matrix result;
-        Invert(ref matrix, out result);
+        Invert(ref matrix, out var result);
         return result;
     }
 
@@ -2533,8 +2502,7 @@ public struct Matrix : IEquatable<Matrix>
     /// <returns>The new <see cref="Matrix"/> which contains the transposing result.</returns>
     public static Matrix Transpose(Matrix matrix)
     {
-        Matrix ret;
-        Transpose(ref matrix, out ret);
+        Transpose(ref matrix, out var ret);
         return ret;
     }
 

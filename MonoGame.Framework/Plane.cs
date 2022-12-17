@@ -418,8 +418,7 @@ public struct Plane : IEquatable<Plane>
 
     internal PlaneIntersectionType Intersects(ref Vector3 point)
     {
-        float distance;
-        DotCoordinate(ref point, out distance);
+        var distance = DotCoordinate(ref point);
 
         return distance switch
         {
