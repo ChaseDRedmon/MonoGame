@@ -36,8 +36,6 @@
 // purpose and non-infringement.
 // */
 
-using System;
-
 namespace Microsoft.Xna.Framework.Input.Touch;
 
 /// <summary>

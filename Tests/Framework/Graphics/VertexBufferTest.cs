@@ -6,7 +6,6 @@ using System;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Framework;
 using NUnit.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Vector3 = System.Numerics.Vector3;

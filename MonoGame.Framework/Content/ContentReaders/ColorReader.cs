@@ -2,10 +2,6 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using System;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework;
-
 namespace Microsoft.Xna.Framework.Content;
 
 internal class ColorReader : ContentTypeReader<Color>

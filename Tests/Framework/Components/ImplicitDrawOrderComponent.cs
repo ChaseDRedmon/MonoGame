@@ -64,7 +64,6 @@ the implied warranties of merchantability, fitness for a particular purpose and
 non-infringement.
 */
 
-using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Microsoft.Xna.Framework;

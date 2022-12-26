@@ -61,8 +61,6 @@
 // -----------------------------------------------------------------------
 
 
-using System;
-
 namespace MonoGame.Framework.Utilities.Deflate
 {
     /// <summary>

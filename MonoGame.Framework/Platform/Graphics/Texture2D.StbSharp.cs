@@ -6,7 +6,6 @@ using StbImageSharp;
 using StbImageWriteSharp;
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace Microsoft.Xna.Framework.Graphics;
 

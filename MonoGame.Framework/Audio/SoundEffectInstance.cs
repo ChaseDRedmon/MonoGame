@@ -36,8 +36,8 @@ public partial class SoundEffectInstance : IDisposable
         get { return _pan; }
         set
         {
-            if (value < -1.0f || value > 1.0f)
-                throw new ArgumentOutOfRangeException();
+            if (value is < -1.0f or > 1.0f)
+                Throw.ArgumentOutOfRangeException();
 
             _pan = value;
             PlatformSetPan(value);
@@ -52,8 +52,8 @@ public partial class SoundEffectInstance : IDisposable
         set
         {
             // XAct sounds effects don't have pitch limits
-            if (!_isXAct && (value < -1.0f || value > 1.0f))
-                throw new ArgumentOutOfRangeException();
+            if (!_isXAct && value is < -1.0f or > 1.0f)
+                Throw.ArgumentOutOfRangeException();
 
             _pitch = value;
             PlatformSetPitch(value);
@@ -71,8 +71,8 @@ public partial class SoundEffectInstance : IDisposable
         set
         {
             // XAct sound effects don't have volume limits.
-            if (!_isXAct && (value < 0.0f || value > 1.0f))
-                throw new ArgumentOutOfRangeException();
+            if (!_isXAct && value is < 0.0f or > 1.0f)
+                Throw.ArgumentOutOfRangeException();
 
             _volume = value;
 

@@ -36,8 +36,6 @@ permitted under your local laws, the contributors exclude the implied warranties
 purpose and non-infringement.
 */
 
-using System;
-
 namespace Microsoft.Xna.Framework.Graphics;
 
 public class EffectMaterial : Effect

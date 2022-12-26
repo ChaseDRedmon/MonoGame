@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using SharpDX;
 using SharpDX.MediaFoundation;
 using SharpDX.Win32;
@@ -233,7 +231,7 @@ public sealed partial class VideoPlayer : IDisposable
             return;
 
         // Get the volume interface.
-        IntPtr volumeObjectPtr;
+        nint volumeObjectPtr;
         MediaFactory.GetService(_session, MediaServiceKeys.StreamVolume, AudioStreamVolumeGuid,
             out volumeObjectPtr);
         _volumeController = CppObject.FromPointer<AudioStreamVolume>(volumeObjectPtr);
