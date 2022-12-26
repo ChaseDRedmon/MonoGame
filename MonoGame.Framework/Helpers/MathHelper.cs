@@ -56,6 +56,7 @@ public static class MathHelper
     /// <param name="value4">The fourth position in the interpolation.</param>
     /// <param name="amount">Weighting factor.</param>
     /// <returns>A position that is the result of the Catmull-Rom interpolation.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float CatmullRom(float value1, float value2, float value3, float value4, float amount)
     {
         // Using formula from http://www.mvps.org/directx/articles/catmull/
@@ -90,6 +91,7 @@ public static class MathHelper
     /// <param name="tangent2">Source tangent.</param>
     /// <param name="amount">Weighting factor.</param>
     /// <returns>The result of the Hermite spline interpolation.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float Hermite(float value1, float tangent1, float value2, float tangent2, float amount)
     {
         // All transformed to double not to lose precission
@@ -123,6 +125,7 @@ public static class MathHelper
     /// Passing amount a value of 0 will cause value1 to be returned, a value of 1 will cause value2 to be returned.
     /// See <see cref="MathHelper.LerpPrecise"/> for a less efficient version with more precision around edge cases.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float Lerp(float value1, float value2, float amount)
     {
         return value1 + (value2 - value1) * amount;
@@ -149,6 +152,7 @@ public static class MathHelper
     /// Relevant Wikipedia Article: https://en.wikipedia.org/wiki/Linear_interpolation#Programming_language_support
     /// Relevant StackOverflow Answer: http://stackoverflow.com/questions/4353525/floating-point-linear-interpolation#answer-23716956
     /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float LerpPrecise(float value1, float value2, float amount)
     {
         return (1 - amount) * value1 + value2 * amount;
@@ -161,6 +165,7 @@ public static class MathHelper
     /// <param name="value2">Source value.</param>
     /// <param name="amount">Weighting value.</param>
     /// <returns>Interpolated value.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float SmoothStep(float value1, float value2, float amount)
     {
         // It is expected that 0 < amount < 1
@@ -182,6 +187,7 @@ public static class MathHelper
     /// though it returns single float
     /// Factor = 180 / pi
     /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float ToDegrees(float radians)
     {
         return (float)(radians * 57.295779513082320876798154814105);
@@ -197,6 +203,7 @@ public static class MathHelper
     /// though it returns single float
     /// Factor = pi / 180
     /// </remarks>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float ToRadians(float degrees)
     {
         return (float)(degrees * 0.017453292519943295769236907684886);
@@ -207,6 +214,7 @@ public static class MathHelper
     /// </summary>
     /// <param name="angle">The angle to reduce, in radians.</param>
     /// <returns>The new angle, in radians.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float WrapAngle(float angle)
     {
         if (angle is > -MathF.PI and <= MathF.PI)

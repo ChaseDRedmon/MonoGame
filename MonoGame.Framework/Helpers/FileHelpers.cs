@@ -11,7 +11,7 @@ namespace MonoGame.Framework.Utilities;
 
 internal static class FileHelpers
 {
-    private static readonly char[] UrlSafeChars = new[] { '.', '_', '-', ';', '/', '?', '\\', ':' };
+    private static readonly char[] UrlSafeChars = { '.', '_', '-', ';', '/', '?', '\\', ':' };
 
     public static readonly char ForwardSlash = '/';
     public static readonly string ForwardSlashString = new(ForwardSlash, 1);

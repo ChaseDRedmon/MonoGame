@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace Microsoft.Xna.Framework.Helpers;
 
@@ -11,6 +12,7 @@ public static class PlaneHelper
     /// <param name="point">The point to check with</param>
     /// <param name="plane">The plane to check against</param>
     /// <returns>Greater than zero if on the positive side, less than zero if on the negative size, 0 otherwise</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float ClassifyPoint(this ref Plane plane, ref Vector3 point)
     {
         return point.X * plane.Normal.X + point.Y * plane.Normal.Y + point.Z * plane.Normal.Z + plane.D;
@@ -26,6 +28,7 @@ public static class PlaneHelper
     /// The dot product of the specified <see cref="Vector3"/> and the normal of this <see cref="Plane"/>
     /// plus the <see cref="D"/> value of this <see cref="Plane"/>.
     /// </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float DotCoordinate(this ref Plane plane, ref Vector3 value, float D)
     {
         return plane.Normal.X * value.X +
@@ -38,6 +41,7 @@ public static class PlaneHelper
     /// </summary>
     /// <param name="value">The <see cref="Vector4"/> to calculate the dot product with.</param>
     /// <returns>The dot product of the specified <see cref="Vector4"/> and this <see cref="Plane"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float Dot(this ref Plane plane, ref Vector4 value)
     {
         return plane.Normal.X * value.X +
@@ -53,6 +57,7 @@ public static class PlaneHelper
     /// <param name="result">
     /// The dot product of the specified <see cref="Vector4"/> and this <see cref="Plane"/>.
     /// </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Dot(this ref Plane plane, ref Vector4 value, out float result)
     {
         result = plane.Normal.X * value.X +
@@ -68,6 +73,7 @@ public static class PlaneHelper
     /// <returns>
     /// The type of intersection of this <see cref="Plane"/> with the specified <see cref="BoundingBox"/>.
     /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PlaneIntersectionType Intersects(this ref Plane plane, BoundingBox box)
     {
         return box.Intersects(plane);
@@ -80,6 +86,7 @@ public static class PlaneHelper
     /// <param name="result">
     /// The type of intersection of this <see cref="Plane"/> with the specified <see cref="BoundingBox"/>.
     /// </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Intersects(this ref Plane plane, ref BoundingBox box, out PlaneIntersectionType result)
     {
         box.Intersects(ref plane, out result);
@@ -92,6 +99,7 @@ public static class PlaneHelper
     /// <returns>
     /// The type of intersection of this <see cref="Plane"/> with the specified <see cref="BoundingFrustum"/>.
     /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PlaneIntersectionType Intersects(this ref Plane plane, BoundingFrustum frustum)
     {
         return frustum.Intersects(plane);
@@ -104,6 +112,7 @@ public static class PlaneHelper
     /// <returns>
     /// The type of intersection of this <see cref="Plane"/> with the specified <see cref="BoundingSphere"/>.
     /// </returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PlaneIntersectionType Intersects(this ref Plane plane, BoundingSphere sphere)
     {
         return sphere.Intersects(plane);
@@ -116,11 +125,13 @@ public static class PlaneHelper
     /// <param name="result">
     /// The type of intersection of this <see cref="Plane"/> with the specified <see cref="BoundingSphere"/>.
     /// </param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Intersects(this ref Plane plane, ref BoundingSphere sphere, out PlaneIntersectionType result)
     {
         sphere.Intersects(ref plane, out result);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PlaneIntersectionType Intersects(this ref Plane plane, ref Vector3 point)
     {
         var distance = Vector3.Dot(plane.Normal, point);
@@ -133,6 +144,7 @@ public static class PlaneHelper
         };
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PlaneIntersectionType Intersects(this ref Plane plane, ref Vector3 point, float D)
     {
         var distance = DotCoordinate(ref plane, ref point, D);
@@ -151,6 +163,7 @@ public static class PlaneHelper
     /// <param name="point">The point to check</param>
     /// <param name="plane">The place to check</param>
     /// <returns>The perpendicular distance from the point to the plane</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float PerpendicularDistance(ref Vector3 point, ref Plane plane)
     {
         if (Vector.IsHardwareAccelerated)

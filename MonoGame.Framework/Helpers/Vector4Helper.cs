@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
@@ -15,6 +16,7 @@ public static class Vector4Helper
     /// <param name="amount1">Barycentric scalar <c>b2</c> which represents a weighting factor towards second vector of 4d-triangle.</param>
     /// <param name="amount2">Barycentric scalar <c>b3</c> which represents a weighting factor towards third vector of 4d-triangle.</param>
     /// <returns>The cartesian translation of barycentric coordinates.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4 Barycentric(Vector4 value1, Vector4 value2, Vector4 value3, float amount1, float amount2)
     {
         return new Vector4(
@@ -33,6 +35,7 @@ public static class Vector4Helper
     /// <param name="amount1">Barycentric scalar <c>b2</c> which represents a weighting factor towards second vector of 4d-triangle.</param>
     /// <param name="amount2">Barycentric scalar <c>b3</c> which represents a weighting factor towards third vector of 4d-triangle.</param>
     /// <param name="result">The cartesian translation of barycentric coordinates as an output parameter.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Barycentric(ref Vector4 value1, ref Vector4 value2, ref Vector4 value3, float amount1,
         float amount2, out Vector4 result)
     {
@@ -51,6 +54,7 @@ public static class Vector4Helper
     /// <param name="value4">The fourth vector in interpolation.</param>
     /// <param name="amount">Weighting factor.</param>
     /// <returns>The result of CatmullRom interpolation.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4 CatmullRom(Vector4 value1, Vector4 value2, Vector4 value3, Vector4 value4, float amount)
     {
         return new Vector4(
@@ -69,6 +73,7 @@ public static class Vector4Helper
     /// <param name="value4">The fourth vector in interpolation.</param>
     /// <param name="amount">Weighting factor.</param>
     /// <param name="result">The result of CatmullRom interpolation as an output parameter.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void CatmullRom(ref Vector4 value1, ref Vector4 value2, ref Vector4 value3, ref Vector4 value4,
         float amount, out Vector4 result)
     {
@@ -81,6 +86,7 @@ public static class Vector4Helper
     /// <summary>
     /// Round the members of this <see cref="Vector4"/> towards positive infinity.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Ceiling(this ref Vector4 vector)
     {
         vector.X = MathF.Ceiling(vector.X);
@@ -94,6 +100,7 @@ public static class Vector4Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector4"/>.</param>
     /// <returns>The rounded <see cref="Vector4"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4 Ceiling(Vector4 value)
     {
         value.X = MathF.Ceiling(value.X);
@@ -108,6 +115,7 @@ public static class Vector4Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector4"/>.</param>
     /// <param name="result">The rounded <see cref="Vector4"/>.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Ceiling(ref Vector4 value, out Vector4 result)
     {
         result.X = MathF.Ceiling(value.X);
@@ -119,6 +127,7 @@ public static class Vector4Helper
     /// <summary>
     /// Round the members of this <see cref="Vector4"/> towards negative infinity.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Floor(this ref Vector4 vector)
     {
         vector.X = MathF.Floor(vector.X);
@@ -132,6 +141,7 @@ public static class Vector4Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector4"/>.</param>
     /// <returns>The rounded <see cref="Vector4"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4 Floor(Vector4 value)
     {
         value.X = MathF.Floor(value.X);
@@ -146,6 +156,7 @@ public static class Vector4Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector4"/>.</param>
     /// <param name="result">The rounded <see cref="Vector4"/>.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Floor(ref Vector4 value, out Vector4 result)
     {
         result.X = MathF.Floor(value.X);
@@ -163,6 +174,7 @@ public static class Vector4Helper
     /// <param name="tangent2">The second tangent vector.</param>
     /// <param name="amount">Weighting factor.</param>
     /// <returns>The hermite spline interpolation vector.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4 Hermite(Vector4 value1, Vector4 tangent1, Vector4 value2, Vector4 tangent2, float amount)
     {
         return new Vector4(MathHelper.Hermite(value1.X, tangent1.X, value2.X, tangent2.X, amount),
@@ -180,6 +192,7 @@ public static class Vector4Helper
     /// <param name="tangent2">The second tangent vector.</param>
     /// <param name="amount">Weighting factor.</param>
     /// <param name="result">The hermite spline interpolation vector as an output parameter.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Hermite(ref Vector4 value1, ref Vector4 tangent1, ref Vector4 value2, ref Vector4 tangent2,
         float amount, out Vector4 result)
     {
@@ -199,6 +212,7 @@ public static class Vector4Helper
     /// <param name="value2">The second vector.</param>
     /// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
     /// <returns>The result of linear interpolation of the specified vectors.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4 LerpPrecise(Vector4 value1, Vector4 value2, float amount)
     {
         return new Vector4(
@@ -218,6 +232,7 @@ public static class Vector4Helper
     /// <param name="value2">The second vector.</param>
     /// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
     /// <param name="result">The result of linear interpolation of the specified vectors as an output parameter.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void LerpPrecise(ref Vector4 value1, ref Vector4 value2, float amount, out Vector4 result)
     {
         result.X = MathHelper.LerpPrecise(value1.X, value2.X, amount);
@@ -229,6 +244,7 @@ public static class Vector4Helper
     /// <summary>
     /// Round the members of this <see cref="Vector4"/> to the nearest integer value.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Round(this ref Vector4 vector)
     {
         vector.X = MathF.Round(vector.X);
@@ -242,6 +258,7 @@ public static class Vector4Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector4"/>.</param>
     /// <returns>The rounded <see cref="Vector4"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4 Round(Vector4 value)
     {
         value.X = MathF.Round(value.X);
@@ -256,6 +273,7 @@ public static class Vector4Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector4"/>.</param>
     /// <param name="result">The rounded <see cref="Vector4"/>.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Round(ref Vector4 value, out Vector4 result)
     {
         result.X = MathF.Round(value.X);
@@ -271,6 +289,7 @@ public static class Vector4Helper
     /// <param name="value2">Source <see cref="Vector4"/>.</param>
     /// <param name="amount">Weighting value.</param>
     /// <returns>Cubic interpolation of the specified vectors.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4 SmoothStep(Vector4 value1, Vector4 value2, float amount)
     {
         return new Vector4(
@@ -287,6 +306,7 @@ public static class Vector4Helper
     /// <param name="value2">Source <see cref="Vector4"/>.</param>
     /// <param name="amount">Weighting value.</param>
     /// <param name="result">Cubic interpolation of the specified vectors as an output parameter.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SmoothStep(ref Vector4 value1, ref Vector4 value2, float amount, out Vector4 result)
     {
         result.X = MathHelper.SmoothStep(value1.X, value2.X, amount);
@@ -406,9 +426,11 @@ public static class Vector4Helper
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static SharpDX.Vector4 AsSharpDXVector4(this ref Vector4 value) =>
         new(x: value.X, y: value.Y, z: value.Z, w: value.W);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static SharpDX.Vector4 AsSharpDXVector4(this ref Color color) =>
         new SharpDX.Vector4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
 }

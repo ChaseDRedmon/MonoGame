@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
@@ -22,6 +23,7 @@ public static class Vector3Helper
     /// <param name="amount1">Barycentric scalar <c>b2</c> which represents a weighting factor towards second vector of 3d-triangle.</param>
     /// <param name="amount2">Barycentric scalar <c>b3</c> which represents a weighting factor towards third vector of 3d-triangle.</param>
     /// <returns>The cartesian translation of barycentric coordinates.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3 Barycentric(Vector3 value1, Vector3 value2, Vector3 value3, float amount1, float amount2)
     {
         return new Vector3(
@@ -39,6 +41,7 @@ public static class Vector3Helper
     /// <param name="amount1">Barycentric scalar <c>b2</c> which represents a weighting factor towards second vector of 3d-triangle.</param>
     /// <param name="amount2">Barycentric scalar <c>b3</c> which represents a weighting factor towards third vector of 3d-triangle.</param>
     /// <param name="result">The cartesian translation of barycentric coordinates as an output parameter.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Barycentric(ref Vector3 value1, ref Vector3 value2, ref Vector3 value3, float amount1,
         float amount2, out Vector3 result)
     {
@@ -56,6 +59,7 @@ public static class Vector3Helper
     /// <param name="value4">The fourth vector in interpolation.</param>
     /// <param name="amount">Weighting factor.</param>
     /// <returns>The result of CatmullRom interpolation.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3 CatmullRom(Vector3 value1, Vector3 value2, Vector3 value3, Vector3 value4, float amount)
     {
         return new Vector3(
@@ -73,6 +77,7 @@ public static class Vector3Helper
     /// <param name="value4">The fourth vector in interpolation.</param>
     /// <param name="amount">Weighting factor.</param>
     /// <param name="result">The result of CatmullRom interpolation as an output parameter.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void CatmullRom(ref Vector3 value1, ref Vector3 value2, ref Vector3 value3, ref Vector3 value4,
         float amount, out Vector3 result)
     {
@@ -86,6 +91,7 @@ public static class Vector3Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector3"/>.</param>
     /// <returns>The rounded <see cref="Vector3"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3 Ceiling(this Vector3 value)
     {
         return new Vector3(
@@ -99,6 +105,7 @@ public static class Vector3Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector3"/>.</param>
     /// <param name="result">The rounded <see cref="Vector3"/>.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Ceiling(this ref Vector3 value, out Vector3 result)
     {
         result.X = MathF.Ceiling(value.X);
@@ -109,6 +116,7 @@ public static class Vector3Helper
     /// <summary>
     /// Round the members of this <see cref="Vector3"/> towards negative infinity.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Floor(this ref Vector3 vector)
     {
         vector.X = MathF.Floor(vector.X);
@@ -121,6 +129,7 @@ public static class Vector3Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector3"/>.</param>
     /// <returns>The rounded <see cref="Vector3"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3 Floor(Vector3 value)
     {
         value.X = MathF.Floor(value.X);
@@ -134,6 +143,7 @@ public static class Vector3Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector3"/>.</param>
     /// <param name="result">The rounded <see cref="Vector3"/>.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Floor(ref Vector3 value, out Vector3 result)
     {
         result.X = MathF.Floor(value.X);
@@ -150,6 +160,7 @@ public static class Vector3Helper
     /// <param name="tangent2">The second tangent vector.</param>
     /// <param name="amount">Weighting factor.</param>
     /// <returns>The hermite spline interpolation vector.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3 Hermite(Vector3 value1, Vector3 tangent1, Vector3 value2, Vector3 tangent2, float amount)
     {
         return new Vector3(MathHelper.Hermite(value1.X, tangent1.X, value2.X, tangent2.X, amount),
@@ -166,6 +177,7 @@ public static class Vector3Helper
     /// <param name="tangent2">The second tangent vector.</param>
     /// <param name="amount">Weighting factor.</param>
     /// <param name="result">The hermite spline interpolation vector as an output parameter.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Hermite(ref Vector3 value1, ref Vector3 tangent1, ref Vector3 value2, ref Vector3 tangent2,
         float amount, out Vector3 result)
     {
@@ -184,6 +196,7 @@ public static class Vector3Helper
     /// <param name="value2">The second vector.</param>
     /// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
     /// <returns>The result of linear interpolation of the specified vectors.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3 LerpPrecise(Vector3 value1, Vector3 value2, float amount)
     {
         return new Vector3(
@@ -202,6 +215,7 @@ public static class Vector3Helper
     /// <param name="value2">The second vector.</param>
     /// <param name="amount">Weighting value(between 0.0 and 1.0).</param>
     /// <param name="result">The result of linear interpolation of the specified vectors as an output parameter.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void LerpPrecise(ref Vector3 value1, ref Vector3 value2, float amount, out Vector3 result)
     {
         result.X = MathHelper.LerpPrecise(value1.X, value2.X, amount);
@@ -212,6 +226,7 @@ public static class Vector3Helper
     /// <summary>
     /// Round the members of this <see cref="Vector3"/> towards the nearest integer value.
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Round(this ref Vector3 vector)
     {
         vector.X = MathF.Round(vector.X);
@@ -224,6 +239,7 @@ public static class Vector3Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector3"/>.</param>
     /// <returns>The rounded <see cref="Vector3"/>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3 Round(Vector3 value)
     {
         value.X = MathF.Round(value.X);
@@ -237,6 +253,7 @@ public static class Vector3Helper
     /// </summary>
     /// <param name="value">Source <see cref="Vector3"/>.</param>
     /// <param name="result">The rounded <see cref="Vector3"/>.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Round(ref Vector3 value, out Vector3 result)
     {
         result.X = MathF.Round(value.X);
@@ -251,6 +268,7 @@ public static class Vector3Helper
     /// <param name="value2">Source <see cref="Vector3"/>.</param>
     /// <param name="amount">Weighting value.</param>
     /// <returns>Cubic interpolation of the specified vectors.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3 SmoothStep(Vector3 value1, Vector3 value2, float amount)
     {
         return new Vector3(
@@ -266,6 +284,7 @@ public static class Vector3Helper
     /// <param name="value2">Source <see cref="Vector3"/>.</param>
     /// <param name="amount">Weighting value.</param>
     /// <param name="result">Cubic interpolation of the specified vectors as an output parameter.</param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SmoothStep(ref Vector3 value1, ref Vector3 value2, float amount, out Vector3 result)
     {
         result.X = MathHelper.SmoothStep(value1.X, value2.X, amount);
@@ -461,6 +480,7 @@ public static class Vector3Helper
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static SharpDX.Vector3 AsSharpDXVector3(this ref Vector3 value) =>
         new(x: value.X, y: value.Y, z: value.Z);
 }

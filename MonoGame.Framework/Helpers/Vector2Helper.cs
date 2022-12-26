@@ -81,6 +81,7 @@ public static class Vector2Helper
     /// <param name="value">Source <see cref="Vector2"/>.</param>
     /// <returns>The rounded <see cref="Vector2"/>.</returns>
     // Used in Vector2Test
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 Ceiling(Vector2 value)
     {
         value.X = MathF.Ceiling(value.X);
@@ -294,6 +295,7 @@ public static class Vector2Helper
     /// Gets a <see cref="Point"/> representation for this object.
     /// </summary>
     /// <returns>A <see cref="Point"/> representation for this object.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Point ToPoint(this Vector2 point)
     {
         return new Point((int)point.X, (int)point.Y);
@@ -472,6 +474,7 @@ public static class Vector2Helper
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static SharpDX.Vector2 AsSharpDXVector2(this ref Vector2 value) =>
         new(x: value.X, y: value.Y);
 }
