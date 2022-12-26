@@ -4,6 +4,8 @@
 
 using System;
 using System.Diagnostics;
+using System.Numerics;
+using Microsoft.Xna.Framework.Helpers;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
@@ -14,7 +16,7 @@ namespace Microsoft.Xna.Framework;
 [DebuggerDisplay("{DebugDisplayString,nq}")]
 public class BoundingFrustum : IEquatable<BoundingFrustum>
 {
-    private Matrix _matrix;
+    private Matrix4x4 _matrix;
     private readonly Vector3[] _corners = new Vector3[CornerCount];
     private readonly Plane[] _planes = new Plane[PlaneCount];
 
@@ -31,7 +33,7 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
     /// <summary>
     /// Gets or sets the <see cref="Matrix"/> of the frustum.
     /// </summary>
-    public Matrix Matrix
+    public Matrix4x4 Matrix
     {
         get { return _matrix; }
         set
@@ -109,7 +111,7 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
     /// Constructs the frustum by extracting the view planes from a matrix.
     /// </summary>
     /// <param name="value">Combined matrix which usually is (View * Projection).</param>
-    public BoundingFrustum(Matrix value)
+    public BoundingFrustum(Matrix4x4 value)
     {
         _matrix = value;
         CreatePlanes();
@@ -272,7 +274,7 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
         for (var i = 0; i < PlaneCount; ++i)
         {
             // TODO: we might want to inline this for performance reasons
-            if (PlaneHelper.ClassifyPoint(ref point, ref _planes[i]) > 0)
+            if (PlaneHelper.ClassifyPoint(ref _planes[i], ref point) > 0)
             {
                 result = ContainmentType.Disjoint;
                 return;
@@ -410,9 +412,14 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
     public void Intersects(ref Plane plane, out PlaneIntersectionType result)
     {
         result = plane.Intersects(ref _corners[0]);
-        for (int i = 1; i < _corners.Length; i++)
+
+        for (var i = 1; i < _corners.Length; i++)
+        {
             if (plane.Intersects(ref _corners[i]) != result)
+            {
                 result = PlaneIntersectionType.Intersecting;
+            }
+        }
     }
 
     /// <summary>
@@ -515,33 +522,43 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
         //                             N1 . ( N2 * N3 )
         //
         // Note: N refers to the normal, d refers to the displacement. '.' means dot product. '*' means cross product
+        Vector3 cross = Vector3.Cross(b.Normal, c.Normal);
 
-        Vector3 v1, v2, v3;
-        Vector3 cross;
-
-        Vector3.Cross(ref b.Normal, ref c.Normal, out cross);
-
-        float f;
-        Vector3.Dot(ref a.Normal, ref cross, out f);
+        float f = Vector3.Dot(a.Normal, cross);
         f *= -1.0f;
 
-        Vector3.Cross(ref b.Normal, ref c.Normal, out cross);
-        Vector3.Multiply(ref cross, a.D, out v1);
+        cross = Vector3.Cross(b.Normal, c.Normal);
+        Vector3 v1 = Vector3.Multiply(cross, a.D);
         //v1 = (a.D * (Vector3.Cross(b.Normal, c.Normal)));
 
-
-        Vector3.Cross(ref c.Normal, ref a.Normal, out cross);
-        Vector3.Multiply(ref cross, b.D, out v2);
+        cross = Vector3.Cross(c.Normal, a.Normal);
+        Vector3 v2 = Vector3.Multiply(cross, b.D);
         //v2 = (b.D * (Vector3.Cross(c.Normal, a.Normal)));
 
-
-        Vector3.Cross(ref a.Normal, ref b.Normal, out cross);
-        Vector3.Multiply(ref cross, c.D, out v3);
+        cross = Vector3.Cross(a.Normal, b.Normal);
+        Vector3 v3 = Vector3.Multiply(cross, c.D);
         //v3 = (c.D * (Vector3.Cross(a.Normal, b.Normal)));
 
         result.X = (v1.X + v2.X + v3.X) / f;
         result.Y = (v1.Y + v2.Y + v3.Y) / f;
         result.Z = (v1.Z + v2.Z + v3.Z) / f;
+    }
+
+    private static void OptimizedIntersectionPoint(ref Plane a, ref Plane b, ref Plane c, out Vector3 result)
+    {
+        // Formula used:
+        // P = (d1 (N2 * N3) + d2 (N3 * N1) + d3 (N1 * N2)) / (N1 . (N2 * N3))
+        // Note: N refers to the normal, d refers to the displacement. '.' means dot product. '*' means cross product
+
+        Vector3 cross = Vector3.Cross(b.Normal, c.Normal);
+        float f = Vector3.Dot(a.Normal, cross);
+        f *= -1.0f;
+
+        Vector3 v1 = a.D * cross;
+        Vector3 v2 = b.D * Vector3.Cross(c.Normal, a.Normal);
+        Vector3 v3 = c.D * Vector3.Cross(a.Normal, b.Normal);
+
+        result = (v1 + v2 + v3) / f;
     }
 
     private void NormalizePlane(ref Plane p)

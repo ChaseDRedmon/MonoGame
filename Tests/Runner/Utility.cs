@@ -5,13 +5,16 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace MonoGame.Tests;
 
-public class MatrixComparer : IEqualityComparer<Matrix>
+public class MatrixComparer : IEqualityComparer<Matrix4x4>
 {
     static public MatrixComparer Epsilon = new(0.000001f);
 
@@ -22,7 +25,7 @@ public class MatrixComparer : IEqualityComparer<Matrix>
         _epsilon = epsilon;
     }
 
-    public bool Equals(Matrix x, Matrix y)
+    public bool Equals(Matrix4x4 x, Matrix4x4 y)
     {
         return Math.Abs(x.M11 - y.M11) < _epsilon &&
                Math.Abs(x.M12 - y.M12) < _epsilon &&
@@ -42,7 +45,7 @@ public class MatrixComparer : IEqualityComparer<Matrix>
                Math.Abs(x.M44 - y.M44) < _epsilon;
     }
 
-    public int GetHashCode(Matrix obj)
+    public int GetHashCode(Matrix4x4 obj)
     {
         throw new NotImplementedException();
     }

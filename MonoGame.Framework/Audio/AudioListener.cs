@@ -2,9 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Numerics;
 
 namespace Microsoft.Xna.Framework.Audio;
 
@@ -18,9 +16,9 @@ public class AudioListener
     /// </summary>
     public AudioListener()
     {
-        Forward = Vector3.Forward;
+        Forward = Vector3Helper.Forward;
         Position = Vector3.Zero;
-        Up = Vector3.Up;
+        Up = Vector3Helper.Up;
         Velocity = Vector3.Zero;
     }
 

@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Numerics;
 
 namespace Microsoft.Xna.Framework.Input;
 
@@ -102,7 +103,7 @@ public struct GamePadThumbSticks
         if (deadZoneMode == GamePadDeadZone.Circular)
         {
             if (thumbstickPosition.LengthSquared() > 1f)
-                thumbstickPosition.Normalize();
+                thumbstickPosition = Vector2.Normalize(thumbstickPosition);
         }
         else
         {

@@ -4,6 +4,8 @@
 
 using System;
 using System.IO;
+using System.Numerics;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Audio;
 

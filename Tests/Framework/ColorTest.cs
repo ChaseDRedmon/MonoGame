@@ -1,5 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Numerics;
+using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using Vector4 = System.Numerics.Vector4;
 
 namespace MonoGame.Tests.Framework;
 

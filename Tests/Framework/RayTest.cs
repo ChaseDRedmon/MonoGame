@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Numerics;
+using Microsoft.Xna.Framework;
 using NUnit.Framework;
 
 namespace MonoGame.Tests.Framework;
@@ -51,7 +52,7 @@ class RayTest
     [Test]
     public void Deconstruct()
     {
-        Ray ray = new Ray(Vector3.Backward, Vector3.Right);
+        Ray ray = new Ray(Vector3Helper.Backward, Vector3Helper.Right);
 
         Vector3 position, direction;
 

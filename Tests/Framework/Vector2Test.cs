@@ -2,6 +2,8 @@
 using NUnit.Framework;
 using System.ComponentModel;
 using System.Globalization;
+using System.Numerics;
+using Vector2 = System.Numerics.Vector2;
 
 namespace MonoGame.Tests.Framework;
 
@@ -18,10 +20,10 @@ class Vector2Test
         var value = 1.0972f;
 
         Vector2 result;
-        Vector2.CatmullRom(ref v1, ref v2, ref v3, ref v4, value, out result);
+        Vector2Helper.CatmullRom(ref v1, ref v2, ref v3, ref v4, value, out result);
 
         Assert.That(expectedResult,
-            Is.EqualTo(Vector2.CatmullRom(v1, v2, v3, v4, value)).Using(Vector2Comparer.Epsilon));
+            Is.EqualTo(Vector2Helper.CatmullRom(v1, v2, v3, v4, value)).Using(Vector2Comparer.Epsilon));
         Assert.That(expectedResult, Is.EqualTo(result).Using(Vector2Comparer.Epsilon));
     }
 
@@ -72,11 +74,11 @@ class Vector2Test
 
         // Overloads comparsion
         var vector3 = Vector2.Multiply(vector, vector2);
-        Vector2.Multiply(ref vector, ref vector2, out refVec);
+        refVec = Vector2.Multiply(vector, vector2);
         Assert.AreEqual(vector3, refVec);
 
         vector3 = Vector2.Multiply(vector, 2);
-        Vector2.Multiply(ref vector, ref vector2, out refVec);
+        refVec = Vector2.Multiply(vector, vector2);
         Assert.AreEqual(vector3, refVec);
     }
 
@@ -95,14 +97,14 @@ class Vector2Test
         var v7 = new Vector2(1, 2);
         var v8 = new Vector2(3, 4);
 
-        Assert.That(t1, Is.EqualTo(Vector2.Hermite(v1, v2, v3, v4, 0.25f)).Using(Vector2Comparer.Epsilon));
-        Assert.That(t2, Is.EqualTo(Vector2.Hermite(v5, v6, v7, v8, 0.45f)).Using(Vector2Comparer.Epsilon));
+        Assert.That(t1, Is.EqualTo(Vector2Helper.Hermite(v1, v2, v3, v4, 0.25f)).Using(Vector2Comparer.Epsilon));
+        Assert.That(t2, Is.EqualTo(Vector2Helper.Hermite(v5, v6, v7, v8, 0.45f)).Using(Vector2Comparer.Epsilon));
 
         Vector2 result1;
         Vector2 result2;
 
-        Vector2.Hermite(ref v1, ref v2, ref v3, ref v4, 0.25f, out result1);
-        Vector2.Hermite(ref v5, ref v6, ref v7, ref v8, 0.45f, out result2);
+        Vector2Helper.Hermite(ref v1, ref v2, ref v3, ref v4, 0.25f, out result1);
+        Vector2Helper.Hermite(ref v5, ref v6, ref v7, ref v8, 0.45f, out result2);
 
         Assert.That(t1, Is.EqualTo(result1).Using(Vector2Comparer.Epsilon));
         Assert.That(t2, Is.EqualTo(result2).Using(Vector2Comparer.Epsilon));
@@ -117,7 +119,7 @@ class Vector2Test
         var expectedResult2 = new Vector2(-0.0168301091f, 2.30964f);
 
         var v1 = new Vector2(1, 2);
-        var m1 = new Matrix(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+        var m1 = new Matrix4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
 
         var v2 = new Vector2(1.1f, 2.45f);
         var q2 = new Quaternion(0.11f, 0.22f, 0.33f, 0.55f);
@@ -128,12 +130,8 @@ class Vector2Test
         Assert.That(expectedResult2, Is.EqualTo(Vector2.Transform(v2, q2)).Using(Vector2Comparer.Epsilon));
 
         // OUTPUT OVERLOADS TEST
-
-        Vector2 result1;
-        Vector2 result2;
-
-        Vector2.Transform(ref v1, ref m1, out result1);
-        Vector2.Transform(ref v2, ref q2, out result2);
+        var result1 = Vector2.Transform(v1, m1);
+        var result2 = Vector2.Transform(v2, q2);
 
         Assert.That(expectedResult1, Is.EqualTo(result1).Using(Vector2Comparer.Epsilon));
         Assert.That(expectedResult2, Is.EqualTo(result2).Using(Vector2Comparer.Epsilon));
@@ -148,7 +146,7 @@ class Vector2Test
                 sourceList1[i] = new Vector2(1 + i, 1 + i);
             }
 
-            Vector2.Transform(sourceList1, 0, ref m1, desinationList1, 0, 10);
+            Vector2Helper.Transform(sourceList1, 0, ref m1, desinationList1, 0, 10);
 
             for (int i = 0; i < 10; i++)
             {
@@ -166,7 +164,7 @@ class Vector2Test
                 sourceList2[i] = new Vector2(1 + i, 1 + i);
             }
 
-            Vector2.Transform(sourceList2, 2, ref m1, desinationList2, 1, 3);
+            Vector2Helper.Transform(sourceList2, 2, ref m1, desinationList2, 1, 3);
 
             Assert.That(Vector2.Zero, Is.EqualTo(desinationList2[0]).Using(Vector2Comparer.Epsilon));
 
@@ -189,7 +187,7 @@ class Vector2Test
                 sourceList3[i] = new Vector2(1 + i, 1 + i);
             }
 
-            Vector2.Transform(sourceList3, ref m1, desinationList3);
+            Vector2Helper.Transform(sourceList3, ref m1, desinationList3);
 
             for (int i = 0; i < 10; i++)
             {
@@ -207,7 +205,7 @@ class Vector2Test
                 sourceList4[i] = new Vector2(1 + i, 1 + i);
             }
 
-            Vector2.Transform(sourceList4, 0, ref q3, desinationList4, 0, 10);
+            Vector2Helper.Transform(sourceList4, 0, ref q3, desinationList4, 0, 10);
 
             for (int i = 0; i < 10; i++)
             {
@@ -225,7 +223,7 @@ class Vector2Test
                 sourceList5[i] = new Vector2(1 + i, 1 + i);
             }
 
-            Vector2.Transform(sourceList5, 2, ref q3, desinationList5, 1, 3);
+            Vector2Helper.Transform(sourceList5, 2, ref q3, desinationList5, 1, 3);
 
             Assert.That(Vector2.Zero, Is.EqualTo(desinationList5[0]).Using(Vector2Comparer.Epsilon));
 
@@ -248,7 +246,7 @@ class Vector2Test
                 sourceList6[i] = new Vector2(1 + i, 1 + i);
             }
 
-            Vector2.Transform(sourceList6, ref q3, desinationList6);
+            Vector2Helper.Transform(sourceList6, ref q3, desinationList6);
 
             for (int i = 0; i < 10; i++)
             {
@@ -262,7 +260,7 @@ class Vector2Test
     public void TransformNormal()
     {
         var normal = new Vector2(1.5f, 2.5f);
-        var matrix = new Matrix(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+        var matrix = new Matrix4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
 
         var expectedResult1 = new Vector2(14, 18);
         var expectedResult2 = expectedResult1;
@@ -270,9 +268,7 @@ class Vector2Test
         Assert.That(expectedResult1,
             Is.EqualTo(Vector2.TransformNormal(normal, matrix)).Using(Vector2Comparer.Epsilon));
 
-        Vector2 result;
-        Vector2.TransformNormal(ref normal, ref matrix, out result);
-
+        Vector2 result = Vector2.TransformNormal(normal, matrix);
         Assert.That(expectedResult2, Is.EqualTo(result).Using(Vector2Comparer.Epsilon));
 
         // TRANSFORM ON LIST
@@ -285,7 +281,7 @@ class Vector2Test
                 sourceArray1[i] = new Vector2(i, i);
             }
 
-            Vector2.TransformNormal(sourceArray1, 0, ref matrix, destinationArray1, 0, 10);
+            Vector2Helper.TransformNormal(sourceArray1, 0, ref matrix, destinationArray1, 0, 10);
 
             for (int i = 0; i < 10; i++)
             {
@@ -303,7 +299,7 @@ class Vector2Test
                 sourceArray2[i] = new Vector2(i, i);
             }
 
-            Vector2.TransformNormal(sourceArray2, 5, ref matrix, destinationArray2, 0, 5);
+            Vector2Helper.TransformNormal(sourceArray2, 5, ref matrix, destinationArray2, 0, 5);
 
             for (int i = 0; i < 5; i++)
             {
@@ -326,7 +322,7 @@ class Vector2Test
                 sourceArray3[i] = new Vector2(i, i);
             }
 
-            Vector2.TransformNormal(sourceArray3, 0, ref matrix, destinationArray3, 5, 5);
+            Vector2Helper.TransformNormal(sourceArray3, 0, ref matrix, destinationArray3, 5, 5);
 
             for (int i = 0; i < 6; ++i)
             {
@@ -348,7 +344,7 @@ class Vector2Test
                 sourceArray4[i] = new Vector2(i, i);
             }
 
-            Vector2.TransformNormal(sourceArray4, 2, ref matrix, destinationArray4, 3, 6);
+            Vector2Helper.TransformNormal(sourceArray4, 2, ref matrix, destinationArray4, 3, 6);
 
             for (int i = 0; i < 3; ++i)
             {
@@ -374,7 +370,7 @@ class Vector2Test
                 sourceArray5[i] = new Vector2(i, i);
             }
 
-            Vector2.TransformNormal(sourceArray5, ref matrix, destinationArray5);
+            Vector2Helper.TransformNormal(sourceArray5, ref matrix, destinationArray5);
 
             for (int i = 0; i < 10; ++i)
             {
@@ -455,9 +451,8 @@ class Vector2Test
     {
         Vector2 vector2 = new Vector2(float.MinValue, float.MaxValue);
 
-        float x, y;
-
-        vector2.Deconstruct(out x, out y);
+        float x = vector2.X;
+        float y = vector2.Y;
 
         Assert.AreEqual(x, vector2.X);
         Assert.AreEqual(y, vector2.Y);
@@ -474,10 +469,10 @@ class Vector2Test
         ceilMember.Ceiling();
 
         Vector2 ceilResult;
-        Vector2.Ceiling(ref vector2, out ceilResult);
+        Vector2Helper.Ceiling(ref vector2, out ceilResult);
 
         Assert.AreEqual(new Vector2(1.0f, 1.0f), ceilMember);
-        Assert.AreEqual(new Vector2(1.0f, 1.0f), Vector2.Ceiling(vector2));
+        Assert.AreEqual(new Vector2(1.0f, 1.0f), Vector2Helper.Ceiling(vector2));
         Assert.AreEqual(new Vector2(1.0f, 1.0f), ceilResult);
 
         // FLOOR
@@ -486,10 +481,10 @@ class Vector2Test
         floorMember.Floor();
 
         Vector2 floorResult;
-        Vector2.Floor(ref vector2, out floorResult);
+        Vector2Helper.Floor(ref vector2, out floorResult);
 
         Assert.AreEqual(new Vector2(0.0f, 0.0f), floorMember);
-        Assert.AreEqual(new Vector2(0.0f, 0.0f), Vector2.Floor(vector2));
+        Assert.AreEqual(new Vector2(0.0f, 0.0f), Vector2Helper.Floor(vector2));
         Assert.AreEqual(new Vector2(0.0f, 0.0f), floorResult);
 
         // ROUND
@@ -498,10 +493,10 @@ class Vector2Test
         roundMember.Round();
 
         Vector2 roundResult;
-        Vector2.Round(ref vector2, out roundResult);
+        Vector2Helper.Round(ref vector2, out roundResult);
 
         Assert.AreEqual(new Vector2(0.0f, 1.0f), roundMember);
-        Assert.AreEqual(new Vector2(0.0f, 1.0f), Vector2.Round(vector2));
+        Assert.AreEqual(new Vector2(0.0f, 1.0f), Vector2Helper.Round(vector2));
         Assert.AreEqual(new Vector2(0.0f, 1.0f), roundResult);
     }
 #endif

@@ -1,5 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Numerics;
+using Microsoft.Xna.Framework;
 using NUnit.Framework;
+using Vector3 = System.Numerics.Vector3;
 
 namespace MonoGame.Tests.Framework;
 
@@ -12,7 +14,7 @@ public class PlaneTest
         var plane = Plane.Normalize(new Plane(new Vector3(0, 1, 1), 2.5f));
 
         // Our matrix.
-        var matrix = Matrix.CreateRotationX(MathHelper.PiOver2);
+        var matrix = Matrix4x4.CreateRotationX(MathHelper.PiOver2);
 
         // Test transform.
         var expectedResult = new Plane(new Vector3(0, -0.7071068f, 0.7071067f), 1.767767f);
@@ -27,12 +29,11 @@ public class PlaneTest
         var originalPlane = plane;
 
         // Our matrix.
-        var matrix = Matrix.CreateRotationX(MathHelper.PiOver2);
+        var matrix = Matrix4x4.CreateRotationX(MathHelper.PiOver2);
         var originalMatrix = matrix;
 
         // Test transform.
-        Plane result;
-        Plane.Transform(ref plane, ref matrix, out result);
+        Plane result = Plane.Transform(plane, matrix);
 
         var expectedResult = new Plane(new Vector3(0.7273929f, -0.3636965f, 0.5819144f), 1.818482f);
         Assert.That(result, Is.EqualTo(expectedResult).Using(PlaneComparer.Epsilon));
@@ -67,8 +68,7 @@ public class PlaneTest
         var originalQuaternion = quaternion;
 
         // Test transform.
-        Plane result;
-        Plane.Transform(ref plane, ref quaternion, out result);
+        Plane result = Plane.Transform(plane, quaternion);
 
         var expectedResult = new Plane(new Vector3(0.7273929f, -0.3636965f, 0.5819144f), 1.818482f);
         Assert.That(result, Is.EqualTo(expectedResult).Using(PlaneComparer.Epsilon));
@@ -83,10 +83,8 @@ public class PlaneTest
     {
         Plane plane = new Plane(new Vector3(255, 255, 255), float.MaxValue);
 
-        Vector3 normal;
-        float d;
-
-        plane.Deconstruct(out normal, out d);
+        Vector3 normal = plane.Normal;
+        float d = plane.D;
 
         Assert.AreEqual(normal, plane.Normal);
         Assert.AreEqual(d, plane.D);

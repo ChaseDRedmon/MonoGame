@@ -39,7 +39,7 @@
 // #endregion License
 //
 
-using System;
+using System.Numerics;
 
 namespace Microsoft.Xna.Framework.Graphics;
 

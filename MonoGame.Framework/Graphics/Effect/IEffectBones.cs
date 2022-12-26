@@ -2,7 +2,7 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using System;
+using System.Numerics;
 
 namespace Microsoft.Xna.Framework.Graphics;
 
@@ -14,5 +14,5 @@ public interface IEffectBones
     /// <summary>
     /// Sets an array of skinning bone transform matrices.
     /// </summary>
-    void SetBoneTransforms(Matrix[] boneTransforms);
+    void SetBoneTransforms(Matrix4x4[] boneTransforms);
 }

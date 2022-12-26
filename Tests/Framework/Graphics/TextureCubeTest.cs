@@ -3,9 +3,11 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
+using Vector4 = System.Numerics.Vector4;
 
 namespace MonoGame.Tests.Graphics;
 

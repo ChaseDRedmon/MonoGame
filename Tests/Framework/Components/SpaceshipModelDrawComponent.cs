@@ -67,11 +67,11 @@ non-infringement.
 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Vector3 = System.Numerics.Vector3;
 
 namespace MonoGame.Tests.Components;
 
@@ -86,12 +86,12 @@ class SpaceshipModelDrawComponent : VisualTestDrawableGameComponent
         // We could just allocate this locally inside the Draw method, but it
         // is more efficient to reuse a single array, as this avoids creating
         // unnecessary garbage.
-        Matrix[] boneTransforms;
+        Matrix4x4[] boneTransforms;
 
         // Spaceship drawing parameters
-        private Matrix projection;
-        private Matrix rotation;
-        private Matrix view;
+        private Matrix4x4 projection;
+        private Matrix4x4 rotation;
+        private Matrix4x4 view;
         private bool[] lights;
         bool isTextureEnabled;
         bool isPerPixelLightingEnabled;
@@ -105,13 +105,13 @@ class SpaceshipModelDrawComponent : VisualTestDrawableGameComponent
             spaceshipModel = content.Load<Model>(Paths.Model("Spaceship"));
 
             // Allocate the transform matrix array.
-            boneTransforms = new Matrix[spaceshipModel.Bones.Count];
+            boneTransforms = new Matrix4x4[spaceshipModel.Bones.Count];
         }
 
         /// <summary>
         /// Gets or sets the projection matrix value.
         /// </summary>
-        public Matrix Projection
+        public Matrix4x4 Projection
         {
             get { return projection; }
             set { projection = value; }
@@ -120,7 +120,7 @@ class SpaceshipModelDrawComponent : VisualTestDrawableGameComponent
         /// <summary>
         /// Gets or sets the rotation matrix value.
         /// </summary>
-        public Matrix Rotation
+        public Matrix4x4 Rotation
         {
             get { return rotation; }
             set { rotation = value; }
@@ -138,7 +138,7 @@ class SpaceshipModelDrawComponent : VisualTestDrawableGameComponent
         /// <summary>
         /// Gets or sets the view matrix value.
         /// </summary>
-        public Matrix View
+        public Matrix4x4 View
         {
             get { return view; }
             set { view = value; }
@@ -254,7 +254,7 @@ class SpaceshipModelDrawComponent : VisualTestDrawableGameComponent
         background = Game.Content.Load<Texture2D>(Paths.Texture("fun-background"));
 
         spaceship = new Spaceship();
-        spaceship.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(cameraFOV),
+        spaceship.Projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.ToRadians(cameraFOV),
             GraphicsDevice.Viewport.AspectRatio, 10, 20000);
         spaceship.Load(Game.Content);
 
@@ -275,17 +275,17 @@ class SpaceshipModelDrawComponent : VisualTestDrawableGameComponent
         var frameInfoSource = Game.Services.RequireService<IFrameInfoSource>();
         var frameInfo = frameInfoSource.FrameInfo;
 
-        spaceship.Rotation = Matrix.CreateWorld(new Vector3(0, 250, 0), Vector3.Forward, Vector3.Up) *
-                             Matrix.CreateFromYawPitchRoll(
+        spaceship.Rotation = Matrix4x4.CreateWorld(new Vector3(0, 250, 0), Vector3Helper.Forward, Vector3Helper.Up) *
+                             Matrix4x4.CreateFromYawPitchRoll(
                                  (float)Math.PI + MathHelper.PiOver2 + rotationXAmount / 100, rotationYAmount / 100,
                                  0);
 
-        spaceship.View = Matrix.CreateLookAt(
+        spaceship.View = Matrix4x4.CreateLookAt(
             new Vector3(3500, 400, 0) + new Vector3(0, 250, 0),
             new Vector3(0, 250, 0),
-            Vector3.Up);
+            Vector3Helper.Up);
         spaceship.IsTextureEnabled = true;
-        spaceship.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(cameraFOV),
+        spaceship.Projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.ToRadians(cameraFOV),
             GraphicsDevice.Viewport.AspectRatio, 10, 20000);
 
 

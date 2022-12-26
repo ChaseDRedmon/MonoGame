@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Numerics;
 using MonoGame.Framework.Utilities;
 using System.Runtime.InteropServices;
 
@@ -554,7 +555,7 @@ public partial class GraphicsDevice : IDisposable
         var options = ClearOptions.Target;
         options |= ClearOptions.DepthBuffer;
         options |= ClearOptions.Stencil;
-        PlatformClear(options, color.ToVector4(), _viewport.MaxDepth, 0);
+        PlatformClear(options, color.AsSharpDXVector4(), _viewport.MaxDepth, 0);
 
         unchecked
         {
@@ -564,7 +565,7 @@ public partial class GraphicsDevice : IDisposable
 
     public void Clear(ClearOptions options, Color color, float depth, int stencil)
     {
-        PlatformClear(options, color.ToVector4(), depth, stencil);
+        PlatformClear(options, color.AsSharpDXVector4(), depth, stencil);
 
         unchecked
         {
@@ -574,7 +575,7 @@ public partial class GraphicsDevice : IDisposable
 
     public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
     {
-        PlatformClear(options, color, depth, stencil);
+        PlatformClear(options, color.AsSharpDXVector4(), depth, stencil);
 
         unchecked
         {

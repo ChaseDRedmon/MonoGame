@@ -76,13 +76,13 @@ internal class EffectMaterialReader : ContentTypeReader<EffectMaterial>
                 {
                     parameter.SetValue((Vector4[])item.Value);
                 }
-                else if (ReflectionHelpers.IsAssignableFromType(typeof(Matrix), itemType))
+                else if (ReflectionHelpers.IsAssignableFromType(typeof(Matrix4x4), itemType))
                 {
-                    parameter.SetValue((Matrix)item.Value);
+                    parameter.SetValue((Matrix4x4)item.Value);
                 }
-                else if (ReflectionHelpers.IsAssignableFromType(typeof(Matrix[]), itemType))
+                else if (ReflectionHelpers.IsAssignableFromType(typeof(Matrix4x4[]), itemType))
                 {
-                    parameter.SetValue((Matrix[])item.Value);
+                    parameter.SetValue((Matrix4x4[])item.Value);
                 }
                 else if (ReflectionHelpers.IsAssignableFromType(typeof(Quaternion), itemType))
                 {

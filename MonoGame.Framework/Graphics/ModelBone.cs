@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Microsoft.Xna.Framework.Graphics;
 
@@ -42,9 +43,9 @@ public sealed class ModelBone
     // Summary:
     //     Gets or sets the matrix used to transform this bone relative to its parent
     //     bone.
-    internal Matrix transform;
+    internal Matrix4x4 transform;
 
-    public Matrix Transform
+    public Matrix4x4 Transform
     {
         get { return transform; }
         set { transform = value; }
@@ -53,7 +54,7 @@ public sealed class ModelBone
     /// <summary>
     /// Transform of this node from the root of the model not from the parent
     /// </summary>
-    public Matrix ModelTransform { get; set; }
+    public Matrix4x4 ModelTransform { get; set; }
 
     public ModelBone()
     {

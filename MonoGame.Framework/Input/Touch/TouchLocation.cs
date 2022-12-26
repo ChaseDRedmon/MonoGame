@@ -38,6 +38,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Numerics;
 
 
 namespace Microsoft.Xna.Framework.Input.Touch;

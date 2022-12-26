@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Numerics;
 using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework.Graphics;
@@ -175,9 +176,9 @@ public struct Viewport
     /// <param name="view">The view <see cref="Matrix"/>.</param>
     /// <param name="world">The world <see cref="Matrix"/>.</param>
     /// <returns></returns>
-    public Vector3 Project(Vector3 source, Matrix projection, Matrix view, Matrix world)
+    public Vector3 Project(Vector3 source, Matrix4x4 projection, Matrix4x4 view, Matrix4x4 world)
     {
-        Matrix matrix = Matrix.Multiply(Matrix.Multiply(world, view), projection);
+        Matrix4x4 matrix = Matrix4x4.Multiply(Matrix4x4.Multiply(world, view), projection);
         Vector3 vector = Vector3.Transform(source, matrix);
         float a = source.X * matrix.M14 + source.Y * matrix.M24 + source.Z * matrix.M34 + matrix.M44;
         if (!WithinEpsilon(a, 1f))
@@ -205,9 +206,10 @@ public struct Viewport
     /// <param name="view">The view <see cref="Matrix"/>.</param>
     /// <param name="world">The world <see cref="Matrix"/>.</param>
     /// <returns></returns>
-    public Vector3 Unproject(Vector3 source, Matrix projection, Matrix view, Matrix world)
+    public Vector3 Unproject(Vector3 source, Matrix4x4 projection, Matrix4x4 view, Matrix4x4 world)
     {
-        Matrix matrix = Matrix.Invert(Matrix.Multiply(Matrix.Multiply(world, view), projection));
+        Matrix4x4.Invert(Matrix4x4.Multiply(Matrix4x4.Multiply(world, view), projection), out var matrix);
+
         source.X = (source.X - x) / width * 2f - 1f;
         source.Y = -((source.Y - y) / height * 2f - 1f);
         source.Z = (source.Z - minDepth) / (maxDepth - minDepth);

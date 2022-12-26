@@ -7,6 +7,7 @@ using System.Collections;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Numerics;
 using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Content;
@@ -85,7 +86,7 @@ public sealed class ContentTypeReaderManager
             var hArrayFloatReader = new ArrayReader<float>();
             var hArrayVector2Reader = new ArrayReader<Vector2>();
             var hListVector2Reader = new ListReader<Vector2>();
-            var hArrayMatrixReader = new ArrayReader<Matrix>();
+            var hArrayMatrixReader = new ArrayReader<Matrix4x4>();
             var hEnumBlendReader = new EnumReader<Graphics.Blend>();
             var hNullableRectReader = new NullableReader<Rectangle>();
             var hEffectMaterialReader = new EffectMaterialReader();

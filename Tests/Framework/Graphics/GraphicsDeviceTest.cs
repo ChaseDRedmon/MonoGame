@@ -4,10 +4,12 @@
 
 using System;
 using System.Linq;
+using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
+using Vector3 = System.Numerics.Vector3;
 #if DESKTOPGL
 using MonoGame.OpenGL;
 #endif
@@ -396,7 +398,7 @@ namespace MonoGame.Tests.Graphics
             VertexBuffer vertexBuffer = null;
             IndexBuffer indexBuffer = null;
             VertexBuffer instanceVertexBuffer = null;
-            Matrix[] worldTransforms = null;
+            Matrix4x4[] worldTransforms = null;
             EffectPass pass = null;
 
             // Create vertex and index buffer for a quad.
@@ -417,12 +419,12 @@ namespace MonoGame.Tests.Graphics
             indexBuffer.SetData(indices);
 
             // Create vertex buffer with instance data.
-            worldTransforms = new Matrix[8 * 4];
+            worldTransforms = new Matrix4x4[8 * 4];
             for (int i = 0; i < worldTransforms.Length; i++)
             {
-                worldTransforms[i] = Matrix.CreateScale(0.4f) *
-                                     Matrix.CreateRotationZ(0.05f * i) *
-                                     Matrix.CreateTranslation(-3.5f + i % 8, -1.5f + i / 8, 0);
+                worldTransforms[i] = Matrix4x4.CreateScale(0.4f) *
+                                     Matrix4x4.CreateRotationZ(0.05f * i) *
+                                     Matrix4x4.CreateTranslation(-3.5f + i % 8, -1.5f + i / 8, 0);
             }
 
             VertexDeclaration instanceVertexDeclaration = new VertexDeclaration
@@ -436,8 +438,8 @@ namespace MonoGame.Tests.Graphics
                 new VertexBuffer(gd, instanceVertexDeclaration, worldTransforms.Length, BufferUsage.None);
             instanceVertexBuffer.SetData(worldTransforms);
 
-            var view = Matrix.CreateLookAt(new Vector3(0, 0, 6), new Vector3(0, 0, 0), Vector3.Up);
-            var projection = Matrix.CreatePerspectiveFieldOfView(
+            var view = Matrix4x4.CreateLookAt(new Vector3(0, 0, 6), new Vector3(0, 0, 0), Vector3Helper.Up);
+            var projection = Matrix4x4.CreatePerspectiveFieldOfView(
                 MathHelper.PiOver4, gd.Viewport.AspectRatio, 0.1f, 100);
 
             var effect = AssetTestUtility.LoadEffect(content, "Instancing");
@@ -712,8 +714,8 @@ namespace MonoGame.Tests.Graphics
                 heightMapData[y * heightMapSize + x] = (float)Math.Sin(x / 2.0f) + (float)Math.Sin(y / 3.0f);
             heightMapTexture.SetData(heightMapData);
 
-            var viewMatrix = Matrix.CreateLookAt(new Vector3(32, 10, 60), new Vector3(32, 0, 30), Vector3.Up);
-            var projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+            var viewMatrix = Matrix4x4.CreateLookAt(new Vector3(32, 10, 60), new Vector3(32, 0, 30), Vector3Helper.Up);
+            var projectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
                 gd.Viewport.AspectRatio, 1.0f, 100.0f);
 
             var effect = AssetTestUtility.LoadEffect(content, "VertexTextureEffect");

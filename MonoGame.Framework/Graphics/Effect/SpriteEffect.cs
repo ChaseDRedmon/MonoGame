@@ -5,6 +5,8 @@
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
 
+using System.Numerics;
+
 namespace Microsoft.Xna.Framework.Graphics;
 
 /// <summary>
@@ -12,9 +14,9 @@ namespace Microsoft.Xna.Framework.Graphics;
 /// </summary>
 public class SpriteEffect : Effect
 {
-    private EffectParameter _matrixParam;
+    private EffectParameter _Matrix4x4Param;
     private Viewport _lastViewport;
-    private Matrix _projection;
+    private Matrix4x4 _projection;
 
     /// <summary>
     /// Creates a new SpriteEffect.
@@ -26,9 +28,9 @@ public class SpriteEffect : Effect
     }
 
     /// <summary>
-    /// An optional matrix used to transform the sprite geometry. Uses <see cref="Matrix.Identity"/> if null.
+    /// An optional Matrix4x4 used to transform the sprite geometry. Uses <see cref="Matrix4x4.Identity"/> if null.
     /// </summary>
-    public Matrix? TransformMatrix { get; set; }
+    public Matrix4x4? TransformMatrix { get; set; }
 
     /// <summary>
     /// Creates a new SpriteEffect by cloning parameter settings from an existing instance.
@@ -54,7 +56,7 @@ public class SpriteEffect : Effect
     /// </summary>
     void CacheEffectParameters()
     {
-        _matrixParam = Parameters["MatrixTransform"];
+        _Matrix4x4Param = Parameters["Matrix4x4Transform"];
     }
 
     /// <summary>
@@ -67,8 +69,8 @@ public class SpriteEffect : Effect
         {
             // Normal 3D cameras look into the -z direction (z = 1 is in front of z = 0). The
             // sprite batch layer depth is the opposite (z = 0 is in front of z = 1).
-            // --> We get the correct matrix with near plane 0 and far plane -1.
-            Matrix.CreateOrthographicOffCenter(0, vp.Width, vp.Height, 0, 0, -1, out _projection);
+            // --> We get the correct Matrix4x4 with near plane 0 and far plane -1.
+            _projection = Matrix4x4.CreateOrthographicOffCenter(0, vp.Width, vp.Height, 0, 0, -1);
 
             if (GraphicsDevice.UseHalfPixelOffset)
             {
@@ -80,8 +82,8 @@ public class SpriteEffect : Effect
         }
 
         if (TransformMatrix.HasValue)
-            _matrixParam.SetValue(TransformMatrix.GetValueOrDefault() * _projection);
+            _Matrix4x4Param.SetValue(TransformMatrix.GetValueOrDefault() * _projection);
         else
-            _matrixParam.SetValue(_projection);
+            _Matrix4x4Param.SetValue(_projection);
     }
 }

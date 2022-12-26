@@ -4,11 +4,13 @@
 
 using System;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using NUnit.Framework;
 using StbImageSharp;
+using Vector4 = System.Numerics.Vector4;
 
 namespace MonoGame.Tests.Graphics;
 

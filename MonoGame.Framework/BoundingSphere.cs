@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.Serialization;
 using MonoGame.Framework.Utilities;
 
@@ -171,15 +172,12 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
     /// <param name="result">The containment type as an output parameter.</param>
     public void Contains(ref BoundingSphere sphere, out ContainmentType result)
     {
-        float sqDistance;
-        Vector3.DistanceSquared(ref sphere.Center, ref Center, out sqDistance);
+        float sqDistance = Vector3.DistanceSquared(sphere.Center, Center);
 
         if (sqDistance > (sphere.Radius + Radius) * (sphere.Radius + Radius))
             result = ContainmentType.Disjoint;
-
         else if (sqDistance <= (Radius - sphere.Radius) * (Radius - sphere.Radius))
             result = ContainmentType.Contains;
-
         else
             result = ContainmentType.Intersects;
     }
@@ -204,15 +202,12 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
     public void Contains(ref Vector3 point, out ContainmentType result)
     {
         float sqRadius = Radius * Radius;
-        float sqDistance;
-        Vector3.DistanceSquared(ref point, ref Center, out sqDistance);
+        float sqDistance = Vector3.DistanceSquared(point, Center);
 
         if (sqDistance > sqRadius)
             result = ContainmentType.Disjoint;
-
         else if (sqDistance < sqRadius)
             result = ContainmentType.Contains;
-
         else
             result = ContainmentType.Intersects;
     }
@@ -478,13 +473,8 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
     /// <param name="result"><c>true</c> if other <see cref="BoundingSphere"/> intersects with this sphere; <c>false</c> otherwise. As an output parameter.</param>
     public void Intersects(ref BoundingSphere sphere, out bool result)
     {
-        float sqDistance;
-        Vector3.DistanceSquared(ref sphere.Center, ref Center, out sqDistance);
-
-        if (sqDistance > (sphere.Radius + Radius) * (sphere.Radius + Radius))
-            result = false;
-        else
-            result = true;
+        float sqDistance = Vector3.DistanceSquared(sphere.Center, Center);
+        result = !(sqDistance > (sphere.Radius + Radius) * (sphere.Radius + Radius));
     }
 
     /// <summary>
@@ -494,9 +484,8 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
     /// <returns>Type of intersection.</returns>
     public PlaneIntersectionType Intersects(Plane plane)
     {
-        var result = default(PlaneIntersectionType);
         // TODO: we might want to inline this for performance reasons
-        Intersects(ref plane, out result);
+        Intersects(ref plane, out var result);
         return result;
     }
 
@@ -507,9 +496,9 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
     /// <param name="result">Type of intersection as an output parameter.</param>
     public void Intersects(ref Plane plane, out PlaneIntersectionType result)
     {
-        var distance = default(float);
         // TODO: we might want to inline this for performance reasons
-        Vector3.Dot(ref plane.Normal, ref Center, out distance);
+        var distance = Vector3.Dot(plane.Normal, Center);
+
         distance += plane.D;
         if (distance > Radius)
             result = PlaneIntersectionType.Front;
@@ -554,14 +543,16 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
     /// </summary>
     /// <param name="matrix">The transformation <see cref="Matrix"/>.</param>
     /// <returns>Transformed <see cref="BoundingSphere"/>.</returns>
-    public BoundingSphere Transform(Matrix matrix)
+    public BoundingSphere Transform(Matrix4x4 matrix)
     {
         BoundingSphere sphere = new BoundingSphere();
         sphere.Center = Vector3.Transform(Center, matrix);
-        sphere.Radius = Radius * MathF.Sqrt(Math.Max(
-            matrix.M11 * matrix.M11 + matrix.M12 * matrix.M12 + matrix.M13 * matrix.M13,
+
+        sphere.Radius = Radius * MathF.Sqrt(
+            Math.Max(matrix.M11 * matrix.M11 + matrix.M12 * matrix.M12 + matrix.M13 * matrix.M13,
             Math.Max(matrix.M21 * matrix.M21 + matrix.M22 * matrix.M22 + matrix.M23 * matrix.M23,
                 matrix.M31 * matrix.M31 + matrix.M32 * matrix.M32 + matrix.M33 * matrix.M33)));
+
         return sphere;
     }
 
@@ -570,9 +561,10 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
     /// </summary>
     /// <param name="matrix">The transformation <see cref="Matrix"/>.</param>
     /// <param name="result">Transformed <see cref="BoundingSphere"/> as an output parameter.</param>
-    public void Transform(ref Matrix matrix, out BoundingSphere result)
+    public void Transform(ref Matrix4x4 matrix, out BoundingSphere result)
     {
         result.Center = Vector3.Transform(Center, matrix);
+
         result.Radius = Radius * MathF.Sqrt(Math.Max(
             matrix.M11 * matrix.M11 + matrix.M12 * matrix.M12 + matrix.M13 * matrix.M13,
             Math.Max(matrix.M21 * matrix.M21 + matrix.M22 * matrix.M22 + matrix.M23 * matrix.M23,

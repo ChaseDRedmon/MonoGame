@@ -2,6 +2,8 @@
 using NUnit.Framework;
 using System.ComponentModel;
 using System.Globalization;
+using System.Numerics;
+using Vector3 = System.Numerics.Vector3;
 
 namespace MonoGame.Tests.Framework;
 
@@ -48,9 +50,9 @@ class Vector3Test
     [Test]
     public void Normalize()
     {
-        Vector3 v1 = new Vector3(-10.5f, 0.2f, 1000.0f);
+        Vector3 v1 = Vector3.Normalize(new Vector3(-10.5f, 0.2f, 1000.0f));
         Vector3 v2 = new Vector3(-10.5f, 0.2f, 1000.0f);
-        v1.Normalize();
+
         var expectedResult = new Vector3(-0.0104994215f, 0.000199988979f, 0.999944866f);
         Assert.That(expectedResult, Is.EqualTo(v1).Using(Vector3Comparer.Epsilon));
         v2 = Vector3.Normalize(v2);
@@ -66,21 +68,17 @@ class Vector3Test
         var expectedResult2 = new Vector3(33, -14, -1);
 
         var v1 = new Vector3(1, 2, 3);
-        var m1 = new Matrix(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+        var m1 = new Matrix4x4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
 
         var v2 = new Vector3(1, 2, 3);
         var q1 = new Quaternion(2, 3, 4, 5);
 
-        Vector3 result1;
-        Vector3 result2;
+        // OUTPUT OVERLOADS TEST
+        Vector3 result1 = Vector3.Transform(v1, m1);
+        Vector3 result2 = Vector3.Transform(v2, q1);
 
         Assert.That(expectedResult1, Is.EqualTo(Vector3.Transform(v1, m1)).Using(Vector3Comparer.Epsilon));
         Assert.That(expectedResult2, Is.EqualTo(Vector3.Transform(v2, q1)).Using(Vector3Comparer.Epsilon));
-
-        // OUTPUT OVERLOADS TEST
-
-        Vector3.Transform(ref v1, ref m1, out result1);
-        Vector3.Transform(ref v2, ref q1, out result2);
 
         Assert.That(expectedResult1, Is.EqualTo(result1).Using(Vector3Comparer.Epsilon));
         Assert.That(expectedResult2, Is.EqualTo(result2).Using(Vector3Comparer.Epsilon));
@@ -131,9 +129,9 @@ class Vector3Test
     {
         Vector3 vector3 = new Vector3(float.MinValue, float.MaxValue, float.MinValue);
 
-        float x, y, z;
-
-        vector3.Deconstruct(out x, out y, out z);
+        float x = vector3.X;
+        float y = vector3.Y;
+        float z = vector3.Z;
 
         Assert.AreEqual(x, vector3.X);
         Assert.AreEqual(y, vector3.Y);
@@ -151,10 +149,10 @@ class Vector3Test
         ceilMember.Ceiling();
 
         Vector3 ceilResult;
-        Vector3.Ceiling(ref vector3, out ceilResult);
+        Vector3Helper.Ceiling(ref vector3, out ceilResult);
 
         Assert.AreEqual(new Vector3(1.0f, 1.0f, 1.0f), ceilMember);
-        Assert.AreEqual(new Vector3(1.0f, 1.0f, 1.0f), Vector3.Ceiling(vector3));
+        Assert.AreEqual(new Vector3(1.0f, 1.0f, 1.0f), Vector3Helper.Ceiling(vector3));
         Assert.AreEqual(new Vector3(1.0f, 1.0f, 1.0f), ceilResult);
 
         // FLOOR
@@ -163,10 +161,10 @@ class Vector3Test
         floorMember.Floor();
 
         Vector3 floorResult;
-        Vector3.Floor(ref vector3, out floorResult);
+        Vector3Helper.Floor(ref vector3, out floorResult);
 
         Assert.AreEqual(new Vector3(0.0f, 0.0f, 1.0f), floorMember);
-        Assert.AreEqual(new Vector3(0.0f, 0.0f, 1.0f), Vector3.Floor(vector3));
+        Assert.AreEqual(new Vector3(0.0f, 0.0f, 1.0f), Vector3Helper.Floor(vector3));
         Assert.AreEqual(new Vector3(0.0f, 0.0f, 1.0f), floorResult);
 
         // ROUND
@@ -175,10 +173,10 @@ class Vector3Test
         roundMember.Round();
 
         Vector3 roundResult;
-        Vector3.Round(ref vector3, out roundResult);
+        Vector3Helper.Round(ref vector3, out roundResult);
 
         Assert.AreEqual(new Vector3(0.0f, 1.0f, 1.0f), roundMember);
-        Assert.AreEqual(new Vector3(0.0f, 1.0f, 1.0f), Vector3.Round(vector3));
+        Assert.AreEqual(new Vector3(0.0f, 1.0f, 1.0f), Vector3Helper.Round(vector3));
         Assert.AreEqual(new Vector3(0.0f, 1.0f, 1.0f), roundResult);
     }
 #endif

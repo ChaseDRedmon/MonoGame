@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.Serialization;
 
 namespace Microsoft.Xna.Framework;
@@ -271,7 +272,8 @@ public struct Ray : IEquatable<Ray>
             return;
         }
 
-        Vector3.Dot(ref Direction, ref difference, out distanceAlongRay);
+        distanceAlongRay = Vector3.Dot(Direction, difference);
+
         // If the ray is pointing away from the sphere then we don't ever intersect
         if (distanceAlongRay < 0)
         {

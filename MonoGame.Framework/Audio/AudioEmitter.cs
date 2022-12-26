@@ -2,9 +2,8 @@
 // This file is subject to the terms and conditions defined in
 // file 'LICENSE.txt', which is part of this source code package.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Numerics;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Audio;
 
@@ -17,9 +16,9 @@ public class AudioEmitter
     public AudioEmitter()
     {
         _dopplerScale = 1.0f;
-        Forward = Vector3.Forward;
+        Forward = Vector3Helper.Forward;
         Position = Vector3.Zero;
-        Up = Vector3.Up;
+        Up = Vector3Helper.Up;
         Velocity = Vector3.Zero;
     }
 

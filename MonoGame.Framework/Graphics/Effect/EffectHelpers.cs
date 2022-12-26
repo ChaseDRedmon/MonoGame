@@ -10,6 +10,7 @@
 //#region Using Statements
 
 using System;
+using System.Numerics;
 
 //#endregion
 
@@ -72,17 +73,17 @@ internal static class EffectHelpers
     /// fog vector based on the current effect parameter settings.
     /// </summary>
     internal static EffectDirtyFlags SetWorldViewProjAndFog(EffectDirtyFlags dirtyFlags,
-        ref Matrix world, ref Matrix view, ref Matrix projection, ref Matrix worldView,
+        ref Matrix4x4 world, ref Matrix4x4 view, ref Matrix4x4 projection, ref Matrix4x4 worldView,
         bool fogEnabled, float fogStart, float fogEnd,
         EffectParameter worldViewProjParam, EffectParameter fogVectorParam)
     {
         // Recompute the world+view+projection matrix?
         if ((dirtyFlags & EffectDirtyFlags.WorldViewProj) != 0)
         {
-            Matrix worldViewProj;
+            Matrix4x4 worldViewProj;
 
-            Matrix.Multiply(ref world, ref view, out worldView);
-            Matrix.Multiply(ref worldView, ref projection, out worldViewProj);
+            worldView = Matrix4x4.Multiply(world, view);
+            worldViewProj = Matrix4x4.Multiply(worldView, projection);
 
             worldViewProjParam.SetValue(worldViewProj);
 
@@ -117,7 +118,7 @@ internal static class EffectHelpers
     /// <summary>
     /// Sets a vector which can be dotted with the object space vertex position to compute fog amount.
     /// </summary>
-    static void SetFogVector(ref Matrix worldView, float fogStart, float fogEnd, EffectParameter fogVectorParam)
+    static void SetFogVector(ref Matrix4x4 worldView, float fogStart, float fogEnd, EffectParameter fogVectorParam)
     {
         if (fogStart == fogEnd)
         {
@@ -149,18 +150,15 @@ internal static class EffectHelpers
     /// Lazily recomputes the world inverse transpose matrix and
     /// eye position based on the current effect parameter settings.
     /// </summary>
-    internal static EffectDirtyFlags SetLightingMatrices(EffectDirtyFlags dirtyFlags, ref Matrix world,
-        ref Matrix view,
+    internal static EffectDirtyFlags SetLightingMatrices(EffectDirtyFlags dirtyFlags, ref Matrix4x4 world,
+        ref Matrix4x4 view,
         EffectParameter worldParam, EffectParameter worldInverseTransposeParam, EffectParameter eyePositionParam)
     {
         // Set the world and world inverse transpose matrices.
         if ((dirtyFlags & EffectDirtyFlags.World) != 0)
         {
-            Matrix worldTranspose;
-            Matrix worldInverseTranspose;
-
-            Matrix.Invert(ref world, out worldTranspose);
-            Matrix.Transpose(ref worldTranspose, out worldInverseTranspose);
+            Matrix4x4.Invert(world, out var worldTranspose);
+            var worldInverseTranspose = Matrix4x4.Transpose(worldTranspose);
 
             worldParam.SetValue(world);
             worldInverseTransposeParam.SetValue(worldInverseTranspose);
@@ -171,12 +169,9 @@ internal static class EffectHelpers
         // Set the eye position.
         if ((dirtyFlags & EffectDirtyFlags.EyePosition) != 0)
         {
-            Matrix viewInverse;
-
-            Matrix.Invert(ref view, out viewInverse);
+            Matrix4x4.Invert(view, out var viewInverse);
 
             eyePositionParam.SetValue(viewInverse.Translation);
-
             dirtyFlags &= ~EffectDirtyFlags.EyePosition;
         }
 
@@ -231,12 +226,13 @@ internal static class EffectHelpers
         }
         else
         {
-            Vector4 diffuse = new Vector4();
-
-            diffuse.X = (diffuseColor.X + emissiveColor.X) * alpha;
-            diffuse.Y = (diffuseColor.Y + emissiveColor.Y) * alpha;
-            diffuse.Z = (diffuseColor.Z + emissiveColor.Z) * alpha;
-            diffuse.W = alpha;
+            var diffuse = new Vector4
+            {
+                X = (diffuseColor.X + emissiveColor.X) * alpha,
+                Y = (diffuseColor.Y + emissiveColor.Y) * alpha,
+                Z = (diffuseColor.Z + emissiveColor.Z) * alpha,
+                W = alpha
+            };
 
             diffuseColorParam.SetValue(diffuse);
         }

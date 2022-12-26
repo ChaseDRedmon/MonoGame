@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -74,8 +75,8 @@ public class GamePadTest
     public void TriggersTest([Range(-0.5f, 1.5f, 0.5f)] float left, [Range(1.5f, -0.5f, -0.5f)] float right)
     {
         var triggers = new GamePadTriggers(left, right);
-        Assert.AreEqual(MathHelper.Clamp(left, 0f, 1f), triggers.Left);
-        Assert.AreEqual(MathHelper.Clamp(right, 0f, 1f), triggers.Right);
+        Assert.AreEqual(Math.Clamp(left, 0f, 1f), triggers.Left);
+        Assert.AreEqual(Math.Clamp(right, 0f, 1f), triggers.Right);
 
 #if !XNA
         var triggers2 = new GamePadTriggers(left, right);

@@ -8,6 +8,8 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using Vector3 = System.Numerics.Vector3;
 
 namespace MonoGame.Tests.Graphics;
 
@@ -36,17 +38,17 @@ internal sealed class ModelTest : GraphicsDeviceTestFixtureBase
         // model contains a bit more that only the cube, so let extract the cube
         // to set transformation matrix. It is necessary to make the cube visible.
         var cubeBone = model.Bones[1];
-        cubeBone.Transform = Matrix.Identity;
+        cubeBone.Transform = Matrix4x4.Identity;
 
         // let's make the model colored in red and lighted
         var effect = (BasicEffect)model.Meshes[0].Effects[0];
         effect.DiffuseColor = Color.Red.ToVector3();
         effect.EnableDefaultLighting();
 
-        var world = Matrix.Identity;
-        var view = Matrix.CreateLookAt(new Vector3(5, 5, 5), new Vector3(0, 0, 0), Vector3.Up);
+        var world = Matrix4x4.Identity;
+        var view = Matrix4x4.CreateLookAt(new Vector3(5, 5, 5), new Vector3(0, 0, 0), Vector3Helper.Up);
         var projection =
-            Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, gd.Viewport.AspectRatio, 0.1f, 100.0f);
+            Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, gd.Viewport.AspectRatio, 0.1f, 100.0f);
 
         PrepareFrameCapture();
 
@@ -99,8 +101,8 @@ internal sealed class ModelTest : GraphicsDeviceTestFixtureBase
         var someBones = new[] { new ModelBone(), new ModelBone() }.ToList();
         var model = new Model(gd, someBones, new List<ModelMesh>());
 
-        var expected = new[] { Matrix.Identity * 1, Matrix.Identity * 2 };
-        var actual = new Matrix[2];
+        var expected = new[] { Matrix4x4.Identity * 1, Matrix4x4.Identity * 2 };
+        var actual = new Matrix4x4[2];
         Assume.That(actual, Is.Not.EqualTo(expected));
 
         model.CopyBoneTransformsFrom(expected);
@@ -116,7 +118,7 @@ internal sealed class ModelTest : GraphicsDeviceTestFixtureBase
         var model = new Model(gd, someBones, new List<ModelMesh>());
 
         Assert.Throws<ArgumentNullException>(() => model.CopyBoneTransformsFrom(null));
-        Assert.Throws<ArgumentOutOfRangeException>(() => model.CopyBoneTransformsFrom(new Matrix[0]));
+        Assert.Throws<ArgumentOutOfRangeException>(() => model.CopyBoneTransformsFrom(new Matrix4x4[0]));
     }
 
     [Test]
@@ -125,7 +127,7 @@ internal sealed class ModelTest : GraphicsDeviceTestFixtureBase
         var someBones = new[] { new ModelBone() }.ToList();
         var model = new Model(gd, someBones, new List<ModelMesh>());
         Assert.Throws<ArgumentNullException>(() => model.CopyBoneTransformsTo(null));
-        Assert.Throws<ArgumentOutOfRangeException>(() => model.CopyBoneTransformsTo(new Matrix[0]));
+        Assert.Throws<ArgumentOutOfRangeException>(() => model.CopyBoneTransformsTo(new Matrix4x4[0]));
     }
 
 #endif
