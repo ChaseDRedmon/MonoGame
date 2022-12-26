@@ -20,7 +20,7 @@ public abstract partial class Texture
     /// The handle of the shared resource, or <see cref="IntPtr.Zero"/> if the texture was not
     /// created as a shared resource.
     /// </returns>
-    public IntPtr GetSharedHandle()
+    public nint GetSharedHandle()
     {
         using (var resource = GetTexture().QueryInterface<SharpDX.DXGI.Resource>())
             return resource.SharedHandle;
