@@ -28,17 +28,6 @@ public struct BoundingSphere : IEquatable<BoundingSphere>
     /// </summary>
     [DataMember] public float Radius;
 
-    internal string DebugDisplayString
-    {
-        get
-        {
-            return string.Concat(
-                "Center( ", Center.DebugDisplayString, " )  \r\n",
-                "Radius( ", Radius.ToString(), " )"
-            );
-        }
-    }
-
     /// <summary>
     /// Constructs a bounding sphere with the specified center and radius.
     /// </summary>

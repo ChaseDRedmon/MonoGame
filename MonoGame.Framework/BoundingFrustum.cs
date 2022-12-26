@@ -92,21 +92,6 @@ public class BoundingFrustum : IEquatable<BoundingFrustum>
         get { return _planes[5]; }
     }
 
-    internal string DebugDisplayString
-    {
-        get
-        {
-            return string.Concat(
-                "Near( ", _planes[0].DebugDisplayString, " )  \r\n",
-                "Far( ", _planes[1].DebugDisplayString, " )  \r\n",
-                "Left( ", _planes[2].DebugDisplayString, " )  \r\n",
-                "Right( ", _planes[3].DebugDisplayString, " )  \r\n",
-                "Top( ", _planes[4].DebugDisplayString, " )  \r\n",
-                "Bottom( ", _planes[5].DebugDisplayString, " )  "
-            );
-        }
-    }
-
     /// <summary>
     /// Constructs the frustum by extracting the view planes from a matrix.
     /// </summary>
