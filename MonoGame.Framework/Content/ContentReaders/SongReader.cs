@@ -15,7 +15,7 @@ internal class SongReader : ContentTypeReader<Song>
     {
         var path = input.ReadString();
 
-        if (!String.IsNullOrEmpty(path))
+        if (!string.IsNullOrEmpty(path))
         {
             // Add the ContentManager's RootDirectory
             var dirPath = Path.Combine(input.ContentManager.RootDirectoryFullPath, input.AssetName);

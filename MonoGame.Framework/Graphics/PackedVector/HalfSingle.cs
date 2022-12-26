@@ -7,9 +7,9 @@ using System.Numerics;
 
 namespace Microsoft.Xna.Framework.Graphics.PackedVector;
 
-public struct HalfSingle : IPackedVector<UInt16>, IEquatable<HalfSingle>, IPackedVector
+public struct HalfSingle : IPackedVector<ushort>, IEquatable<HalfSingle>, IPackedVector
 {
-    UInt16 packedValue;
+    ushort packedValue;
 
     public HalfSingle(float single)
     {

@@ -98,7 +98,7 @@ public sealed class ContentReader : BinaryReader
     {
         var externalReference = ReadString();
 
-        if (!String.IsNullOrEmpty(externalReference))
+        if (!string.IsNullOrEmpty(externalReference))
         {
             return contentManager.Load<T>(FileHelpers.ResolveRelativePath(assetName, externalReference));
         }
@@ -235,7 +235,7 @@ public sealed class ContentReader : BinaryReader
             {
                 if (!(v is T obj))
                 {
-                    throw new ContentLoadException(String.Format(
+                    throw new ContentLoadException(string.Format(
                         "Error loading shared resource. Expected type {0}, received type {1}", typeof(T).Name,
                         v.GetType().Name));
                 }

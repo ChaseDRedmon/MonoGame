@@ -18,7 +18,7 @@ public static partial class Mouse
     /// <summary>
     /// Gets or sets the window handle for current mouse processing.
     /// </summary>
-    public static IntPtr WindowHandle
+    public static nint WindowHandle
     {
         get { return PlatformGetWindowHandle(); }
         set { PlatformSetWindowHandle(value); }

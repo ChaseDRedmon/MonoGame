@@ -96,7 +96,7 @@ public sealed partial class DynamicSoundEffectInstance : SoundEffectInstance
         // _voice is disposed by SoundEffectInstance.PlatformDispose
     }
 
-    private void OnBufferEnd(IntPtr obj)
+    private void OnBufferEnd(nint obj)
     {
         // Release the buffer
         if (_queuedBuffers.Count > 0)

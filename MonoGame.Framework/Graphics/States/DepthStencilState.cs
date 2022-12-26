@@ -221,8 +221,8 @@ public partial class DepthStencilState : GraphicsResource
         CounterClockwiseStencilFail = StencilOperation.Keep;
         CounterClockwiseStencilPass = StencilOperation.Keep;
         CounterClockwiseStencilDepthBufferFail = StencilOperation.Keep;
-        StencilMask = Int32.MaxValue;
-        StencilWriteMask = Int32.MaxValue;
+        StencilMask = int.MaxValue;
+        StencilWriteMask = int.MaxValue;
         ReferenceStencil = 0;
     }
 

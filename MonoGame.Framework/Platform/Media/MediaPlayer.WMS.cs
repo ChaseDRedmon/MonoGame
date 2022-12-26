@@ -254,7 +254,7 @@ public static partial class MediaPlayer
     {
         lock (_volumeLock)
         {
-            IntPtr volumeObjectPtr;
+            nint volumeObjectPtr;
             MediaFactory.GetService(_session, MediaServiceKeys.StreamVolume, AudioStreamVolumeGuid,
                 out volumeObjectPtr);
             _volumeController = CppObject.FromPointer<AudioStreamVolume>(volumeObjectPtr);

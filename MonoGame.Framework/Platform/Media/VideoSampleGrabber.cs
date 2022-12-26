@@ -9,7 +9,7 @@ internal class VideoSampleGrabber : SharpDX.CallbackBase, SampleGrabberSinkCallb
     internal byte[] TextureData { get; private set; }
 
     public void OnProcessSample(Guid guidMajorMediaType, int dwSampleFlags, long llSampleTime,
-        long llSampleDuration, IntPtr sampleBufferRef, int dwSampleSize)
+        long llSampleDuration, nint sampleBufferRef, int dwSampleSize)
     {
         if (TextureData == null || TextureData.Length != dwSampleSize)
             TextureData = new byte[dwSampleSize];

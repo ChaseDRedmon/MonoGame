@@ -253,7 +253,7 @@ partial class SoundEffect
             Flags = BufferFlags.EndOfStream,
             PlayBegin = loopStart,
             PlayLength = loopLength,
-            Context = new IntPtr(42),
+            Context = new nint(42),
         };
 
         _loopedBuffer = new AudioBuffer
@@ -264,7 +264,7 @@ partial class SoundEffect
             LoopBegin = loopStart,
             LoopLength = loopLength,
             LoopCount = AudioBuffer.LoopInfinite,
-            Context = new IntPtr(42),
+            Context = new nint(42),
         };
     }
 

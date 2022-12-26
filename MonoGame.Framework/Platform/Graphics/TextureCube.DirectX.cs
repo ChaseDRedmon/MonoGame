@@ -147,7 +147,7 @@ public partial class TextureCube
         // Use try..finally to make sure dataHandle is freed in case of an error
         try
         {
-            var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+            var dataPtr = (nint)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
             var box = new DataBox(dataPtr, GetPitch(rect.Width), 0);
 
             var subresourceIndex = CalculateSubresourceIndex(face, level);

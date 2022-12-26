@@ -202,7 +202,7 @@ public partial class BlendState : GraphicsResource
         _targetBlendState[3] = new TargetBlendState(this);
 
         _blendFactor = Color.White;
-        _multiSampleMask = Int32.MaxValue;
+        _multiSampleMask = int.MaxValue;
         _independentBlendEnable = false;
     }
 

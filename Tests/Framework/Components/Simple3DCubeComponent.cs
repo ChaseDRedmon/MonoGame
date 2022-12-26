@@ -99,7 +99,7 @@ class Simple3DCubeComponent
 
     void CreateCubeIndexBuffer()
     {
-        UInt16[] cubeIndices = new UInt16[number_of_indices];
+        ushort[] cubeIndices = new ushort[number_of_indices];
 
         //bottom face
         cubeIndices[0] = 0;
@@ -151,6 +151,6 @@ class Simple3DCubeComponent
 
         indices = new IndexBuffer(graphicsDevice, IndexElementSize.SixteenBits, number_of_indices,
             BufferUsage.WriteOnly);
-        indices.SetData<UInt16>(cubeIndices);
+        indices.SetData<ushort>(cubeIndices);
     }
 }

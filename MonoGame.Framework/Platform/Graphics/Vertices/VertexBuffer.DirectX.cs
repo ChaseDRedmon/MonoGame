@@ -99,7 +99,7 @@ public partial class VertexBuffer
             try
             {
                 var startBytes = startIndex * TsizeInBytes;
-                var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                var dataPtr = (nint)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
                 lock (GraphicsDevice._d3dContext)
                 {
@@ -166,7 +166,7 @@ public partial class VertexBuffer
             try
             {
                 var startBytes = startIndex * elementSizeInBytes;
-                var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                var dataPtr = (nint)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
 
                 var d3dContext = GraphicsDevice._d3dContext;
 

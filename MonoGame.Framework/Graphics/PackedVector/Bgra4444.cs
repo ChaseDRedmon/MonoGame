@@ -10,13 +10,13 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector;
 /// <summary>
 /// Packed vector type containing unsigned normalized values, ranging from 0 to 1, using 4 bits each for x, y, z, and w.
 /// </summary>
-public struct Bgra4444 : IPackedVector<UInt16>, IEquatable<Bgra4444>
+public struct Bgra4444 : IPackedVector<ushort>, IEquatable<Bgra4444>
 {
-    UInt16 _packedValue;
+    ushort _packedValue;
 
-    private static UInt16 Pack(float x, float y, float z, float w)
+    private static ushort Pack(float x, float y, float z, float w)
     {
-        return (UInt16)((((int)MathF.Round(Math.Clamp(w, 0, 1) * 15.0f) & 0x0F) << 12) |
+        return (ushort)((((int)MathF.Round(Math.Clamp(w, 0, 1) * 15.0f) & 0x0F) << 12) |
                         (((int)MathF.Round(Math.Clamp(x, 0, 1) * 15.0f) & 0x0F) << 8) |
                         (((int)MathF.Round(Math.Clamp(y, 0, 1) * 15.0f) & 0x0F) << 4) |
                         ((int)MathF.Round(Math.Clamp(z, 0, 1) * 15.0f) & 0x0F));
@@ -47,7 +47,7 @@ public struct Bgra4444 : IPackedVector<UInt16>, IEquatable<Bgra4444>
     /// Gets and sets the packed value.
     /// </summary>
     [CLSCompliant(false)]
-    public UInt16 PackedValue
+    public ushort PackedValue
     {
         get { return _packedValue; }
         set { _packedValue = value; }

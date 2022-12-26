@@ -17,7 +17,7 @@ public struct Short2 : IPackedVector<uint>, IEquatable<Short2>
         _short2Packed = PackInTwo(vector.X, vector.Y);
     }
 
-    public Short2(Single x, Single y)
+    public Short2(float x, float y)
     {
         _short2Packed = PackInTwo(x, y);
     }

@@ -70,7 +70,7 @@ namespace Microsoft.Xna.Framework.Graphics
             try
             {
                 var startBytes = startIndex * elementSizeInByte;
-                var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                var dataPtr = (nint)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                 var region = new ResourceRegion();
                 region.Top = 0;
                 region.Front = 0;
@@ -100,7 +100,7 @@ namespace Microsoft.Xna.Framework.Graphics
             try
             {
                 var startBytes = startIndex * elementSizeInByte;
-                var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
+                var dataPtr = (nint)(dataHandle.AddrOfPinnedObject().ToInt64() + startBytes);
                 var region = new ResourceRegion();
                 region.Top = rect.Top;
                 region.Front = 0;

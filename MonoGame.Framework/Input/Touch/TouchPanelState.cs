@@ -66,7 +66,7 @@ public class TouchPanelState
     /// <summary>
     /// The window handle of the touch panel. Purely for Xna compatibility.
     /// </summary>
-    public IntPtr WindowHandle { get; set; }
+    public nint WindowHandle { get; set; }
 
     /// <summary>
     /// Returns capabilities of touch panel device.

@@ -16,12 +16,12 @@ public static partial class Mouse
 
     private static Control _window;
 
-    private static IntPtr PlatformGetWindowHandle()
+    private static nint PlatformGetWindowHandle()
     {
         return _window.Handle;
     }
 
-    private static void PlatformSetWindowHandle(IntPtr windowHandle)
+    private static void PlatformSetWindowHandle(nint windowHandle)
     {
         _window = Control.FromHandle(windowHandle);
     }

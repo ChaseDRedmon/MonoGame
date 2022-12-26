@@ -14,14 +14,14 @@ namespace Microsoft.Xna.Framework.Graphics;
 /// </remarks>
 public class SwapChainRenderTarget : RenderTarget2D
 {
-    private IntPtr _windowHandle;
+    private nint _windowHandle;
     private SharpDX.Direct3D11.Texture2D _backBuffer;
     private SwapChain _swapChain;
 
     public readonly PresentInterval PresentInterval;
 
     public SwapChainRenderTarget(GraphicsDevice graphicsDevice,
-        IntPtr windowHandle,
+        nint windowHandle,
         int width,
         int height)
         : this(
@@ -39,7 +39,7 @@ public class SwapChainRenderTarget : RenderTarget2D
     }
 
     public SwapChainRenderTarget(GraphicsDevice graphicsDevice,
-        IntPtr windowHandle,
+        nint windowHandle,
         int width,
         int height,
         bool mipMap,

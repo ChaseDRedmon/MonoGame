@@ -87,7 +87,7 @@ public partial class MouseCursor : IDisposable
         return PlatformFromTexture2D(texture, originx, originy);
     }
 
-    public IntPtr Handle { get; private set; }
+    public nint Handle { get; private set; }
 
     private bool _disposed;
 
@@ -96,7 +96,7 @@ public partial class MouseCursor : IDisposable
         PlatformInitalize();
     }
 
-    private MouseCursor(IntPtr handle)
+    private MouseCursor(nint handle)
     {
         Handle = handle;
     }

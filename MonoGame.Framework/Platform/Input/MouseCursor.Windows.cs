@@ -96,14 +96,14 @@ public partial class MouseCursor
         public bool fIcon;
         public int xHotspot;
         public int yHotspot;
-        public IntPtr MaskBitmap;
-        public IntPtr ColorBitmap;
+        public nint MaskBitmap;
+        public nint ColorBitmap;
     };
 
     [DllImport("user32.dll")]
-    static extern IntPtr CreateIconIndirect([In] ref IconInfo iconInfo);
+    static extern nint CreateIconIndirect([In] ref IconInfo iconInfo);
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    static extern bool GetIconInfo(IntPtr hIcon, ref IconInfo pIconInfo);
+    static extern bool GetIconInfo(nint hIcon, ref IconInfo pIconInfo);
 }

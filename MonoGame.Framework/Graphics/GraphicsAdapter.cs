@@ -96,7 +96,7 @@ public sealed partial class GraphicsAdapter : IDisposable
 
     public bool IsDefaultAdapter { get; private set; }
 
-    public IntPtr MonitorHandle { get; private set; }
+    public nint MonitorHandle { get; private set; }
 
     public int Revision { get; private set; }
 

@@ -25,7 +25,7 @@ internal class MockWindow : GameWindow
         get { throw new NotImplementedException(); }
     }
 
-    public override IntPtr Handle
+    public override nint Handle
     {
         get { throw new NotImplementedException(); }
     }

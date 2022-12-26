@@ -75,7 +75,7 @@ namespace MonoGame.Tests;
 [StructLayout(LayoutKind.Sequential)]
 struct PixelArgb
 {
-    public const int MaxDelta = 4 * Byte.MaxValue;
+    public const int MaxDelta = 4 * byte.MaxValue;
 
     public byte B;
     public byte G;

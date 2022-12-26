@@ -69,7 +69,7 @@ public partial class Texture3D : Texture
         var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
         try
         {
-            var dataPtr = (IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
+            var dataPtr = (nint)(dataHandle.AddrOfPinnedObject().ToInt64() + startIndex * elementSizeInByte);
 
             int rowPitch = GetPitch(width);
             int slicePitch = rowPitch * height; // For 3D texture: Size of 2D image.

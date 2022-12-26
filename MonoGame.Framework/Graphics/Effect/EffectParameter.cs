@@ -272,7 +272,7 @@ public class EffectParameter
     }
     */
 
-    public Single GetValueSingle()
+    public float GetValueSingle()
     {
         // TODO: Should this fetch int and bool as a float?
         if (ParameterClass != EffectParameterClass.Scalar || ParameterType != EffectParameterType.Single)
@@ -281,11 +281,11 @@ public class EffectParameter
         return ((float[])Data)[0];
     }
 
-    public Single[] GetValueSingleArray()
+    public float[] GetValueSingleArray()
     {
         if (Elements != null && Elements.Count > 0)
         {
-            var ret = new Single[RowCount * ColumnCount * Elements.Count];
+            var ret = new float[RowCount * ColumnCount * Elements.Count];
             for (int i = 0; i < Elements.Count; i++)
             {
                 var elmArray = Elements[i].GetValueSingleArray();
@@ -299,7 +299,7 @@ public class EffectParameter
         switch (ParameterClass)
         {
             case EffectParameterClass.Scalar:
-                return new Single[] { GetValueSingle() };
+                return new[] { GetValueSingle() };
             case EffectParameterClass.Vector:
             case EffectParameterClass.Matrix:
                 if (Data is Matrix4x4 data)
@@ -821,7 +821,7 @@ public class EffectParameter
     }
     */
 
-    public void SetValue(Single value)
+    public void SetValue(float value)
     {
         if (ParameterType != EffectParameterType.Single)
             throw new InvalidCastException();
@@ -829,7 +829,7 @@ public class EffectParameter
         StateKey = unchecked(NextStateKey++);
     }
 
-    public void SetValue(Single[] value)
+    public void SetValue(float[] value)
     {
         for (var i = 0; i < value.Length; i++)
             Elements[i].SetValue(value[i]);

@@ -57,7 +57,7 @@ public abstract class GameWindow
     /// For DesktopGL this is the SDL window handle.
     /// For UWP this is a handle to an IUnknown interface for the CoreWindow.
     /// </summary>
-    public abstract IntPtr Handle { get; }
+    public abstract nint Handle { get; }
 
     /// <summary>
     /// The name of the screen the window is currently on.

@@ -89,7 +89,7 @@ public static class TouchPanel
     /// <summary>
     /// The window handle of the touch panel. Purely for Xna compatibility.
     /// </summary>
-    public static IntPtr WindowHandle
+    public static nint WindowHandle
     {
         get { return PrimaryWindow.TouchPanelState.WindowHandle; }
         set { PrimaryWindow.TouchPanelState.WindowHandle = value; }
