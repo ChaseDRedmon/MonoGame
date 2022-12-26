@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Audio;
 
@@ -43,17 +44,19 @@ public sealed partial class Microphone
     /// <summary>
     /// Gets or sets the capture buffer duration. This value must be greater than 100 milliseconds, lower than 1000 milliseconds, and must be 10 milliseconds aligned (BufferDuration % 10 == 10).
     /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public TimeSpan BufferDuration
     {
         get { return _bufferDuration; }
         set
         {
             if (value.TotalMilliseconds < 100 || value.TotalMilliseconds > 1000)
-                throw new ArgumentOutOfRangeException(
-                    "Buffer duration must be a value between 100 and 1000 milliseconds.");
+                Throw.ArgumentOutOfRangeException("Buffer duration must be a value between 100 and 1000 milliseconds.");
+
             if (value.TotalMilliseconds % 10 != 0)
-                throw new ArgumentOutOfRangeException(
-                    "Buffer duration must be 10ms aligned (BufferDuration % 10 == 0)");
+                Throw.ArgumentOutOfRangeException("Buffer duration must be 10ms aligned (BufferDuration % 10 == 0)");
+
             _bufferDuration = value;
         }
     }

@@ -65,10 +65,7 @@ public sealed class Model
     /// </exception>
     public Model(GraphicsDevice graphicsDevice, List<ModelBone> bones, List<ModelMesh> meshes)
     {
-        if (graphicsDevice == null)
-        {
-            throw new ArgumentNullException("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
-        }
+        ArgumentNullException.ThrowIfNull(graphicsDevice);
 
         // TODO: Complete member initialization
         this.graphicsDevice = graphicsDevice;
@@ -133,7 +130,7 @@ public sealed class Model
                 IEffectMatrices effectMatricies = effect as IEffectMatrices;
                 if (effectMatricies == null)
                 {
-                    throw new InvalidOperationException();
+                    Throw.InvalidOperationException();
                 }
 
                 effectMatricies.World = sharedDrawBoneMatrices[mesh.ParentBone.Index] * world;
@@ -151,10 +148,9 @@ public sealed class Model
     /// <param name="destinationBoneTransforms">The array receiving the transformed bones.</param>
     public void CopyAbsoluteBoneTransformsTo(Matrix4x4[] destinationBoneTransforms)
     {
-        if (destinationBoneTransforms == null)
-            throw new ArgumentNullException("destinationBoneTransforms");
-        if (destinationBoneTransforms.Length < Bones.Count)
-            throw new ArgumentOutOfRangeException("destinationBoneTransforms");
+        ArgumentNullException.ThrowIfNull(destinationBoneTransforms);
+        Throw.ArgumentOutOfRangeException("Bone Transforms cannot be less than Bones", nameof(destinationBoneTransforms));
+
         int count = Bones.Count;
         for (int index1 = 0; index1 < count; ++index1)
         {
@@ -184,10 +180,8 @@ public sealed class Model
     /// </exception>
     public void CopyBoneTransformsFrom(Matrix4x4[] sourceBoneTransforms)
     {
-        if (sourceBoneTransforms == null)
-            throw new ArgumentNullException("sourceBoneTransforms");
-        if (sourceBoneTransforms.Length < Bones.Count)
-            throw new ArgumentOutOfRangeException("sourceBoneTransforms");
+        ArgumentNullException.ThrowIfNull(sourceBoneTransforms);
+        Throw.ArgumentOutOfRangeException("Bone Transforms cannot be less than Bones", nameof(sourceBoneTransforms));
 
         int count = Bones.Count;
         for (int i = 0; i < count; i++)
@@ -208,10 +202,8 @@ public sealed class Model
     /// </exception>
     public void CopyBoneTransformsTo(Matrix4x4[] destinationBoneTransforms)
     {
-        if (destinationBoneTransforms == null)
-            throw new ArgumentNullException("destinationBoneTransforms");
-        if (destinationBoneTransforms.Length < Bones.Count)
-            throw new ArgumentOutOfRangeException("destinationBoneTransforms");
+        ArgumentNullException.ThrowIfNull(destinationBoneTransforms);
+        Throw.ArgumentOutOfRangeException("Bone Transforms cannot be less than Bones", nameof(destinationBoneTransforms));
 
         int count = Bones.Count;
         for (int i = 0; i < count; i++)

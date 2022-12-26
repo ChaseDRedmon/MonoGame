@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Audio;
 
@@ -87,8 +88,7 @@ public class AudioEngine : IDisposable
     /// <remarks>For the best results, use a lookAheadTime of 250 milliseconds or greater.</remarks>
     public AudioEngine(string settingsFile, TimeSpan lookAheadTime, string rendererId)
     {
-        if (string.IsNullOrEmpty(settingsFile))
-            throw new ArgumentNullException("settingsFile");
+        ArgumentNullException.ThrowIfNullOrEmpty(settingsFile);
 
         // Read the xact settings file
         // Credits to alisci01 for initial format documentation
@@ -97,7 +97,7 @@ public class AudioEngine : IDisposable
         {
             uint magic = reader.ReadUInt32();
             if (magic != 0x46534758) //'XGFS'
-                throw new ArgumentException("XGS format not recognized");
+                Throw.ArgumentException("XGS format not recognized");
 
             reader.ReadUInt16(); // toolVersion
             uint formatVersion = reader.ReadUInt16();
@@ -226,10 +226,12 @@ public class AudioEngine : IDisposable
                 //
                 // So because of this we know exactly how many presets and
                 // parameters we should have.
+
                 if (numDspPresets != 1)
-                    throw new Exception("Unexpected number of DSP presets!");
+                    Throw.ArgumentException("Unexpected number of DSP presets!");
+
                 if (numDspParams != 22)
-                    throw new Exception("Unexpected number of DSP parameters!");
+                    Throw.ArgumentException("Unexpected number of DSP parameters!");
 
                 reader.BaseStream.Seek(dspParamsOffset, SeekOrigin.Begin);
                 _reverbSettings = new ReverbSettings(reader);
@@ -318,12 +320,11 @@ public class AudioEngine : IDisposable
     /// <returns>The AudioCategory with a matching name. Throws an exception if not found.</returns>
     public AudioCategory GetCategory(string name)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException("name");
+        ArgumentNullException.ThrowIfNullOrEmpty(name);
 
         int i;
         if (!_categoryLookup.TryGetValue(name, out i))
-            throw new InvalidOperationException("This resource could not be created.");
+            Throw.InvalidOperationException("This resource could not be created.");
 
         return _categories[i];
     }
@@ -334,12 +335,11 @@ public class AudioEngine : IDisposable
     /// <remarks>A global variable has global scope. It can be accessed by all code within a project.</remarks>
     public float GetGlobalVariable(string name)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException("name");
+        ArgumentNullException.ThrowIfNullOrEmpty(name);
 
         int i;
         if (!_variableLookup.TryGetValue(name, out i) || !_variables[i].IsPublic)
-            throw new IndexOutOfRangeException("The specified variable index is invalid.");
+            Throw.InvalidOperationException("The specified variable index is invalid.");
 
         lock (UpdateLock)
             return _variables[i].Value;
@@ -356,12 +356,11 @@ public class AudioEngine : IDisposable
     /// <param name="value">Value of the global variable.</param>
     public void SetGlobalVariable(string name, float value)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException("name");
+        ArgumentNullException.ThrowIfNullOrEmpty(name);
 
         int i;
         if (!_variableLookup.TryGetValue(name, out i) || !_variables[i].IsPublic)
-            throw new IndexOutOfRangeException("The specified variable index is invalid.");
+            Throw.InvalidOperationException("The specified variable index is invalid.");
 
         lock (UpdateLock)
             _variables[i].SetValue(value);

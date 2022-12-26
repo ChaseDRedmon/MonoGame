@@ -30,10 +30,8 @@ public class SoundBank : IDisposable
     /// <param name="fileName">Path to a .xsb SoundBank file.</param>
     public SoundBank(AudioEngine audioEngine, string fileName)
     {
-        if (audioEngine == null)
-            throw new ArgumentNullException("audioEngine");
-        if (string.IsNullOrEmpty(fileName))
-            throw new ArgumentNullException("fileName");
+        ArgumentNullException.ThrowIfNull(audioEngine);
+        ArgumentNullException.ThrowIfNullOrEmpty(fileName);
 
         _audioengine = audioEngine;
 
@@ -227,7 +225,8 @@ public class SoundBank : IDisposable
         {
             var name = _waveBankNames[waveBankIndex];
             if (!_audioengine.Wavebanks.TryGetValue(name, out waveBank))
-                throw new Exception("The wave bank '" + name + "' was not found!");
+                Throw.Exception($"The wave bank '{name}' was not found!");
+
             _waveBanks[waveBankIndex] = waveBank;
         }
 
@@ -244,16 +243,15 @@ public class SoundBank : IDisposable
     /// </remarks>
     public Cue GetCue(string name)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException("name");
+        ArgumentNullException.ThrowIfNullOrEmpty(name);
 
         XactSound[] sounds;
         if (!_sounds.TryGetValue(name, out sounds))
-            throw new ArgumentException();
+            Throw.ArgumentException();
 
         float[] probs;
         if (!_probabilities.TryGetValue(name, out probs))
-            throw new ArgumentException();
+            Throw.ArgumentException();
 
         IsInUse = true;
 
@@ -268,16 +266,15 @@ public class SoundBank : IDisposable
     /// <param name="name">Name of the cue to play.</param>
     public void PlayCue(string name)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException("name");
+        ArgumentNullException.ThrowIfNullOrEmpty(name);
 
         XactSound[] sounds;
         if (!_sounds.TryGetValue(name, out sounds))
-            throw new ArgumentException();
+            Throw.ArgumentException();
 
         float[] probs;
         if (!_probabilities.TryGetValue(name, out probs))
-            throw new ArgumentException();
+            Throw.ArgumentException();
 
         IsInUse = true;
         var cue = new Cue(_audioengine, name, sounds, probs);
@@ -296,16 +293,15 @@ public class SoundBank : IDisposable
     /// <param name="emitter">The cue emitter state.</param>
     public void PlayCue(string name, AudioListener listener, AudioEmitter emitter)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException("name");
+        ArgumentNullException.ThrowIfNullOrEmpty(name);
 
         XactSound[] sounds;
         if (!_sounds.TryGetValue(name, out sounds))
-            throw new InvalidOperationException();
+            Throw.InvalidOperationException();
 
         float[] probs;
         if (!_probabilities.TryGetValue(name, out probs))
-            throw new ArgumentException();
+            Throw.ArgumentException();
 
         IsInUse = true;
 

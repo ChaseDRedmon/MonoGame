@@ -90,7 +90,7 @@ internal class EffectMaterialReader : ContentTypeReader<EffectMaterial>
                 }
                 else
                 {
-                    throw new NotSupportedException("Parameter type is not supported");
+                    Throw.NotSupportedException("Parameter type is not supported");
                 }
             }
             else

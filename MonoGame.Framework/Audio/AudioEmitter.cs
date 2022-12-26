@@ -36,8 +36,7 @@ public class AudioEmitter
         set
         {
             if (value < 0.0f)
-                throw new ArgumentOutOfRangeException("value",
-                    "AudioEmitter.DopplerScale must be greater than or equal to 0.0f");
+                Throw.ArgumentOutOfRangeException("AudioEmitter.DopplerScale must be greater than or equal to 0.0f", nameof(value));
 
             _dopplerScale = value;
         }

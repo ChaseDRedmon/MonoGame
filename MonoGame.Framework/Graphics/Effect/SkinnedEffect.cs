@@ -310,7 +310,7 @@ public class SkinnedEffect : Effect, IEffectMatrices, IEffectLights, IEffectFog,
                 value != 2 &&
                 value != 4)
             {
-                throw new ArgumentOutOfRangeException("value");
+                Throw.ArgumentOutOfRangeException("Invalid vertex weight", nameof(WeightsPerVertex));
             }
 
             weightsPerVertex = value;
@@ -324,11 +324,13 @@ public class SkinnedEffect : Effect, IEffectMatrices, IEffectLights, IEffectFog,
     /// </summary>
     public void SetBoneTransforms(Matrix4x4[] boneTransforms)
     {
-        if (boneTransforms == null || boneTransforms.Length == 0)
-            throw new ArgumentNullException("boneTransforms");
+        ArgumentNullException.ThrowIfNull(boneTransforms);
+
+        if (boneTransforms.Length == 0)
+            Throw.ArgumentException("Length cannot be 0", nameof(boneTransforms));
 
         if (boneTransforms.Length > MaxBones)
-            throw new ArgumentException();
+            Throw.ArgumentException("Length cannot be greater than Max Bones", nameof(boneTransforms));
 
         bonesParam.SetValue(boneTransforms);
     }
@@ -339,8 +341,8 @@ public class SkinnedEffect : Effect, IEffectMatrices, IEffectLights, IEffectFog,
     /// </summary>
     public Matrix4x4[] GetBoneTransforms(int count)
     {
-        if (count <= 0 || count > MaxBones)
-            throw new ArgumentOutOfRangeException("count");
+        if (count is <= 0 or > MaxBones)
+            Throw.ArgumentOutOfRangeException("Must be between 0 and MaxBones", nameof(count));
 
         Matrix4x4[] bones = bonesParam.GetValueMatrixArray(count);
 

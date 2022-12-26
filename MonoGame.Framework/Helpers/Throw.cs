@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MonoGame.Framework.Utilities;
 
@@ -12,6 +12,10 @@ namespace MonoGame.Framework.Utilities;
 /// </summary>
 internal static class Throw
 {
+    public static void Exception(string? message = "", Exception? e = null) => throw new Exception(message, e);
+    public static void NoAudioHardwareException(string? message = "", Exception? e = null) => throw new NoAudioHardwareException(message, e);
+    public static void InstancePlayLimitException() => throw new InstancePlayLimitException();
+
     public static void NotImplementedException(string? message = "", Exception? e = null) => throw new NotImplementedException(message, e);
     public static void UnreachableException(string? message = "", Exception? e = null) => throw new UnreachableException(message, e);
     public static void IndexOutOfRangeException(string? message = "", Exception? e = null) => throw new IndexOutOfRangeException(message, e);
@@ -31,8 +35,7 @@ internal static class Throw
     public static void ArgumentNullException<T>(T? argument, Exception? e, [CallerArgumentExpression(nameof(argument))] string? parameterName = "") => throw new ArgumentNullException($"Argument ({parameterName}) cannot be null", e);
     public static void ArgumentNullException<T>(T? argument, [CallerArgumentExpression(nameof(argument))] string? parameterName = "") => throw new ArgumentNullException(parameterName, "Argument cannot be null");
 
-    public static void FileNotFoundException(string name, Exception inner)
-    {
-        throw new FileNotFoundException("Error loading \"" + name + "\". File not found.", inner);
-    }
+    public static void FileNotFoundException(string name, Exception inner) => throw new FileNotFoundException("Error loading \"" + name + "\". File not found.", inner);
+    public static void ObjectDisposedException(string? message = "", Exception? e = null) => throw new ObjectDisposedException(message, e);
+    public static void ObjectDisposedException<T>(T? argument, string message, [CallerArgumentExpression(nameof(argument))] string? parameterName = "") => throw new ObjectDisposedException(parameterName, message);
 }

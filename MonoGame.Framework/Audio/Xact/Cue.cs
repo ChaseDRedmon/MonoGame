@@ -197,12 +197,11 @@ public class Cue : IDisposable
     /// <remarks>The friendly name is a value set from the designer.</remarks>
     public void SetVariable(string name, float value)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException("name");
+        ArgumentNullException.ThrowIfNullOrEmpty(name);
 
         var i = FindVariable(name);
         if (i == -1 || !_variables[i].IsPublic)
-            throw new IndexOutOfRangeException("The specified variable index is invalid.");
+            Throw.IndexOutOfRangeException("The specified variable index is invalid.");
 
         _variables[i].SetValue(value);
     }
@@ -216,12 +215,11 @@ public class Cue : IDisposable
     /// </remarks>
     public float GetVariable(string name)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException("name");
+        ArgumentNullException.ThrowIfNullOrEmpty(name);
 
         var i = FindVariable(name);
         if (i == -1 || !_variables[i].IsPublic)
-            throw new IndexOutOfRangeException("The specified variable index is invalid.");
+            Throw.IndexOutOfRangeException("The specified variable index is invalid.");
 
         return _variables[i].Value;
     }
@@ -235,14 +233,11 @@ public class Cue : IDisposable
     /// </remarks>
     public void Apply3D(AudioListener listener, AudioEmitter emitter)
     {
-        if (listener == null)
-            throw new ArgumentNullException("listener");
-        if (emitter == null)
-            throw new ArgumentNullException("emitter");
+        ArgumentNullException.ThrowIfNull(listener);
+        ArgumentNullException.ThrowIfNull(emitter);
 
         if (_played && !_applied3D)
-            throw new InvalidOperationException(
-                "You must call Apply3D on a Cue before calling Play to be able to call Apply3D after calling Play.");
+            Throw.InvalidOperationException("You must call Apply3D on a Cue before calling Play to be able to call Apply3D after calling Play.");
 
         var direction = listener.Position - emitter.Position;
 
@@ -261,7 +256,8 @@ public class Cue : IDisposable
             var angle = MathHelper.ToDegrees(MathF.Acos(slope));
             var j = FindVariable("OrientationAngle");
             _variables[j].SetValue(angle);
-            if (_curSound != null)
+
+            if (_curSound is null)
                 _curSound.SetCuePan(Vector3.Dot(direction, right));
 
             // Calculate doppler effect.
@@ -330,7 +326,8 @@ public class Cue : IDisposable
                         break;
 
                     default:
-                        throw new ArgumentOutOfRangeException("rpcCurve.Parameter");
+                        Throw.ArgumentOutOfRangeException("rpcCurve.Parameter", nameof(rpcCurve.Parameter));
+                        break;
                 }
             }
 

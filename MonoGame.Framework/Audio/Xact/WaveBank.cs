@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Audio;
 
@@ -78,18 +79,17 @@ public partial class WaveBank : IDisposable
 
     private WaveBank(AudioEngine audioEngine, string waveBankFilename, bool streaming, int offset, int packetsize)
     {
-        if (audioEngine == null)
-            throw new ArgumentNullException("audioEngine");
-        if (string.IsNullOrEmpty(waveBankFilename))
-            throw new ArgumentNullException("nonStreamingWaveBankFilename");
+        ArgumentNullException.ThrowIfNull(audioEngine);
+        ArgumentNullException.ThrowIfNullOrEmpty(waveBankFilename);
 
         // Is this a streaming wavebank?
         if (streaming)
         {
             if (offset != 0)
-                throw new ArgumentException("We only support a zero offset in streaming banks.", "offset");
+                Throw.ArgumentException("We only support a zero offset in streaming banks.", nameof(offset));
+
             if (packetsize < 2)
-                throw new ArgumentException("The packet size must be greater than 2.", "packetsize");
+                Throw.ArgumentException("The packet size must be greater than 2.", nameof(packetsize));
 
             _streaming = true;
             _offset = offset;

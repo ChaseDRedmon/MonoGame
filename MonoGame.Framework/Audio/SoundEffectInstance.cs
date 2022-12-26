@@ -147,7 +147,7 @@ public partial class SoundEffectInstance : IDisposable
     public virtual void Play()
     {
         if (_isDisposed)
-            throw new ObjectDisposedException("SoundEffectInstance");
+            Throw.ArgumentOutOfRangeException("SoundEffectInstance disposed");
 
         if (State == SoundState.Playing)
             return;
@@ -163,7 +163,7 @@ public partial class SoundEffectInstance : IDisposable
         if (State != SoundState.Paused)
         {
             if (!SoundEffectInstancePool.SoundsAvailable)
-                throw new InstancePlayLimitException();
+                Throw.InstancePlayLimitException();
         }
 
         // For non-XAct sounds we need to be sure the latest

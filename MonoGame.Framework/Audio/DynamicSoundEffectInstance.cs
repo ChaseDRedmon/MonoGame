@@ -23,9 +23,8 @@ public sealed partial class DynamicSoundEffectInstance : SoundEffectInstance
         set
         {
             AssertNotDisposed();
-            if (value == true)
-                throw new InvalidOperationException(
-                    "IsLooped cannot be set true. Submit looped audio data to implement looping.");
+            if (value)
+                Throw.InvalidOperationException("IsLooped cannot be set true. Submit looped audio data to implement looping.");
         }
     }
 
@@ -70,13 +69,13 @@ public sealed partial class DynamicSoundEffectInstance : SoundEffectInstance
     {
         SoundEffect.Initialize();
         if (SoundEffect._systemState != SoundEffect.SoundSystemState.Initialized)
-            throw new NoAudioHardwareException(
-                "Audio has failed to initialize. Call SoundEffect.Initialize() before sound operation to get more specific errors.");
+            Throw.NoAudioHardwareException("Audio has failed to initialize. Call SoundEffect.Initialize() before sound operation to get more specific errors.");
 
         if (sampleRate < 8000 || sampleRate > 48000)
-            throw new ArgumentOutOfRangeException("sampleRate");
+            Throw.ArgumentOutOfRangeException("Sample rate must be between 8000 and 48000", nameof(sampleRate));
+
         if (channels != AudioChannels.Mono && channels != AudioChannels.Stereo)
-            throw new ArgumentOutOfRangeException("channels");
+            Throw.ArgumentOutOfRangeException("AudioChannels must be equal to Mono or Stereo",nameof(channels));
 
         _sampleRate = sampleRate;
         _channels = channels;
@@ -125,7 +124,8 @@ public sealed partial class DynamicSoundEffectInstance : SoundEffectInstance
 
             // Add the instance to the pool
             if (!SoundEffectInstancePool.SoundsAvailable)
-                throw new InstancePlayLimitException();
+                Throw.InstancePlayLimitException();
+
             SoundEffectInstancePool.Remove(this);
 
             PlatformPlay();
@@ -159,7 +159,8 @@ public sealed partial class DynamicSoundEffectInstance : SoundEffectInstance
 
             // Add the instance to the pool
             if (!SoundEffectInstancePool.SoundsAvailable)
-                throw new InstancePlayLimitException();
+                Throw.InstancePlayLimitException();
+
             SoundEffectInstancePool.Remove(this);
         }
 
@@ -213,13 +214,13 @@ public sealed partial class DynamicSoundEffectInstance : SoundEffectInstance
         AssertNotDisposed();
 
         if (buffer.Length == 0)
-            throw new ArgumentException("Buffer may not be empty.");
+            Throw.ArgumentException("Buffer may not be empty.", nameof(buffer));
 
         // Ensure that the buffer length matches alignment.
         // The data must be 16-bit, so the length is a multiple of 2 (mono) or 4 (stereo).
         var sampleSize = 2 * (int)_channels;
         if (buffer.Length % sampleSize != 0)
-            throw new ArgumentException("Buffer length does not match format alignment.");
+            Throw.ArgumentException("Buffer length does not match format alignment.", nameof(buffer));
 
         SubmitBuffer(buffer, 0, buffer.Length);
     }
@@ -237,19 +238,25 @@ public sealed partial class DynamicSoundEffectInstance : SoundEffectInstance
     {
         AssertNotDisposed();
 
-        if (buffer == null || buffer.Length == 0)
-            throw new ArgumentException("Buffer may not be null or empty.");
+        ArgumentNullException.ThrowIfNull(buffer);
+
+        if (buffer.Length == 0)
+            Throw.ArgumentException("Buffer may not be empty.");
+
         if (count <= 0)
-            throw new ArgumentException("Number of bytes must be greater than zero.");
+            Throw.ArgumentException("Number of bytes must be greater than zero.");
+
         if (offset + count > buffer.Length)
-            throw new ArgumentException("Buffer is shorter than the specified number of bytes from the offset.");
+            Throw.ArgumentException("Buffer is shorter than the specified number of bytes from the offset.");
 
         // Ensure that the buffer length and start position match alignment.
         var sampleSize = 2 * (int)_channels;
+
         if (count % sampleSize != 0)
-            throw new ArgumentException("Number of bytes does not match format alignment.");
+            Throw.ArgumentException("Number of bytes does not match format alignment.");
+
         if (offset % sampleSize != 0)
-            throw new ArgumentException("Offset into the buffer does not match format alignment.");
+            Throw.ArgumentException("Offset into the buffer does not match format alignment.");
 
         PlatformSubmitBuffer(buffer, offset, count);
     }
@@ -257,7 +264,7 @@ public sealed partial class DynamicSoundEffectInstance : SoundEffectInstance
     private void AssertNotDisposed()
     {
         if (IsDisposed)
-            throw new ObjectDisposedException(null);
+            Throw.ObjectDisposedException(this, "Object disposed of");
     }
 
     protected override void Dispose(bool disposing)

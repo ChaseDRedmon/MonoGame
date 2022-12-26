@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Audio;
 
@@ -137,7 +138,7 @@ public struct AudioCategory : IEquatable<AudioCategory>
     public void SetVolume(float volume)
     {
         if (volume < 0)
-            throw new ArgumentException("The volume must be positive.");
+            Throw.ArgumentException("The volume must be positive.");
 
         // Updating all the sounds in a category can be
         // very expensive... so avoid it if we can.

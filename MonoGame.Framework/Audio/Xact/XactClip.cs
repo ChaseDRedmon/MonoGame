@@ -64,7 +64,8 @@ class XactClip
             {
                 case 0:
                     // Stop Event
-                    throw new NotImplementedException("Stop event");
+                    Throw.NotImplementedException("Stop event");
+                    break;
 
                 case 1:
                 {
@@ -335,7 +336,8 @@ class XactClip
 
                 case 7:
                     // Pitch Event
-                    throw new NotImplementedException("Pitch event");
+                    Throw.NotImplementedException("Pitch event");
+                    break;
 
                 case 8:
                 {
@@ -362,14 +364,17 @@ class XactClip
 
                 case 17:
                     // Volume Repeat Event
-                    throw new NotImplementedException("Volume repeat event");
+                    Throw.NotImplementedException("Volume repeat event");
+                    break;
 
                 case 9:
                     // Marker Event
-                    throw new NotImplementedException("Marker event");
+                    Throw.NotImplementedException("Marker event");
+                    break;
 
                 default:
-                    throw new NotSupportedException("Unknown event " + eventId);
+                    Throw.NotImplementedException($"Unknown event {eventId}");
+                    break;
             }
         }
 
