@@ -234,16 +234,12 @@ public class SpriteBatch : GraphicsResource
 
         if ((effects & SpriteEffects.FlipVertically) != 0)
         {
-            var temp = _texCoordBR.Y;
-            _texCoordBR.Y = _texCoordTL.Y;
-            _texCoordTL.Y = temp;
+            (_texCoordBR.Y, _texCoordTL.Y) = (_texCoordTL.Y, _texCoordBR.Y);
         }
 
         if ((effects & SpriteEffects.FlipHorizontally) != 0)
         {
-            var temp = _texCoordBR.X;
-            _texCoordBR.X = _texCoordTL.X;
-            _texCoordTL.X = temp;
+            (_texCoordBR.X, _texCoordTL.X) = (_texCoordTL.X, _texCoordBR.X);
         }
 
         if (rotation == 0f)
@@ -372,16 +368,12 @@ public class SpriteBatch : GraphicsResource
 
         if ((effects & SpriteEffects.FlipVertically) != 0)
         {
-            var temp = _texCoordBR.Y;
-            _texCoordBR.Y = _texCoordTL.Y;
-            _texCoordTL.Y = temp;
+            (_texCoordBR.Y, _texCoordTL.Y) = (_texCoordTL.Y, _texCoordBR.Y);
         }
 
         if ((effects & SpriteEffects.FlipHorizontally) != 0)
         {
-            var temp = _texCoordBR.X;
-            _texCoordBR.X = _texCoordTL.X;
-            _texCoordTL.X = temp;
+            (_texCoordBR.X, _texCoordTL.X) = (_texCoordTL.X, _texCoordBR.X);
         }
 
         if (rotation == 0f)
@@ -794,6 +786,7 @@ public class SpriteBatch : GraphicsResource
 
                 if (flippedHorz)
                     p.X += pCurrentGlyph->BoundsInTexture.Width;
+
                 p.X += pCurrentGlyph->Cropping.X;
 
                 if (flippedVert)
@@ -815,16 +808,12 @@ public class SpriteBatch : GraphicsResource
 
                 if ((effects & SpriteEffects.FlipVertically) != 0)
                 {
-                    var temp = _texCoordBR.Y;
-                    _texCoordBR.Y = _texCoordTL.Y;
-                    _texCoordTL.Y = temp;
+                    (_texCoordBR.Y, _texCoordTL.Y) = (_texCoordTL.Y, _texCoordBR.Y);
                 }
 
                 if ((effects & SpriteEffects.FlipHorizontally) != 0)
                 {
-                    var temp = _texCoordBR.X;
-                    _texCoordBR.X = _texCoordTL.X;
-                    _texCoordTL.X = temp;
+                    (_texCoordBR.X, _texCoordTL.X) = (_texCoordTL.X, _texCoordBR.X);
                 }
 
                 if (rotation == 0f)
@@ -1009,16 +998,12 @@ public class SpriteBatch : GraphicsResource
 
                 if ((effects & SpriteEffects.FlipVertically) != 0)
                 {
-                    var temp = _texCoordBR.Y;
-                    _texCoordBR.Y = _texCoordTL.Y;
-                    _texCoordTL.Y = temp;
+                    (_texCoordBR.Y, _texCoordTL.Y) = (_texCoordTL.Y, _texCoordBR.Y);
                 }
 
                 if ((effects & SpriteEffects.FlipHorizontally) != 0)
                 {
-                    var temp = _texCoordBR.X;
-                    _texCoordBR.X = _texCoordTL.X;
-                    _texCoordTL.X = temp;
+                    (_texCoordBR.X, _texCoordTL.X) = (_texCoordTL.X, _texCoordBR.X);
                 }
 
                 if (rotation == 0f)
@@ -1301,16 +1286,12 @@ public class SpriteBatch : GraphicsResource
 
                 if ((effects & SpriteEffects.FlipVertically) != 0)
                 {
-                    var temp = _texCoordBR.Y;
-                    _texCoordBR.Y = _texCoordTL.Y;
-                    _texCoordTL.Y = temp;
+                    (_texCoordBR.Y, _texCoordTL.Y) = (_texCoordTL.Y, _texCoordBR.Y);
                 }
 
                 if ((effects & SpriteEffects.FlipHorizontally) != 0)
                 {
-                    var temp = _texCoordBR.X;
-                    _texCoordBR.X = _texCoordTL.X;
-                    _texCoordTL.X = temp;
+                    (_texCoordBR.X, _texCoordTL.X) = (_texCoordTL.X, _texCoordBR.X);
                 }
 
                 if (rotation == 0f)
@@ -1438,6 +1419,7 @@ public class SpriteBatch : GraphicsResource
         var firstGlyphOfLine = true;
 
         fixed (SpriteFont.Glyph* pGlyphs = spriteFont.Glyphs)
+        {
             for (var i = 0; i < text.Length; ++i)
             {
                 var c = text[i];
@@ -1495,16 +1477,12 @@ public class SpriteBatch : GraphicsResource
 
                 if ((effects & SpriteEffects.FlipVertically) != 0)
                 {
-                    var temp = _texCoordBR.Y;
-                    _texCoordBR.Y = _texCoordTL.Y;
-                    _texCoordTL.Y = temp;
+                    (_texCoordBR.Y, _texCoordTL.Y) = (_texCoordTL.Y, _texCoordBR.Y);
                 }
 
                 if ((effects & SpriteEffects.FlipHorizontally) != 0)
                 {
-                    var temp = _texCoordBR.X;
-                    _texCoordBR.X = _texCoordTL.X;
-                    _texCoordTL.X = temp;
+                    (_texCoordBR.X, _texCoordTL.X) = (_texCoordTL.X, _texCoordBR.X);
                 }
 
                 if (rotation == 0f)
@@ -1537,6 +1515,7 @@ public class SpriteBatch : GraphicsResource
                 offset.X += pCurrentGlyph->Width +
                             (rtl ? pCurrentGlyph->LeftSideBearing : pCurrentGlyph->RightSideBearing);
             }
+        }
 
         // We need to flush if we're using Immediate sort mode.
         FlushIfNeeded();

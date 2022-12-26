@@ -16,7 +16,7 @@ namespace MonoGame.Tests;
 
 public class MatrixComparer : IEqualityComparer<Matrix4x4>
 {
-    static public MatrixComparer Epsilon = new(0.000001f);
+    public static MatrixComparer Epsilon = new(0.000001f);
 
     private readonly float _epsilon;
 

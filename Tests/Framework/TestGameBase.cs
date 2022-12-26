@@ -224,7 +224,7 @@ namespace MonoGame.Tests
             Exit();
 #else
             // NOTE: We avoid Game.Exit() here as we marked it
-            // obsolete on platforms that disallow exit in 
+            // obsolete on platforms that disallow exit in
             // shipping games.
             //
             // We however need it here to halt the app after we

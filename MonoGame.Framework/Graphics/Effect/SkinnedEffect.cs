@@ -335,7 +335,6 @@ public class SkinnedEffect : Effect, IEffectMatrices, IEffectLights, IEffectFog,
         bonesParam.SetValue(boneTransforms);
     }
 
-
     /// <summary>
     /// Gets a copy of the current skinning bone transform matrices.
     /// </summary>
@@ -354,7 +353,6 @@ public class SkinnedEffect : Effect, IEffectMatrices, IEffectLights, IEffectFog,
 
         return bones;
     }
-
 
     /// <summary>
     /// This effect requires lighting, so we explicitly implement

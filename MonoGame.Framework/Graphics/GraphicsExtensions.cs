@@ -140,7 +140,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 case VertexElementFormat.NormalizedShort4:
                     return VertexAttribPointerType.Short;
-                
+
 #if WINDOWS || DESKTOPGL
                case VertexElementFormat.HalfVector2:
                     return VertexAttribPointerType.HalfFloat;
@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public static bool OpenGLVertexAttribNormalized(this VertexElement element)
         {
-            // TODO: This may or may not be the right behavor.  
+            // TODO: This may or may not be the right behavor.
             //
             // For instance the VertexElementFormat.Byte4 format is not supposed
             // to be normalized, but this line makes it so.
@@ -210,7 +210,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 case VertexElementFormat.NormalizedShort4:
                     return ColorPointerType.UnsignedShort;
-				
+
 #if MONOMAC
                 case VertexElementFormat.HalfVector2:
                     return ColorPointerType.HalfFloat;
@@ -256,7 +256,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 case VertexElementFormat.NormalizedShort4:
                     return NormalPointerType.Short;
-				
+
 #if MONOMAC
                 case VertexElementFormat.HalfVector2:
                     return NormalPointerType.HalfFloat;
@@ -302,7 +302,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 case VertexElementFormat.NormalizedShort4:
                     return TexCoordPointerType.Short;
-				
+
 #if MONOMAC
                 case VertexElementFormat.HalfVector2:
                     return TexCoordPointerType.HalfFloat;
@@ -315,7 +315,7 @@ namespace Microsoft.Xna.Framework.Graphics
             throw new ArgumentException();
         }
 
-		
+
 		public static BlendEquationMode GetBlendEquationMode (this BlendFunction function)
 		{
 			switch (function) {
@@ -758,7 +758,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				glInternalFormat = PixelInternalFormat.CompressedRgbaPvrtc4Bppv1Img;
 				glFormat = PixelFormat.CompressedTextureFormats;
 				break;
-            case InvalidFormat: 
+            case InvalidFormat:
             default:
                     throw new NotSupportedException(string.Format("The requested SurfaceFormat `{0}` is not supported.", format));
 			}

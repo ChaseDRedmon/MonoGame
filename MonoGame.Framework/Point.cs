@@ -17,7 +17,10 @@ namespace Microsoft.Xna.Framework;
 [DebuggerDisplay("{DebugDisplayString,nq}")]
 public struct Point : IEquatable<Point>
 {
-    private static readonly Point zeroPoint = new();
+    /// <summary>
+    /// Returns a <see cref="Point"/> with coordinates 0, 0.
+    /// </summary>
+    public static Point Zero { get; } = new();
 
     /// <summary>
     /// The x coordinate of this <see cref="Point"/>.
@@ -28,14 +31,6 @@ public struct Point : IEquatable<Point>
     /// The y coordinate of this <see cref="Point"/>.
     /// </summary>
     [DataMember] public int Y;
-
-    /// <summary>
-    /// Returns a <see cref="Point"/> with coordinates 0, 0.
-    /// </summary>
-    public static Point Zero
-    {
-        get { return zeroPoint; }
-    }
 
     internal string DebugDisplayString
     {

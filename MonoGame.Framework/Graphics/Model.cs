@@ -128,7 +128,7 @@ public sealed class Model
             foreach (Effect effect in mesh.Effects)
             {
                 IEffectMatrices effectMatricies = effect as IEffectMatrices;
-                if (effectMatricies == null)
+                if (effectMatricies is null)
                 {
                     Throw.InvalidOperationException();
                 }
@@ -155,7 +155,7 @@ public sealed class Model
         for (int index1 = 0; index1 < count; ++index1)
         {
             ModelBone modelBone = Bones[index1];
-            if (modelBone.Parent == null)
+            if (modelBone.Parent is null)
             {
                 destinationBoneTransforms[index1] = modelBone.transform;
             }

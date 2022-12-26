@@ -54,9 +54,7 @@ public partial class MouseCursor
         // convert ABGR to ARGB
         for (int i = 0; i < bytes.Length; i += 4)
         {
-            var r = bytes[i];
-            bytes[i] = bytes[i + 2];
-            bytes[i + 2] = r;
+            (bytes[i], bytes[i + 2]) = (bytes[i + 2], bytes[i]);
         }
 
         try

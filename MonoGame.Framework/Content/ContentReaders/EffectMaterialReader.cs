@@ -24,7 +24,7 @@ internal class EffectMaterialReader : ContentTypeReader<EffectMaterial>
         foreach (KeyValuePair<string, object> item in dict)
         {
             var parameter = effectMaterial.Parameters[item.Key];
-            if (parameter != null)
+            if (parameter is not null)
             {
                 Type itemType = item.Value.GetType();
 

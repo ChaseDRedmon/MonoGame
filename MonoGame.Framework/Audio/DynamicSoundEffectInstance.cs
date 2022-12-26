@@ -287,7 +287,7 @@ public sealed partial class DynamicSoundEffectInstance : SoundEffectInstance
         // Raise the event
         var bufferNeededHandler = BufferNeeded;
 
-        if (bufferNeededHandler != null)
+        if (bufferNeededHandler is not null)
         {
             var eventCount = _buffersNeeded < 3 ? _buffersNeeded : 3;
             for (var i = 0; i < eventCount; i++)

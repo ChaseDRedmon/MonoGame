@@ -438,7 +438,7 @@ public class GZipStream : Stream
     ///
     /// <para>
     ///   The <c>GZipStream</c> will use the default compression level. If you want
-    ///   to specify the compression level, see <see cref="GZipStream(Stream,
+    ///   to specify the compression level, see <see cref="System.IO.Compression.GZipStream
     ///   CompressionMode, CompressionLevel, bool)"/>.
     /// </para>
     ///

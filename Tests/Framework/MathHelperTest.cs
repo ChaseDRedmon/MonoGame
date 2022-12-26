@@ -6,33 +6,6 @@ namespace MonoGame.Tests.Framework;
 public class MathHelperTest
 {
     [Test]
-    public void ClampFloatTest()
-    {
-        Assert.True(MathHelper.Clamp(1f, 0f, 2f) == 1f, "Failed boundary test, clamp [0,2] on 1 should be 1");
-        Assert.True(MathHelper.Clamp(1f, 0f, 1f) == 1f, "Failed boundary test, clamp [0,1] on 1 should be 1");
-        Assert.True(MathHelper.Clamp(1f, 2f, 5f) == 2f, "Failed boundary test, clamp [2,5] on 1 should be 2");
-        Assert.True(MathHelper.Clamp(1f, -50f, -10f) == -10f,
-            "Failed boundary test, clamp [-50f, -10f] on 1 should be -10");
-        Assert.True(MathHelper.Clamp(1f, -50f, 25f) == 1f,
-            "Failed boundary test, clamp [-50, 25] on 1 should be 1");
-        Assert.True(MathHelper.Clamp(0f, 1f, 1f) == 1f, "Failed boundary test, clamp [1,1] on 0 should be 1");
-        Assert.True(MathHelper.Clamp(0f, -1f, -1f) == -1f, "Failed boundary test, clamp [-1,-1] on 0 should be -1");
-    }
-
-    [Test]
-    public void ClampIntTest()
-    {
-        Assert.True(MathHelper.Clamp(1, 0, 2) == 1, "Failed boundary test, clamp [0,2] on 1 should be 1");
-        Assert.True(MathHelper.Clamp(1, 0, 1) == 1, "Failed boundary test, clamp [0,1] on 1 should be 1");
-        Assert.True(MathHelper.Clamp(1, 2, 5) == 2, "Failed boundary test, clamp [2,5] on 1 should be 2");
-        Assert.True(MathHelper.Clamp(1, -50, -10) == -10,
-            "Failed boundary test, clamp [-50f, -10f] on 1 should be -10");
-        Assert.True(MathHelper.Clamp(1, -50, 25) == 1, "Failed boundary test, clamp [-50, 25] on 1 should be 1");
-        Assert.True(MathHelper.Clamp(0, 1, 1) == 1, "Failed boundary test, clamp [1,1] on 0 should be 1");
-        Assert.True(MathHelper.Clamp(0, -1, -1) == -1, "Failed boundary test, clamp [-1,-1] on 0 should be -1");
-    }
-
-    [Test]
     public void DistanceTest()
     {
         Assert.AreEqual(MathHelper.Distance(0, 5f), 5f, "Distance test failed on [0,5]");
@@ -67,32 +40,8 @@ public class MathHelperTest
     }
 #endif
 
-    [Test]
-    public void Min()
-    {
-        Assert.AreEqual(-0.5f, MathHelper.Min(-0.5f, -0.5f));
-        Assert.AreEqual(-0.5f, MathHelper.Min(-0.5f, 0.0f));
-        Assert.AreEqual(-0.5f, MathHelper.Min(0.0f, -0.5f));
-        Assert.AreEqual(0, MathHelper.Min(0, 0));
-        Assert.AreEqual(-5, MathHelper.Min(-5, 5));
-        Assert.AreEqual(-5, MathHelper.Min(5, -5));
-    }
-
-    [Test]
-    public void Max()
-    {
-        Assert.AreEqual(-0.5f, MathHelper.Min(-0.5f, -0.5f));
-        Assert.AreEqual(0.0f, MathHelper.Max(-0.5f, 0.0f));
-        Assert.AreEqual(0.0f, MathHelper.Max(0.0f, -0.5f));
-        Assert.AreEqual(0, MathHelper.Max(0, 0));
-        Assert.AreEqual(5, MathHelper.Max(-5, 5));
-        Assert.AreEqual(5, MathHelper.Max(5, -5));
-    }
-
     [TestCase(MathHelper.PiOver4, 0.7853982f)]
     [TestCase(MathHelper.PiOver2, 1.5707964f)]
-    [TestCase(MathHelper.Pi, 3.1415927f)]
-    [TestCase(MathHelper.TwoPi, 6.2831855f)]
     public void PiConstantsAreExpectedValues(float actualValue, float expectedValue)
     {
         Assert.AreEqual(expectedValue, actualValue);
@@ -103,10 +52,6 @@ public class MathHelperTest
     [TestCase(-MathHelper.PiOver4, -MathHelper.PiOver4)]
     [TestCase(MathHelper.PiOver2, MathHelper.PiOver2)]
     [TestCase(-MathHelper.PiOver2, -MathHelper.PiOver2)]
-    [TestCase(MathHelper.Pi, MathHelper.Pi)]
-    [TestCase(-MathHelper.Pi, MathHelper.Pi)]
-    [TestCase(MathHelper.TwoPi, 0f)]
-    [TestCase(-MathHelper.TwoPi, 0f)]
     [TestCase(10f, -2.566371f)]
     [TestCase(-10f, 2.566371f)]
     // Pi boundaries

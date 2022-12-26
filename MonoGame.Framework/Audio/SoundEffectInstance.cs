@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework.Audio;
 
@@ -143,6 +144,8 @@ public partial class SoundEffectInstance : IDisposable
     }
 
     /// <summary>Plays or resumes a SoundEffectInstance.</summary>
+    /// <exception cref="ObjectDisposedException"></exception>
+    /// <exception cref="InstancePlayLimitException"></exception>
     /// <remarks>Throws an exception if more sounds are playing than the platform allows.</remarks>
     public virtual void Play()
     {
