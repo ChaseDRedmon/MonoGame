@@ -554,7 +554,7 @@ public partial class GraphicsDevice : IDisposable
         var options = ClearOptions.Target;
         options |= ClearOptions.DepthBuffer;
         options |= ClearOptions.Stencil;
-        PlatformClear(options, color.AsSharpDXVector4(), _viewport.MaxDepth, 0);
+        PlatformClear(options, color.AsPlatformVector4(), _viewport.MaxDepth, 0);
 
         unchecked
         {
@@ -564,7 +564,7 @@ public partial class GraphicsDevice : IDisposable
 
     public void Clear(ClearOptions options, Color color, float depth, int stencil)
     {
-        PlatformClear(options, color.AsSharpDXVector4(), depth, stencil);
+        PlatformClear(options, color.AsPlatformVector4(), depth, stencil);
 
         unchecked
         {
@@ -574,7 +574,11 @@ public partial class GraphicsDevice : IDisposable
 
     public void Clear(ClearOptions options, Vector4 color, float depth, int stencil)
     {
-        PlatformClear(options, color.AsSharpDXVector4(), depth, stencil);
+#if OPENGL
+        PlatformClear(options, color, depth, stencil);
+#elif DIRECTX
+        PlatformClear(options, color.AsPlatformVector4(), depth, stencil);
+#endif
 
         unchecked
         {

@@ -3,6 +3,7 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 using System;
+using System.Numerics;
 using MonoGame.OpenAL;
 
 namespace Microsoft.Xna.Framework.Audio
@@ -22,9 +23,9 @@ namespace Microsoft.Xna.Framework.Audio
         int pauseCount;
 
         internal readonly object sourceMutex = new object();
-        
+
         internal OpenALSoundController controller;
-        
+
         internal bool HasSourceId = false;
 
 #region Initialization
@@ -69,7 +70,7 @@ namespace Microsoft.Xna.Framework.Audio
             // get the emitter offset from origin
             Vector3 posOffset = emitter.Position - listener.Position;
             // set up matrix to transform world space coordinates to listener space coordinates
-            Matrix worldSpaceToListenerSpace = Matrix.Transpose(Matrix.CreateWorld(Vector3.Zero, listener.Forward, listener.Up));
+            Matrix4x4 worldSpaceToListenerSpace = Matrix4x4.Transpose(Matrix4x4.CreateWorld(Vector3.Zero, listener.Forward, listener.Up));
             // set up our final position and velocity according to orientation of listener
             Vector3 finalPos = new Vector3(x + posOffset.X, y + posOffset.Y, z + posOffset.Z);
             finalPos = Vector3.Transform(finalPos, worldSpaceToListenerSpace);
@@ -239,7 +240,7 @@ namespace Microsoft.Xna.Framework.Audio
         {
             if (!HasSourceId)
                 return SoundState.Stopped;
-            
+
             var alState = AL.GetSourceState(SourceId);
             ALHelper.CheckError("Failed to get source state.");
 

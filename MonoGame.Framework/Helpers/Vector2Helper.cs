@@ -474,7 +474,9 @@ public static class Vector2Helper
         }
     }
 
+#if DIRECTX
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static SharpDX.Vector2 AsSharpDXVector2(this ref Vector2 value) =>
         new(x: value.X, y: value.Y);
+#endif
 }

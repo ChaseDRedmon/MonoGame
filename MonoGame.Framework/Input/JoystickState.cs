@@ -114,20 +114,28 @@ public struct JoystickState
         {
             ret.Append(", Axes=");
             foreach (var axis in Axes)
+            {
                 ret.Append((axis > 0 ? "+" : "") + axis.ToString("00000") + " ");
+            }
+
             ret.Length--;
 
             ret.Append(", Buttons=");
             foreach (var button in Buttons)
+            {
                 ret.Append((int)button);
+            }
 
             ret.Append(", Hats=");
             foreach (var hat in Hats)
+            {
                 ret.Append(hat + " ");
+            }
+
             ret.Length--;
         }
 
-        ret.Append("]");
+        ret.Append(']');
         return ret.ToString();
     }
 }

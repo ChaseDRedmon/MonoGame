@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using MonoGame.Framework.Utilities;
 
 namespace Microsoft.Xna.Framework;
 
@@ -16,7 +17,10 @@ partial class TitleContainer
             // Check for the package Resources Folder first. This is where the assets
             // will be bundled.
             if (CurrentPlatform.OS == OS.MacOSX)
+            {
                 Location = Path.Combine (AppDomain.CurrentDomain.BaseDirectory, "..", "Resources");
+            }
+
             if (!Directory.Exists (Location))
 #endif
         Location = AppDomain.CurrentDomain.BaseDirectory;

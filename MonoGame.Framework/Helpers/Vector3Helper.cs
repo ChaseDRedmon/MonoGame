@@ -480,7 +480,9 @@ public static class Vector3Helper
         }
     }
 
+#if DIRECTX
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static SharpDX.Vector3 AsSharpDXVector3(this ref Vector3 value) =>
         new(x: value.X, y: value.Y, z: value.Z);
+#endif
 }

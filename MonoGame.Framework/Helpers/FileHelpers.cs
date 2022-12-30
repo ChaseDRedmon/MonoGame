@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace MonoGame.Framework.Utilities;
 
-internal static class FileHelpers
+internal static partial class FileHelpers
 {
     private static readonly char[] UrlSafeChars = { '.', '_', '-', ';', '/', '?', '\\', ':' };
 
@@ -77,7 +77,7 @@ internal static class FileHelpers
 
         foreach (var c in url)
         {
-            if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122) ||
+            if (c >= 48 && c <= 57 || c >= 65 && c <= 90 || c >= 97 && c <= 122 ||
                 Array.IndexOf(UrlSafeChars, c) != -1)
                 safeline.Append(c);
             else
@@ -86,7 +86,7 @@ internal static class FileHelpers
 
                 foreach (var num in bytes)
                 {
-                    safeline.Append("%");
+                    safeline.Append('%');
                     safeline.Append(num.ToString("X"));
                 }
             }
@@ -105,12 +105,18 @@ internal static class FileHelpers
         while (filePath.Contains(@"\.\"))
             filePath = filePath.Replace(@"\.\", @"\");
 
-        filePath = Regex.Replace(filePath, @"^\.(\/|\\)", string.Empty);
+        filePath = MyRegex().Replace(filePath, string.Empty);
 
         // Remove .. in filePath
 
-        filePath = Regex.Replace(filePath, @"[^\/\\]+(\/|\\)\.\.(\/|\\)", string.Empty);
+        filePath = MyRegex1().Replace(filePath, string.Empty);
 
         return filePath;
     }
+
+    [GeneratedRegex("^\\.(\\/|\\\\)")]
+    private static partial Regex MyRegex();
+
+    [GeneratedRegex("[^\\/\\\\]+(\\/|\\\\)\\.\\.(\\/|\\\\)")]
+    private static partial Regex MyRegex1();
 }

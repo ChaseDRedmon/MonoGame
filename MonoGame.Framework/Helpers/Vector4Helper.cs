@@ -426,11 +426,18 @@ public static class Vector4Helper
         }
     }
 
+#if DIRECTX
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static SharpDX.Vector4 AsSharpDXVector4(this ref Vector4 value) =>
+    public static SharpDX.Vector4 AsPlatformVector4(this ref Vector4 value) =>
         new(x: value.X, y: value.Y, z: value.Z, w: value.W);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static SharpDX.Vector4 AsSharpDXVector4(this ref Color color) =>
-        new SharpDX.Vector4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
+    public static SharpDX.Vector4 AsPlatformVector4(this ref Color color) =>
+        new(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
+
+#elif OPENGL
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector4 AsPlatformVector4(this ref Color color) =>
+        new(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f);
+#endif
 }

@@ -1248,7 +1248,7 @@ public struct Color : IEquatable<Color>
         sb.Append(B);
         sb.Append(" A:");
         sb.Append(A);
-        sb.Append("}");
+        sb.Append('}');
         return sb.ToString();
     }
 
